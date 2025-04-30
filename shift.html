@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift in Progress</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Shift in Progress</h1>
+    <div class="button-container">
+        <button id="extraButton" onclick="window.location.href='extra.html'">Extra</button>
+        <button id="deliveryButton">Delivery</button>
+        <button id="issueButton">Issue</button>
+        <button id="analysisButton">Analysis</button>
+        <button id="endShiftButton" class="red-button">End Shift</button>
+    </div>
+
+    <!-- Modal for Extra Form -->
+    <div id="extraModal" class="modal">
+        <div class="modal-content">
+            <p>Enter Extra Details:</p>
+            <form id="extraForm">
+                <label>Bill Number: <input type="text" id="billNumber" required></label><br>
+                <label>Extra Amount: <input type="number" id="extraAmount" required></label><br>
+                <label>Payment Method:
+                    <select id="paymentMethod" required>
+                        <option value="Cash">Cash</option>
+                        <option value="Card">Card</option>
+                        <option value="UPI">UPI</option>
+                    </select>
+                </label><br>
+                <label>Item Category: <input type="text" id="itemCategory" required></label><br>
+                <button type="button" id="saveExtraButton">Save</button>
+                <button type="button" id="closeExtraButton">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Analysis Modal -->
+<div id="analysisModal" class="modal">
+    <div class="modal-content">
+        <h2>Analysis</h2>
+        <div class="button-container">
+            <button id="viewExtraButton">View Extra</button>
+            <button id="closeAnalysisButton">Close</button>
+        </div>
+        <div>
+            <label for="filterPaymentMethod">Filter by Payment Method:</label>
+            <select id="filterPaymentMethod">
+                <option value="All">All</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI">UPI</option>
+            </select>
+        </div>
+        <div id="extraDataContainer" class="data-container"></div>
+    </div>
+</div>
+
+<!-- Delivery Modal -->
+<div id="deliveryModal" class="modal">
+    <div class="modal-content">
+        <h2>Delivery Details</h2>
+        <form id="deliveryForm">
+            <label for="deliveryBillNumber">Bill Number:</label>
+            <input type="text" id="deliveryBillNumber" placeholder="Enter bill number" required>
+
+            <label for="deliveryAmount">Amount:</label>
+            <input type="number" id="deliveryAmount" placeholder="Enter amount" required>
+
+            <label for="deliveryPaymentMethod">Payment Method:</label>
+            <select id="deliveryPaymentMethod" required>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI">UPI</option>
+            </select>
+
+            <label for="deliveryPaid">
+                <input type="checkbox" id="deliveryPaid"> Paid
+            </label>
+
+            <div class="button-container">
+                <button type="button" id="saveDeliveryButton" class="primary-button">Save</button>
+                <button type="button" id="closeDeliveryButton" class="primary-button">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delivery Analysis Section -->
+<div id="deliveryAnalysisModal" class="modal">
+    <div class="modal-content">
+        <h2>Delivery Analysis</h2>
+        <div class="button-container">
+            <button id="viewDeliveryButton">View Delivery</button>
+            <button id="closeDeliveryAnalysisButton">Close</button>
+        </div>
+        <div>
+            <label for="filterPaidStatus">Filter by Paid Status:</label>
+            <select id="filterPaidStatus">
+                <option value="All">All</option>
+                <option value="Paid">Paid</option>
+                <option value="Not Paid">Not Paid</option>
+            </select>
+        </div>
+        <div id="deliveryDataContainer" class="data-container"></div>
+    </div>
+</div>
+
+<!-- Analysis Selection Modal -->
+<div id="analysisSelectionModal" class="modal">
+    <div class="modal-content">
+        <h2>Select Analysis</h2>
+        <div class="button-container">
+            <button id="openExtraAnalysisButton" class="primary-button">Extra Analysis</button>
+            <button id="openDeliveryAnalysisButton" class="primary-button">Delivery Analysis</button>
+        </div>
+        <button id="closeAnalysisSelectionButton" class="primary-button">Close</button>
+    </div>
+</div>
+
+<script>
+    // Show the Analysis modal
+    document.getElementById('analysisButton').addEventListener('click', () => {
+        const analysisModal = document.getElementById('analysisModal');
+        analysisModal.style.display = 'flex'; // Show the modal
+    });
+
+    // Close the Analysis modal
+    document.getElementById('closeAnalysisButton').addEventListener('click', () => {
+        const analysisModal = document.getElementById('analysisModal');
+        analysisModal.style.display = 'none'; // Hide the modal
+    });
+
+    // View Extra data
+    const renderExtraData = (filter = 'All') => {
+        const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+        const extraDataContainer = document.getElementById('extraDataContainer');
+        extraDataContainer.innerHTML = ''; // Clear previous data
+
+        const filteredData = filter === 'All' ? extraData : extraData.filter(entry => entry.paymentMethod === filter);
+
+        if (filteredData.length === 0) {
+            extraDataContainer.innerHTML = '<p>No Extra data available.</p>';
+            return;
+        }
+
+        let html = `
+            <h3>Extra Data:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bill Number</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Item Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        filteredData.forEach((entry, index) => {
+            html += `
+                <tr>
+                    <td>${entry.billNumber}</td>
+                    <td>₹${entry.extraAmount}</td>
+                    <td>${entry.paymentMethod}</td>
+                    <td>${entry.itemCategory}</td>
+                    <td>
+                        <button class="delete-button" data-index="${index}">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        extraDataContainer.innerHTML = html;
+
+        // Add event listeners to delete buttons
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const index = e.target.getAttribute('data-index');
+                deleteExtraData(index, filter);
+            });
+        });
+    };
+
+    const deleteExtraData = (index, filter) => {
+        const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+        extraData.splice(index, 1); // Remove the selected entry
+        localStorage.setItem('extraData', JSON.stringify(extraData));
+        renderExtraData(filter); // Re-render the data
+    };
+
+    document.getElementById('viewExtraButton').addEventListener('click', () => {
+        renderExtraData();
+    });
+
+    // Filter by payment method
+    document.getElementById('filterPaymentMethod').addEventListener('change', (e) => {
+        const filter = e.target.value;
+        renderExtraData(filter);
+    });
+
+    // Show the Delivery modal
+    document.getElementById('deliveryButton').addEventListener('click', () => {
+        const deliveryModal = document.getElementById('deliveryModal');
+        deliveryModal.style.display = 'flex'; // Show the modal
+    });
+
+    // Close the Delivery modal
+    document.getElementById('closeDeliveryButton').addEventListener('click', () => {
+        const deliveryModal = document.getElementById('deliveryModal');
+        deliveryModal.style.display = 'none'; // Hide the modal
+    });
+
+    // Save Delivery data
+    document.getElementById('saveDeliveryButton').addEventListener('click', () => {
+        const billNumber = document.getElementById('deliveryBillNumber').value;
+        const amount = parseFloat(document.getElementById('deliveryAmount').value) || 0;
+        const paymentMethod = document.getElementById('deliveryPaymentMethod').value;
+        const paid = document.getElementById('deliveryPaid').checked;
+
+        if (!billNumber || !amount || !paymentMethod) {
+            alert('Please fill all fields!');
+            return;
+        }
+
+        // Save data to localStorage
+        const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+        const newEntry = { billNumber, amount, paymentMethod, paid };
+        deliveryData.push(newEntry);
+        localStorage.setItem('deliveryData', JSON.stringify(deliveryData));
+
+        alert('Delivery details saved successfully!');
+
+        // Clear the form
+        document.getElementById('deliveryForm').reset();
+
+        // Close the modal
+        const deliveryModal = document.getElementById('deliveryModal');
+        deliveryModal.style.display = 'none';
+    });
+
+    // Show the Delivery Analysis modal
+    document.getElementById('analysisButton').addEventListener('click', () => {
+        const deliveryAnalysisModal = document.getElementById('deliveryAnalysisModal');
+        deliveryAnalysisModal.style.display = 'flex'; // Show the modal
+    });
+
+    // Close the Delivery Analysis modal
+    document.getElementById('closeDeliveryAnalysisButton').addEventListener('click', () => {
+        const deliveryAnalysisModal = document.getElementById('deliveryAnalysisModal');
+        deliveryAnalysisModal.style.display = 'none'; // Hide the modal
+    });
+
+    // View Delivery data
+    const renderDeliveryData = (filter = 'All') => {
+        const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+        const deliveryDataContainer = document.getElementById('deliveryDataContainer');
+        deliveryDataContainer.innerHTML = ''; // Clear previous data
+
+        const filteredData = filter === 'All'
+            ? deliveryData
+            : deliveryData.filter(entry => (filter === 'Paid' ? entry.paid : !entry.paid));
+
+        if (filteredData.length === 0) {
+            deliveryDataContainer.innerHTML = '<p>No Delivery data available.</p>';
+            return;
+        }
+
+        let html = `
+            <h3>Delivery Data:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bill Number</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Paid</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        filteredData.forEach((entry, index) => {
+            html += `
+                <tr>
+                    <td>${entry.billNumber}</td>
+                    <td>₹${entry.amount}</td>
+                    <td>${entry.paymentMethod}</td>
+                    <td>${entry.paid ? 'Yes' : 'No'}</td>
+                    <td>
+                        <button class="delete-button" data-index="${index}">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        deliveryDataContainer.innerHTML = html;
+
+        // Add event listeners to delete buttons
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const index = e.target.getAttribute('data-index');
+                deleteDeliveryData(index, filter);
+            });
+        });
+    };
+
+    const deleteDeliveryData = (index, filter) => {
+        const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+        deliveryData.splice(index, 1); // Remove the selected entry
+        localStorage.setItem('deliveryData', JSON.stringify(deliveryData));
+        renderDeliveryData(filter); // Re-render the data
+    };
+
+    document.getElementById('viewDeliveryButton').addEventListener('click', () => {
+        renderDeliveryData();
+    });
+
+    // Filter by paid status
+    document.getElementById('filterPaidStatus').addEventListener('change', (e) => {
+        const filter = e.target.value;
+        renderDeliveryData(filter);
+    });
+
+    // Show the Analysis Selection modal
+    document.getElementById('analysisButton').addEventListener('click', () => {
+        const analysisSelectionModal = document.getElementById('analysisSelectionModal');
+        analysisSelectionModal.style.display = 'flex'; // Show the modal
+    });
+
+    // Close the Analysis Selection modal
+    document.getElementById('closeAnalysisSelectionButton').addEventListener('click', () => {
+        const analysisSelectionModal = document.getElementById('analysisSelectionModal');
+        analysisSelectionModal.style.display = 'none'; // Hide the modal
+    });
+
+    // Open Extra Analysis from the selection modal
+    document.getElementById('openExtraAnalysisButton').addEventListener('click', () => {
+        const analysisSelectionModal = document.getElementById('analysisSelectionModal');
+        const extraAnalysisModal = document.getElementById('analysisModal');
+        analysisSelectionModal.style.display = 'none'; // Hide the selection modal
+        extraAnalysisModal.style.display = 'flex'; // Show the Extra Analysis modal
+    });
+
+    // Open Delivery Analysis from the selection modal
+    document.getElementById('openDeliveryAnalysisButton').addEventListener('click', () => {
+        const analysisSelectionModal = document.getElementById('analysisSelectionModal');
+        const deliveryAnalysisModal = document.getElementById('deliveryAnalysisModal');
+        analysisSelectionModal.style.display = 'none'; // Hide the selection modal
+        deliveryAnalysisModal.style.display = 'flex'; // Show the Delivery Analysis modal
+    });
+</script>
+
+    <script src="script.js"></script>
+</body>
+</html>

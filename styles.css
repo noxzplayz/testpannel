@@ -1,0 +1,144 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f8f0ff; /* Light purple background */
+    color: #4b0082; /* Indigo text color */
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #4b0082; /* Indigo */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #9370db; /* Medium purple */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6a5acd; /* Slightly darker purple */
+}
+
+.red-button {
+    background-color: #ff4d4d; /* Red button for "End Shift" */
+}
+
+.red-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Delivery Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    color: #4b0082; /* Indigo */
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.modal-content form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #4b0082; /* Indigo */
+}
+
+.modal-content form input,
+.modal-content form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.modal-content form input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.primary-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #9370db; /* Medium purple */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px;
+}
+
+.primary-button:hover {
+    background-color: #6a5acd; /* Slightly darker purple */
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.primary-button:active {
+    transform: translateY(0); /* Reset lift effect on click */
+}
+
+/* Animation for modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Button container for the Analysis Selection Modal */
+#analysisSelectionModal .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
