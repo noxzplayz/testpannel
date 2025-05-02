@@ -22,6 +22,7 @@ document.getElementById('startShiftButton').addEventListener('click', () => {
 document.getElementById('counter1Button').addEventListener('click', () => {
     shiftData.counter = 'Counter 1'; // Save counter selection
     closeModal('counterModal');
+    window.location.href = 'shift.html'; // Redirect to shift.html to start shift
     // const denominationModal = document.getElementById('denominationModal');
     // denominationModal.style.display = 'flex'; // Show the denomination modal
 });
