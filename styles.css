@@ -100,6 +100,44 @@ button:hover {
     }
 }
 
+/* Additional responsive tweaks for very small devices */
+@media (max-width: 400px) {
+    .modal-content {
+        padding: 15px;
+        width: 98%;
+        max-width: 350px;
+    }
+
+    .modal-content form label {
+        font-size: 0.9rem;
+    }
+
+    .modal-content form input,
+    .modal-content form select {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 320px) {
+    .modal-content {
+        padding: 10px;
+        width: 100%;
+        max-width: 300px;
+        border-radius: 10px;
+    }
+
+    .modal-content form label {
+        font-size: 0.85rem;
+    }
+
+    .modal-content form input,
+    .modal-content form select {
+        font-size: 0.85rem;
+        padding: 6px;
+    }
+}
+
 .modal-content h2 {
     margin-bottom: 20px;
     color: #4b0082; /* Indigo */
