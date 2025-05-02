@@ -102,8 +102,15 @@ updateDateTime();
 // Initialize data from localStorage
 const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
 
-// Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Back button functionality
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            window.history.back();
+        });
+    }
+
     // Show the Extra modal
     document.getElementById('extraButton').addEventListener('click', () => {
         const extraModal = document.getElementById('extraModal');
