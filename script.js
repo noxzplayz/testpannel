@@ -19,12 +19,11 @@ document.getElementById('startShiftButton').addEventListener('click', () => {
     modal.style.display = 'flex'; // Show the modal
 });
 
-// Handle button clicks inside the counter selection modal
 document.getElementById('counter1Button').addEventListener('click', () => {
     shiftData.counter = 'Counter 1'; // Save counter selection
     closeModal('counterModal');
-    const denominationModal = document.getElementById('denominationModal');
-    denominationModal.style.display = 'flex'; // Show the denomination modal
+    // const denominationModal = document.getElementById('denominationModal');
+    // denominationModal.style.display = 'flex'; // Show the denomination modal
 });
 
 document.getElementById('counter2Button').addEventListener('click', () => {
@@ -34,44 +33,44 @@ document.getElementById('counter2Button').addEventListener('click', () => {
 });
 
 // Handle live calculation in the denomination form
-const inputs = document.querySelectorAll('#denominationForm input');
-inputs.forEach(input => {
-    input.addEventListener('input', calculateTotal);
-});
+// const inputs = document.querySelectorAll('#denominationForm input');
+// inputs.forEach(input => {
+//     input.addEventListener('input', calculateTotal);
+// });
 
-function calculateTotal() {
-    const notes500 = parseInt(document.getElementById('notes500').value) || 0;
-    const notes200 = parseInt(document.getElementById('notes200').value) || 0;
-    const notes100 = parseInt(document.getElementById('notes100').value) || 0;
-    const notes20 = parseInt(document.getElementById('notes20').value) || 0;
-    const notes10 = parseInt(document.getElementById('notes10').value) || 0;
-    const coins5 = parseInt(document.getElementById('coins5').value) || 0;
-    const remainingCoins = parseInt(document.getElementById('remainingCoins').value) || 0;
+// function calculateTotal() {
+//     const notes500 = parseInt(document.getElementById('notes500').value) || 0;
+//     const notes200 = parseInt(document.getElementById('notes200').value) || 0;
+//     const notes100 = parseInt(document.getElementById('notes100').value) || 0;
+//     const notes20 = parseInt(document.getElementById('notes20').value) || 0;
+//     const notes10 = parseInt(document.getElementById('notes10').value) || 0;
+//     const coins5 = parseInt(document.getElementById('coins5').value) || 0;
+//     const remainingCoins = parseInt(document.getElementById('remainingCoins').value) || 0;
 
-    const total = (notes500 * 500) + (notes200 * 200) + (notes100 * 100) +
-                  (notes20 * 20) + (notes10 * 10) + (coins5 * 5) + remainingCoins;
+//     const total = (notes500 * 500) + (notes200 * 200) + (notes100 * 100) +
+//                   (notes20 * 20) + (notes10 * 10) + (coins5 * 5) + remainingCoins;
 
-    document.getElementById('totalValue').textContent = total;
+//     document.getElementById('totalValue').textContent = total;
 
-    // Save the note counts and total to shiftData
-    shiftData.notes = {
-        notes500,
-        notes200,
-        notes100,
-        notes20,
-        notes10,
-        coins5,
-        remainingCoins,
-        total
-    };
-}
+//     // Save the note counts and total to shiftData
+//     shiftData.notes = {
+//         notes500,
+//         notes200,
+//         notes100,
+//         notes20,
+//         notes10,
+//         coins5,
+//         remainingCoins,
+//         total
+//     };
+// }
 
 // Handle form submission for denomination
-document.getElementById('submitDenomination').addEventListener('click', () => {
-    closeModal('denominationModal');
-    const upiPaymentModal = document.getElementById('upiPaymentModal');
-    upiPaymentModal.style.display = 'flex'; // Show the UPI payment modal
-});
+// document.getElementById('submitDenomination').addEventListener('click', () => {
+//     closeModal('denominationModal');
+//     const upiPaymentModal = document.getElementById('upiPaymentModal');
+//     upiPaymentModal.style.display = 'flex'; // Show the UPI payment modal
+// });
 
 // Handle UPI payment submission
 document.getElementById('submitUPI').addEventListener('click', () => {
