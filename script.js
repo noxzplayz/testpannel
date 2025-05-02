@@ -103,18 +103,6 @@ updateDateTime();
 const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Back button functionality
-    const backButton = document.getElementById('backButton');
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-    }
-
     // Show the Extra modal
     document.getElementById('extraButton').addEventListener('click', () => {
         const extraModal = document.getElementById('extraModal');
