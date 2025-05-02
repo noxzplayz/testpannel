@@ -1,65 +1,64 @@
-/* General styles for the Extra Details page */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f8f0ff; /* Light purple background */
-    color: #4b0082; /* Indigo text color */
+    padding: 1rem;
+    background-color: #f8f0ff;
+    color: #4b0082;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
-/* Form container */
 .form-container {
     background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
+    padding: 2rem;
+    border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
 }
 
 h1 {
-    margin-bottom: 20px;
-    color: #4b0082; /* Indigo */
-    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 form label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
     font-weight: bold;
-    text-align: left;
 }
 
-form input, form select {
+form input,
+form select {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     font-size: 1rem;
 }
 
 .primary-button {
-    padding: 10px 20px;
+    padding: 0.75rem;
     font-size: 1rem;
     color: #fff;
-    background-color: #9370db; /* Medium purple */
+    background-color: #9370db;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     cursor: pointer;
     width: 100%;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .primary-button:hover {
-    background-color: #6a5acd; /* Slightly darker purple */
-    transform: translateY(-2px); /* Lift effect on hover */
+    background-color: #6a5acd;
+    transform: translateY(-2px);
 }
 
 .primary-button:active {
-    transform: translateY(0); /* Reset lift effect on click */
+    transform: translateY(0);
 }
