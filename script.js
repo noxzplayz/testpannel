@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
           alert('Please enter your previous UPI balance.');
           return;
         }
-        // Show shift in progress interface
+        // Show shift in progress interface with End Shift button styled red
         mainContent.innerHTML = `
           <div class="shift-status">Shift in progress</div>
           <button class="action-button">Extra</button>
           <button class="action-button">Delivery</button>
           <button class="action-button">Issue</button>
           <button class="action-button">Analysis</button>
-          <button class="action-button">End Shift</button>
+          <button class="action-button end-shift-button">End Shift</button>
         `;
 
         // Add event listeners for these buttons
