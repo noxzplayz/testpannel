@@ -1,0 +1,62 @@
+/* Extra section styles matching main theme */
+.extra-form {
+  background: #f5f0ff;
+  padding: 20px 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4);
+  max-width: 320px;
+  width: 100%;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-weight: 700;
+  color: #6a1b9a;
+}
+.extra-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 900;
+}
+.extra-form input[type="text"],
+.extra-form input[type="number"],
+.extra-form select {
+  padding: 10px 15px;
+  border: 3px solid #6a1b9a;
+  border-radius: 25px;
+  font-size: 1.2em;
+  font-weight: 700;
+  outline: none;
+  box-shadow: inset 0 2px 5px rgba(107, 27, 154, 0.3);
+  color: #6a1b9a;
+  background-color: white;
+}
+.extra-form input[type="text"]:focus,
+.extra-form input[type="number"]:focus,
+.extra-form select:focus {
+  border-color: #9b59b6;
+  box-shadow: 0 0 8px #9b59b6;
+}
+.extra-form .submit-button {
+  margin-top: 20px;
+  background-color: #9b59b6;
+  color: white;
+  border: 3px solid #6a1b9a;
+  border-radius: 25px;
+  padding: 15px 0;
+  font-size: 1.4em;
+  font-weight: 900;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 12px rgba(155, 89, 182, 0.6);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+}
+.extra-form .submit-button:hover {
+  background-color: #7d3c98;
+  transform: scale(1.05);
+}
+.extra-form .submit-button:active {
+  background-color: #5e2a75;
+  transform: scale(0.95);
+}
