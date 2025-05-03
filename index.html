@@ -1,53 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mart Shift App</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Namma Mart Employee Portal</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div id="dateTimeTextView">Loading...</div>
-    <button id="startShiftButton">Start Shift</button>
-
-    <!-- Modal for Counter Selection -->
-    <div id="counterModal" class="modal">
-        <div class="modal-content">
-            <p>Choose your counter:</p>
-            <button id="counter1Button">Counter 1</button>
-            <button id="counter2Button">Counter 2</button>
-        </div>
-    </div>
-
-    <!-- Modal for Denomination Form -->
-    <!--
-    <div id="denominationModal" class="modal">
-        <div class="modal-content">
-            <p>Enter the denominations:</p>
-            <form id="denominationForm">
-                <label>500 Notes: <input type="number" id="notes500" value="0"></label><br>
-                <label>200 Notes: <input type="number" id="notes200" value="0"></label><br>
-                <label>100 Notes: <input type="number" id="notes100" value="0"></label><br>
-                <label>20 Notes: <input type="number" id="notes20" value="0"></label><br>
-                <label>10 Notes: <input type="number" id="notes10" value="0"></label><br>
-                <label>5 Coins: <input type="number" id="coins5" value="0"></label><br>
-                <label>Remaining Coins (1 & 2): <input type="number" id="remainingCoins" value="0"></label><br>
-                <p>Total: <span id="totalValue">0</span></p>
-                <button type="button" id="submitDenomination">Submit</button>
-            </form>
-        </div>
-    </div>
-    -->
-
-    <!-- Modal for UPI Payment -->
-    <div id="upiPaymentModal" class="modal">
-        <div class="modal-content">
-            <p>Enter UPI payment of the previous employee:</p>
-            <label>UPI Amount: <input type="number" id="upiAmount" value="0"></label><br>
-            <button type="button" id="submitUPI">Submit</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<header>
+  <div class="logo">namma mart</div>
+  <div class="subtitle">employee portal</div>
+</header>
+<main id="main-content">
+  <div class="welcome-text">Welcome</div>
+  <button class="start-shift-button">Start Shift</button>
+</main>
+<footer>
+  &copy; 2024 Namma Mart. All rights reserved.
+</footer>
+<script src="script.js"></script>
 </body>
 </html>
