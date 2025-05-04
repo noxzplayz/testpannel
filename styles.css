@@ -1,14 +1,124 @@
-/* Reset and base styles */
+g/* Reset and base styles */
 body {
   margin: 0;
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   min-height: 100vh;
   background: linear-gradient(135deg, #2e004f, #6a00b8);
   color: #000000;
   overflow-x: hidden;
   scroll-behavior: smooth;
+}
+<<<<<<< SEARCH
+main {
+  flex: 1;
+  padding: 60px 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f5f0ff;
+  max-width: 650px;
+  margin: 40px auto;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(107, 0, 179, 0.3);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1.5s ease forwards;
+}
+=======
+main {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding: 60px 30px;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #f5f0ff;
+  max-width: 650px;
+  margin: 40px auto;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(107, 0, 179, 0.3);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1.5s ease forwards;
+}
+<<<<<<< SEARCH
+main .start-shift-button {
+  background: #6a00b8;
+  color: #000000;
+  border: none;
+  border-radius: 12px;
+  padding: 18px 48px;
+  font-size: 1.8em;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 12px rgba(107, 0, 179, 0.4);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+=======
+main .start-shift-button {
+  background: #6a00b8;
+  color: #000000;
+  border: none;
+  border-radius: 12px;
+  padding: 18px 48px;
+  font-size: 1.8em;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 12px rgba(107, 0, 179, 0.4);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Gradient text for logo and welcome */
