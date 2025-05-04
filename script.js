@@ -102,12 +102,13 @@ function showShiftInProgress() {
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
 
-  function showExtraForm(savedData = {}) {
+function showExtraForm(savedData = {}) {
     localStorage.setItem('appState', 'extraForm');
     mainContent.innerHTML = `
       <form id="extra-form" class="extra-form">
+        <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
         <label for="bill-number">Bill Number:</label><br/>
-        <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
+        <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
         <label for="extra-amount">Extra Amount:</label><br/>
         <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
         <label for="mode-pay">Mode of Pay:</label><br/>
@@ -120,14 +121,44 @@ function showShiftInProgress() {
         <label for="item-category">Item Category:</label><br/>
         <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
         <button type="submit" class="action-button">Submit</button>
+        <button type="button" id="quick-add-btn" class="action-button">Quick Add</button>
         <button type="button" id="extra-back-btn" class="action-button">Back</button>
       </form>
     `;
 
     const extraForm = document.getElementById('extra-form');
+    const completelyExtraCheckbox = document.getElementById('completely-extra');
+    const billNumberInput = document.getElementById('bill-number');
+
+    function toggleBillNumber() {
+      if (completelyExtraCheckbox.checked) {
+        billNumberInput.disabled = true;
+        billNumberInput.required = false;
+      } else {
+        billNumberInput.disabled = false;
+        billNumberInput.required = true;
+      }
+    }
+
+    completelyExtraCheckbox.addEventListener('change', () => {
+      toggleBillNumber();
+      // Save form data on checkbox change
+      const formData = {
+        completelyExtra: completelyExtraCheckbox.checked,
+        billNumber: billNumberInput.value,
+        extraAmount: document.getElementById('extra-amount').value,
+        modePay: document.getElementById('mode-pay').value,
+        itemCategory: document.getElementById('item-category').value,
+      };
+      localStorage.setItem('extraFormData', JSON.stringify(formData));
+    });
+
+    toggleBillNumber();
+
     extraForm.addEventListener('input', () => {
       const formData = {
-        billNumber: document.getElementById('bill-number').value,
+        completelyExtra: completelyExtraCheckbox.checked,
+        billNumber: billNumberInput.value,
         extraAmount: document.getElementById('extra-amount').value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
@@ -137,18 +168,23 @@ function showShiftInProgress() {
 
     extraForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const billNumber = document.getElementById('bill-number').value.trim();
+      const completelyExtra = completelyExtraCheckbox.checked;
+      const billNumber = billNumberInput.value.trim();
       const extraAmount = document.getElementById('extra-amount').value.trim();
       const modePay = document.getElementById('mode-pay').value;
       const itemCategory = document.getElementById('item-category').value.trim();
 
-      if (!billNumber || !extraAmount || !modePay || !itemCategory) {
+      if (!completelyExtra && !billNumber) {
+        alert('Please fill all fields.');
+        return;
+      }
+      if (!extraAmount || !modePay || !itemCategory) {
         alert('Please fill all fields.');
         return;
       }
 
       let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({ billNumber, extraAmount, modePay, itemCategory });
+      extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
       localStorage.setItem('extraData', JSON.stringify(extraData));
       localStorage.removeItem('extraFormData');
 
@@ -157,6 +193,80 @@ function showShiftInProgress() {
       localStorage.setItem('appState', 'shiftInProgress');
       showShiftInProgress();
     });
+
+    document.getElementById('quick-add-btn').addEventListener('click', () => {
+      showQuickAddForm();
+    });
+
+  function showQuickAddForm() {
+    localStorage.setItem('appState', 'quickAddForm');
+    mainContent.innerHTML = `
+      <form id="quick-add-form" class="extra-form">
+        <label for="bill-number-quick">Bill Number:</label><br/>
+        <input type="text" id="bill-number-quick" name="bill-number-quick" required class="input-field"/><br/>
+        <label for="total-amount">Total Amount:</label><br/>
+        <input type="number" id="total-amount" name="total-amount" required class="input-field"/><br/>
+        <label for="without-extra-amount">Without Extra Amount:</label><br/>
+        <input type="number" id="without-extra-amount" name="without-extra-amount" required class="input-field"/><br/>
+        <label for="extra-amount-quick">Extra Amount:</label><br/>
+        <input type="number" id="extra-amount-quick" name="extra-amount-quick" readonly class="input-field"/><br/>
+        <label for="mode-pay-quick">Mode of Pay:</label><br/>
+        <select id="mode-pay-quick" name="mode-pay-quick" required class="input-field">
+          <option value="">Select</option>
+          <option value="UPI">UPI</option>
+          <option value="Cash">Cash</option>
+          <option value="Card">Card</option>
+        </select><br/>
+        <label for="item-category-quick">Item Category:</label><br/>
+        <input type="text" id="item-category-quick" name="item-category-quick" required class="input-field"/><br/>
+        <button type="submit" class="action-button">Submit</button>
+        <button type="button" id="quick-add-back-btn" class="action-button">Back</button>
+      </form>
+    `;
+
+    const quickAddForm = document.getElementById('quick-add-form');
+    const totalAmountInput = document.getElementById('total-amount');
+    const withoutExtraAmountInput = document.getElementById('without-extra-amount');
+    const extraAmountInput = document.getElementById('extra-amount-quick');
+
+    function updateExtraAmount() {
+      const total = parseFloat(totalAmountInput.value) || 0;
+      const withoutExtra = parseFloat(withoutExtraAmountInput.value) || 0;
+      const extra = total - withoutExtra;
+      extraAmountInput.value = extra >= 0 ? extra.toFixed(2) : '';
+    }
+
+    totalAmountInput.addEventListener('input', updateExtraAmount);
+    withoutExtraAmountInput.addEventListener('input', updateExtraAmount);
+
+    quickAddForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const billNumber = document.getElementById('bill-number-quick').value.trim();
+      const totalAmount = parseFloat(totalAmountInput.value);
+      const withoutExtraAmount = parseFloat(withoutExtraAmountInput.value);
+      const extraAmount = parseFloat(extraAmountInput.value);
+      const modePay = document.getElementById('mode-pay-quick').value;
+      const itemCategory = document.getElementById('item-category-quick').value.trim();
+
+      if (!billNumber || isNaN(totalAmount) || isNaN(withoutExtraAmount) || isNaN(extraAmount) || !modePay || !itemCategory) {
+        alert('Please fill all fields correctly.');
+        return;
+      }
+
+      let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+      extraData.push({ completelyExtra: false, billNumber, extraAmount, modePay, itemCategory });
+      localStorage.setItem('extraData', JSON.stringify(extraData));
+
+      alert('Quick add data saved.');
+
+      showQuickAddForm();
+    });
+
+    document.getElementById('quick-add-back-btn').addEventListener('click', () => {
+      localStorage.setItem('appState', 'extraForm');
+      showExtraForm();
+    });
+  }
 
     document.getElementById('extra-back-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'shiftInProgress');
@@ -333,7 +443,7 @@ function showShiftInProgress() {
           return `
             <tr>
               <td>${index + 1}</td>
-              <td>${item.billNumber}</td>
+              <td>${item.completelyExtra ? 'CE' : item.billNumber}</td>
               <td>${item.extraAmount}</td>
               <td>${item.modePay}</td>
               <td>${item.itemCategory}</td>
@@ -456,17 +566,130 @@ function showShiftInProgress() {
   }
 
   function endShift() {
-    if (confirm('Are you sure you want to end the shift? This will clear all saved data.')) {
-      localStorage.removeItem('extraData');
-      localStorage.removeItem('deliveryData');
-      localStorage.removeItem('issueData');
-      localStorage.removeItem('appState');
-      localStorage.removeItem('extraFormData');
-      localStorage.removeItem('deliveryFormData');
-      localStorage.removeItem('issueFormData');
-      localStorage.removeItem('shiftStarted');
-      alert('Shift ended and data cleared.');
-      location.reload();
+    // Dynamically load jsPDF library
+    if (!window.jspdfLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      script.onload = () => {
+        window.jspdfLoaded = true;
+        generateAndShowPDF();
+      };
+      document.head.appendChild(script);
+    } else {
+      generateAndShowPDF();
+    }
+
+    function generateAndShowPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Gather all data from localStorage
+      const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+      const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+      const issueData = JSON.parse(localStorage.getItem('issueData')) || [];
+
+      let y = 10;
+      doc.setFontSize(16);
+      doc.text('Namma Mart Shift Analysis Report', 10, y);
+      y += 10;
+
+      function addTable(title, data, columns) {
+        doc.setFontSize(14);
+        doc.text(title, 10, y);
+        y += 8;
+        doc.setFontSize(12);
+
+        // Headers
+        columns.forEach((col, i) => {
+          doc.text(col.header, 10 + i * 40, y);
+        });
+        y += 6;
+
+        // Rows
+        data.forEach(item => {
+          columns.forEach((col, i) => {
+            let text = item[col.key];
+            if (col.key === 'billNumber' && item.completelyExtra) {
+              text = 'CE';
+            }
+            if (text === undefined) text = '';
+            doc.text(String(text), 10 + i * 40, y);
+          });
+          y += 6;
+          if (y > 280) {
+            doc.addPage();
+            y = 10;
+          }
+        });
+        y += 10;
+      }
+
+      addTable('Extra Data', extraData, [
+        { header: 'Bill Number', key: 'billNumber' },
+        { header: 'Extra Amount', key: 'extraAmount' },
+        { header: 'Mode of Pay', key: 'modePay' },
+        { header: 'Item Category', key: 'itemCategory' },
+      ]);
+
+      addTable('Delivery Data', deliveryData, [
+        { header: 'Bill Number', key: 'billNumber' },
+        { header: 'Amount', key: 'amount' },
+        { header: 'Mode of Pay', key: 'modePay' },
+        { header: 'Paid', key: 'paid' },
+      ]);
+
+      addTable('Issue Data', issueData, [
+        { header: 'Bill Number', key: 'billNumber' },
+        { header: 'Issue Description', key: 'issueText' },
+      ]);
+
+      // Show download button and hide end shift button
+      mainContent.innerHTML = `
+        <div>PDF generated. Click the button below to download the report.</div>
+        <button id="download-pdf-btn" class="action-button">Download PDF</button>
+        <div id="timer-message" style="margin-top: 10px;"></div>
+      `;
+
+      document.getElementById('download-pdf-btn').addEventListener('click', () => {
+        doc.save('shift_analysis_report.pdf');
+        document.getElementById('download-pdf-btn').style.display = 'none';
+        startTimer();
+      });
+
+      function startTimer() {
+        let seconds = 5;
+        const timerMessage = document.getElementById('timer-message');
+        timerMessage.textContent = `Shift will end in ${seconds} seconds...`;
+        const interval = setInterval(() => {
+          seconds--;
+          if (seconds > 0) {
+            timerMessage.textContent = `Shift will end in ${seconds} seconds...`;
+          } else {
+            clearInterval(interval);
+            timerMessage.textContent = '';
+            showFinalEndShiftButton();
+          }
+        }, 1000);
+      }
+
+      function showFinalEndShiftButton() {
+        const btn = document.createElement('button');
+        btn.textContent = 'End Shift and Reset Data';
+        btn.className = 'action-button';
+        btn.addEventListener('click', () => {
+          localStorage.removeItem('extraData');
+          localStorage.removeItem('deliveryData');
+          localStorage.removeItem('issueData');
+          localStorage.removeItem('appState');
+          localStorage.removeItem('extraFormData');
+          localStorage.removeItem('deliveryFormData');
+          localStorage.removeItem('issueFormData');
+          localStorage.removeItem('shiftStarted');
+          alert('Shift ended and data cleared.');
+          location.reload();
+        });
+        mainContent.appendChild(btn);
+      }
     }
   }
 });
