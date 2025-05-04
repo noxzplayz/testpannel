@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <form id="upi-form" class="upi-form">
             <label for="upi-balance">What's my previous UPI balance?</label><br/>
             <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
-            <button type="submit" class="action-button">Submit</button>
+            <button type="submit" class="submit-button">Submit</button>
           </form>
         `;
 
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function showShiftInProgress() {
+function showShiftInProgress() {
     localStorage.setItem('appState', 'shiftInProgress');
     mainContent.innerHTML = `
       <div class="shift-status">Shift in progress</div>
