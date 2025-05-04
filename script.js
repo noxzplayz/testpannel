@@ -77,7 +77,6 @@ function showShiftInProgress() {
     mainContent.innerHTML = `
       <div class="shift-status">Shift in progress</div>
       <button class="action-button" id="extra-btn">Extra</button>
-      <button class="action-button" id="quick-add-btn">Quick Add</button>
       <button class="action-button" id="delivery-btn">Delivery</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
@@ -87,10 +86,6 @@ function showShiftInProgress() {
     document.getElementById('extra-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'extraForm');
       showExtraForm();
-    });
-    document.getElementById('quick-add-btn').addEventListener('click', () => {
-      localStorage.setItem('appState', 'quickAddForm');
-      showQuickAddForm();
     });
     document.getElementById('delivery-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'deliveryForm');
@@ -115,59 +110,24 @@ function showExtraForm(savedData = {}) {
         <label for="bill-number">Bill Number:</label><br/>
         <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
         <label for="extra-amount">Extra Amount:</label><br/>
-      <div style="display:flex; align-items:center;">
-        <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field" style="flex:1;"/>
-        <button type="button" id="quick-add-btn" title="Quick Add" style="margin-left:8px; font-weight:bold; font-size:1.2em; cursor:pointer;">i</button>
-      </div>
-      <label for="mode-pay">Mode of Pay:</label><br/>
-      <select id="mode-pay" name="mode-pay" required class="input-field">
-        <option value="">Select</option>
-        <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
-        <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
-        <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
-      </select><br/>
-      <label for="item-category">Item Category:</label><br/>
-      <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
-      <button type="submit" class="action-button">Submit</button>
-      <button type="button" id="extra-back-btn" class="action-button">Back</button>
-    </form>
-    <div id="quick-add-form" style="display:none; margin-top:20px; padding:15px; border:1px solid #9b00e8; border-radius:12px; background:rgba(155,0,232,0.1); max-width:360px;">
-      <h3>Quick Add</h3>
-      <label for="bill-number-quick">Bill Number:</label><br/>
-      <input type="text" id="bill-number-quick" class="input-field" /><br/>
-      <label for="total-amount">Total Amount:</label><br/>
-      <input type="number" id="total-amount" class="input-field" /><br/>
-      <label for="without-extra-amount">Without Extra Amount:</label><br/>
-      <input type="number" id="without-extra-amount" class="input-field" /><br/>
-      <label for="extra-amount-quick">Extra Amount:</label><br/>
-      <input type="number" id="extra-amount-quick" class="input-field" readonly /><br/>
-      <label for="mode-pay-quick">Mode of Pay:</label><br/>
-      <select id="mode-pay-quick" class="input-field">
-        <option value="">Select</option>
-        <option value="UPI">UPI</option>
-        <option value="Cash">Cash</option>
-        <option value="Card">Card</option>
-      </select><br/>
-      <label for="item-category-quick">Item Category:</label><br/>
-      <input type="text" id="item-category-quick" class="input-field" /><br/>
-      <button type="button" id="submit-quick-add" class="action-button">Submit</button>
-      <button type="button" id="cancel-quick-add" class="action-button">Cancel</button>
-    </div>
+        <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
+        <label for="mode-pay">Mode of Pay:</label><br/>
+        <select id="mode-pay" name="mode-pay" required class="input-field">
+          <option value="">Select</option>
+          <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
+          <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
+          <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+        </select><br/>
+        <label for="item-category">Item Category:</label><br/>
+        <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
+        <button type="submit" class="action-button">Submit</button>
+        <button type="button" id="extra-back-btn" class="action-button">Back</button>
+      </form>
     `;
 
     const extraForm = document.getElementById('extra-form');
     const completelyExtraCheckbox = document.getElementById('completely-extra');
     const billNumberInput = document.getElementById('bill-number');
-    const quickAddBtn = document.getElementById('quick-add-btn');
-    const quickAddForm = document.getElementById('quick-add-form');
-    const totalAmountInput = document.getElementById('total-amount');
-    const withoutExtraAmountInput = document.getElementById('without-extra-amount');
-    const cancelQuickAddBtn = document.getElementById('cancel-quick-add');
-    const extraAmountInput = document.getElementById('extra-amount');
-    const extraAmountQuickInput = document.getElementById('extra-amount-quick');
-    const modePayQuickSelect = document.getElementById('mode-pay-quick');
-    const itemCategoryQuickInput = document.getElementById('item-category-quick');
-    const submitQuickAddBtn = document.getElementById('submit-quick-add');
 
     function toggleBillNumber() {
       if (completelyExtraCheckbox.checked) {
@@ -185,7 +145,7 @@ function showExtraForm(savedData = {}) {
       const formData = {
         completelyExtra: completelyExtraCheckbox.checked,
         billNumber: billNumberInput.value,
-        extraAmount: extraAmountInput.value,
+        extraAmount: document.getElementById('extra-amount').value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
       };
@@ -198,7 +158,7 @@ function showExtraForm(savedData = {}) {
       const formData = {
         completelyExtra: completelyExtraCheckbox.checked,
         billNumber: billNumberInput.value,
-        extraAmount: extraAmountInput.value,
+        extraAmount: document.getElementById('extra-amount').value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
       };
@@ -209,7 +169,7 @@ function showExtraForm(savedData = {}) {
       e.preventDefault();
       const completelyExtra = completelyExtraCheckbox.checked;
       const billNumber = billNumberInput.value.trim();
-      const extraAmount = extraAmountInput.value.trim();
+      const extraAmount = document.getElementById('extra-amount').value.trim();
       const modePay = document.getElementById('mode-pay').value;
       const itemCategory = document.getElementById('item-category').value.trim();
 
@@ -237,76 +197,6 @@ function showExtraForm(savedData = {}) {
       localStorage.setItem('appState', 'shiftInProgress');
       localStorage.removeItem('extraFormData');
       showShiftInProgress();
-    });
-
-    quickAddBtn.addEventListener('click', () => {
-      if (quickAddForm.style.display === 'none' || quickAddForm.style.display === '') {
-        quickAddForm.style.display = 'block';
-      } else {
-        quickAddForm.style.display = 'none';
-      }
-    });
-
-    function calculateQuickAddExtraAmount() {
-      const total = parseFloat(totalAmountInput.value);
-      const withoutExtra = parseFloat(withoutExtraAmountInput.value);
-      if (isNaN(total) || isNaN(withoutExtra)) {
-        extraAmountQuickInput.value = '';
-        return;
-      }
-      const calculatedExtraAmount = total - withoutExtra;
-      if (calculatedExtraAmount < 0) {
-        alert('Calculated extra amount cannot be negative.');
-        extraAmountQuickInput.value = '';
-        return;
-      }
-      extraAmountQuickInput.value = calculatedExtraAmount.toFixed(2);
-    }
-
-    totalAmountInput.addEventListener('input', calculateQuickAddExtraAmount);
-    withoutExtraAmountInput.addEventListener('input', calculateQuickAddExtraAmount);
-
-    submitQuickAddBtn.addEventListener('click', () => {
-      const billNumber = document.getElementById('bill-number-quick').value.trim();
-      const totalAmount = totalAmountInput.value.trim();
-      const withoutExtraAmount = withoutExtraAmountInput.value.trim();
-      const extraAmount = extraAmountQuickInput.value.trim();
-      const modePay = modePayQuickSelect.value;
-      const itemCategory = itemCategoryQuickInput.value.trim();
-
-      if (!billNumber || !totalAmount || !withoutExtraAmount || !extraAmount || !modePay || !itemCategory) {
-        alert('Please fill all fields in Quick Add form.');
-        return;
-      }
-
-      let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({
-        completelyExtra: false,
-        billNumber,
-        extraAmount,
-        modePay,
-        itemCategory
-      });
-      localStorage.setItem('extraData', JSON.stringify(extraData));
-      alert('Quick Add data saved.');
-
-      quickAddForm.style.display = 'none';
-      document.getElementById('bill-number-quick').value = '';
-      totalAmountInput.value = '';
-      withoutExtraAmountInput.value = '';
-      extraAmountQuickInput.value = '';
-      modePayQuickSelect.value = '';
-      itemCategoryQuickInput.value = '';
-    });
-
-    cancelQuickAddBtn.addEventListener('click', () => {
-      quickAddForm.style.display = 'none';
-      document.getElementById('bill-number-quick').value = '';
-      totalAmountInput.value = '';
-      withoutExtraAmountInput.value = '';
-      extraAmountQuickInput.value = '';
-      modePayQuickSelect.value = '';
-      itemCategoryQuickInput.value = '';
     });
   }
 
