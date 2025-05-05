@@ -226,7 +226,7 @@ main .shift-status {
 /* Footer styles */
 footer {
   text-align: center;
-  padding: 15px 20px;
+  padding: 13px 20px; /* reduced padding-top and padding-bottom by 2px */
   font-size: 0.9em;
   color: #666;
   border-top: 1px solid #ccc;
