@@ -109,14 +109,19 @@ function showExtraForm(savedData = {}) {
         <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
         <label for="bill-number">Bill Number:</label><br/>
         <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
+        <label for="total-amount">Total Amount with Extra:</label><br/>
+        <input type="number" id="total-amount" name="total-amount" value="${savedData.totalAmount || ''}" class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
+        <label for="without-extra">Amount Without Extra:</label><br/>
+        <input type="number" id="without-extra" name="without-extra" value="${savedData.withoutExtra || ''}" class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
         <label for="extra-amount">Extra Amount:</label><br/>
-        <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
+        <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field" ${savedData.completelyExtra ? '' : 'readonly'}/><br/>
         <label for="mode-pay">Mode of Pay:</label><br/>
         <select id="mode-pay" name="mode-pay" required class="input-field">
           <option value="">Select</option>
           <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
           <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+          <option value="Multiple" ${savedData.modePay === 'Multiple' ? 'selected' : ''}>Multiple</option>
         </select><br/>
         <label for="item-category">Item Category:</label><br/>
         <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
@@ -128,6 +133,9 @@ function showExtraForm(savedData = {}) {
     const extraForm = document.getElementById('extra-form');
     const completelyExtraCheckbox = document.getElementById('completely-extra');
     const billNumberInput = document.getElementById('bill-number');
+    const totalAmountInput = document.getElementById('total-amount');
+    const withoutExtraInput = document.getElementById('without-extra');
+    const extraAmountInput = document.getElementById('extra-amount');
 
     function toggleBillNumber() {
       if (completelyExtraCheckbox.checked) {
@@ -139,13 +147,37 @@ function showExtraForm(savedData = {}) {
       }
     }
 
+    function toggleExtraAmountInputs() {
+      if (completelyExtraCheckbox.checked) {
+        totalAmountInput.disabled = true;
+        withoutExtraInput.disabled = true;
+        extraAmountInput.readOnly = false;
+        extraAmountInput.required = true;
+      } else {
+        totalAmountInput.disabled = false;
+        withoutExtraInput.disabled = false;
+        extraAmountInput.readOnly = true;
+        extraAmountInput.required = true;
+      }
+    }
+
+    function updateExtraAmount() {
+      const total = parseFloat(totalAmountInput.value) || 0;
+      const withoutExtra = parseFloat(withoutExtraInput.value) || 0;
+      const calculatedExtra = total - withoutExtra;
+      extraAmountInput.value = calculatedExtra >= 0 ? calculatedExtra : 0;
+    }
+
     completelyExtraCheckbox.addEventListener('change', () => {
       toggleBillNumber();
+      toggleExtraAmountInputs();
       // Save form data on checkbox change
       const formData = {
         completelyExtra: completelyExtraCheckbox.checked,
         billNumber: billNumberInput.value,
-        extraAmount: document.getElementById('extra-amount').value,
+        totalAmount: totalAmountInput.value,
+        withoutExtra: withoutExtraInput.value,
+        extraAmount: extraAmountInput.value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
       };
@@ -153,12 +185,27 @@ function showExtraForm(savedData = {}) {
     });
 
     toggleBillNumber();
+    toggleExtraAmountInputs();
+
+    totalAmountInput.addEventListener('input', () => {
+      if (!completelyExtraCheckbox.checked) {
+        updateExtraAmount();
+      }
+    });
+
+    withoutExtraInput.addEventListener('input', () => {
+      if (!completelyExtraCheckbox.checked) {
+        updateExtraAmount();
+      }
+    });
 
     extraForm.addEventListener('input', () => {
       const formData = {
         completelyExtra: completelyExtraCheckbox.checked,
         billNumber: billNumberInput.value,
-        extraAmount: document.getElementById('extra-amount').value,
+        totalAmount: totalAmountInput.value,
+        withoutExtra: withoutExtraInput.value,
+        extraAmount: extraAmountInput.value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
       };
@@ -169,11 +216,17 @@ function showExtraForm(savedData = {}) {
       e.preventDefault();
       const completelyExtra = completelyExtraCheckbox.checked;
       const billNumber = billNumberInput.value.trim();
-      const extraAmount = document.getElementById('extra-amount').value.trim();
+      const totalAmount = totalAmountInput.value.trim();
+      const withoutExtra = withoutExtraInput.value.trim();
+      const extraAmount = extraAmountInput.value.trim();
       const modePay = document.getElementById('mode-pay').value;
       const itemCategory = document.getElementById('item-category').value.trim();
 
       if (!completelyExtra && !billNumber) {
+        alert('Please fill all fields.');
+        return;
+      }
+      if (!completelyExtra && (!totalAmount || !withoutExtra)) {
         alert('Please fill all fields.');
         return;
       }
@@ -183,7 +236,7 @@ function showExtraForm(savedData = {}) {
       }
 
       let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
+      extraData.push({ completelyExtra, billNumber, totalAmount, withoutExtra, extraAmount, modePay, itemCategory });
       localStorage.setItem('extraData', JSON.stringify(extraData));
       localStorage.removeItem('extraFormData');
 
@@ -214,6 +267,7 @@ function showExtraForm(savedData = {}) {
           <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
           <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+          <option value="Multiple" ${savedData.modePay === 'Multiple' ? 'selected' : ''}>Multiple</option>
         </select><br/>
         <button type="submit" class="action-button">Save</button>
         <button type="button" id="delivery-back-btn" class="action-button">Back</button>
@@ -346,6 +400,7 @@ function showExtraForm(savedData = {}) {
             <option value="UPI">UPI</option>
             <option value="Cash">Cash</option>
             <option value="Card">Card</option>
+            <option value="Multiple">Multiple</option>
           </select>
         `;
 

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
           <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+          <option value="Multiple" ${savedData.modePay === 'Multiple' ? 'selected' : ''}>Multiple</option>
         </select><br/>
         <label for="item-category">Item Category:</label><br/>
         <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
