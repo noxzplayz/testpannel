@@ -33,43 +33,40 @@ document.addEventListener('DOMContentLoaded', () => {
     startShiftButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
       localStorage.setItem('shiftStartTime', new Date().toISOString());
-      localStorage.setItem('appState', 'shiftInProgress');
+      localStorage.setItem('appState', 'upiForm');
       mainContent.innerHTML = `
-        <button id="counter1" class="counter-button">Counter 1</button>
-        <button id="counter2" class="counter-button">Counter 2</button>
+      <form id="upi-form" class="upi-form">
+        <label for="upi-balance">What's my previous UPI balance?</label><br/>
+        <input type="number" id="upi-balance" name="upi-balance" class="input-field"/><br/>
+        <label><input type="checkbox" id="counter2-checkbox" name="counter2-checkbox"/> I am in counter 2</label><br/>
+        <button type="submit" class="submit-button">Submit</button>
+      </form>
       `;
 
-      const counter1 = document.getElementById('counter1');
-      const counter2 = document.getElementById('counter2');
+      const upiForm = document.getElementById('upi-form');
+      if (!upiForm) return;
+      upiForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const upiBalanceInput = document.getElementById('upi-balance');
+        const counter2Checkbox = document.getElementById('counter2-checkbox');
+        const upiBalance = upiBalanceInput.value;
+        const isCounter2 = counter2Checkbox.checked;
 
-      if (!counter1 || !counter2) return;
-
-      counter1.addEventListener('click', () => {
-        mainContent.innerHTML = `
-          <form id="upi-form" class="upi-form">
-            <label for="upi-balance">What's my previous UPI balance?</label><br/>
-            <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
-            <button type="submit" class="submit-button">Submit</button>
-          </form>
-        `;
-
-        const upiForm = document.getElementById('upi-form');
-        if (!upiForm) return;
-        upiForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-        const upiBalance = document.getElementById('upi-balance').value;
-        if (upiBalance.trim() === '') {
-          alert('Please enter your previous UPI balance.');
+        if (!isCounter2 && upiBalance.trim() === '') {
+          alert('Please enter your previous UPI balance or check "I am in counter 2".');
           return;
         }
-        localStorage.setItem('upiBalance', upiBalance);
+
+        if (isCounter2) {
+          localStorage.setItem('activeCounter', 'counter2');
+          localStorage.removeItem('upiBalance');
+        } else {
+          localStorage.setItem('activeCounter', 'counter1');
+          localStorage.setItem('upiBalance', upiBalance);
+        }
+
         localStorage.setItem('appState', 'shiftInProgress');
         showShiftInProgress();
-        });
-      });
-
-      counter2.addEventListener('click', () => {
-        alert('Counter 2 clicked');
       });
     });
   }
@@ -400,6 +397,8 @@ function showAnalysis() {
 
     // Display UPI balance below date/time
     const upiBalance = localStorage.getItem('upiBalance');
+    const activeCounter = localStorage.getItem('activeCounter') || 'counter1';
+
     if (upiBalance !== null) {
       const upiDisplay = document.createElement('div');
       upiDisplay.style.fontWeight = 'bold';
@@ -415,6 +414,21 @@ function showAnalysis() {
       upiDisplay.textContent = `UPI Before Checking: ₹${upiBalance}`;
       dateTimeDisplay.parentNode.insertBefore(upiDisplay, dateTimeDisplay.nextSibling);
     }
+
+    // Display active counter below UPI balance or shift start time
+    const counterDisplay = document.createElement('div');
+    counterDisplay.style.fontWeight = 'bold';
+    counterDisplay.style.marginBottom = '10px';
+    counterDisplay.style.fontFamily = 'Arial, sans-serif';
+    counterDisplay.style.color = '#34495e';
+    counterDisplay.style.fontSize = '18px';
+    counterDisplay.style.border = '1px solid #2980b9';
+    counterDisplay.style.padding = '8px 12px';
+    counterDisplay.style.borderRadius = '6px';
+    counterDisplay.style.backgroundColor = '#ecf0f1';
+    counterDisplay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+    counterDisplay.textContent = `Active Counter: ${activeCounter === 'counter2' ? 'Counter 2' : 'Counter 1'}`;
+    dateTimeDisplay.parentNode.insertBefore(counterDisplay, dateTimeDisplay.nextSibling.nextSibling);
 
     // Display shift start time below UPI balance
     const shiftStartTimeISO = localStorage.getItem('shiftStartTime');
