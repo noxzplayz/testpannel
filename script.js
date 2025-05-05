@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (startShiftButton) {
     startShiftButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
+      localStorage.setItem('shiftStartTime', new Date().toISOString());
       localStorage.setItem('appState', 'shiftInProgress');
       mainContent.innerHTML = `
         <button id="counter1" class="counter-button">Counter 1</button>
@@ -56,13 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!upiForm) return;
         upiForm.addEventListener('submit', (e) => {
           e.preventDefault();
-          const upiBalance = document.getElementById('upi-balance').value;
-          if (upiBalance.trim() === '') {
-            alert('Please enter your previous UPI balance.');
-            return;
-          }
-          localStorage.setItem('appState', 'shiftInProgress');
-          showShiftInProgress();
+        const upiBalance = document.getElementById('upi-balance').value;
+        if (upiBalance.trim() === '') {
+          alert('Please enter your previous UPI balance.');
+          return;
+        }
+        localStorage.setItem('upiBalance', upiBalance);
+        localStorage.setItem('appState', 'shiftInProgress');
+        showShiftInProgress();
         });
       });
 
@@ -363,7 +365,7 @@ function showExtraForm(savedData = {}) {
     });
   }
 
-  function showAnalysis() {
+function showAnalysis() {
     localStorage.setItem('appState', 'analysisView');
     let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
@@ -371,6 +373,7 @@ function showExtraForm(savedData = {}) {
 
     mainContent.innerHTML = `
       <div class="shift-status analysis-title">Analysis</div>
+      <div id="date-time-display" style="font-weight:bold; margin-bottom:10px; font-family: Arial, sans-serif;"></div>
       <div class="analysis-tabs">
         <button class="tab-button" id="tab-extra">View Extra</button>
         <button class="tab-button" id="tab-delivery">View Delivery</button>
@@ -383,6 +386,82 @@ function showExtraForm(savedData = {}) {
 
     const analysisContent = document.getElementById('analysis-content');
     const filterContainer = document.getElementById('filter-container');
+    const dateTimeDisplay = document.getElementById('date-time-display');
+
+    // Function to format date and time
+    function formatDateTime(date) {
+      const options = {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: true
+      };
+      return date.toLocaleString('en-US', options);
+    }
+
+    // Display UPI balance below date/time
+    const upiBalance = localStorage.getItem('upiBalance');
+    if (upiBalance !== null) {
+      const upiDisplay = document.createElement('div');
+      upiDisplay.style.fontWeight = 'bold';
+      upiDisplay.style.marginBottom = '10px';
+      upiDisplay.style.fontFamily = 'Arial, sans-serif';
+      upiDisplay.style.color = '#2c3e50';
+      upiDisplay.style.fontSize = '18px';
+      upiDisplay.style.border = '1px solid #2980b9';
+      upiDisplay.style.padding = '8px 12px';
+      upiDisplay.style.borderRadius = '6px';
+      upiDisplay.style.backgroundColor = '#ecf0f1';
+      upiDisplay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+      upiDisplay.textContent = `UPI Before Checking: ₹${upiBalance}`;
+      dateTimeDisplay.parentNode.insertBefore(upiDisplay, dateTimeDisplay.nextSibling);
+    }
+
+    // Display shift start time below UPI balance
+    const shiftStartTimeISO = localStorage.getItem('shiftStartTime');
+    if (shiftStartTimeISO) {
+      const shiftStartTime = new Date(shiftStartTimeISO);
+      const shiftStartDisplay = document.createElement('div');
+      shiftStartDisplay.style.fontWeight = 'bold';
+      shiftStartDisplay.style.marginBottom = '10px';
+      shiftStartDisplay.style.fontFamily = 'Arial, sans-serif';
+      shiftStartDisplay.style.color = '#2c3e50';
+      shiftStartDisplay.style.fontSize = '18px';
+      shiftStartDisplay.style.border = '1px solid #2980b9';
+      shiftStartDisplay.style.padding = '8px 12px';
+      shiftStartDisplay.style.borderRadius = '6px';
+      shiftStartDisplay.style.backgroundColor = '#ecf0f1';
+      shiftStartDisplay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+      shiftStartDisplay.textContent = `Shift Started: ${shiftStartTime.toLocaleString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: true
+      })}`;
+      dateTimeDisplay.parentNode.insertBefore(shiftStartDisplay, dateTimeDisplay.nextSibling.nextSibling);
+    }
+
+    // Update date and time every second
+    function updateDateTime() {
+      const now = new Date();
+      dateTimeDisplay.textContent = formatDateTime(now);
+    }
+
+    updateDateTime();
+    const dateTimeInterval = setInterval(updateDateTime, 1000);
+
+    // Clear interval when leaving analysis view
+    function clearDateTimeInterval() {
+      clearInterval(dateTimeInterval);
+    }
+
+    // Attach event listener to back button to clear interval
+    const analysisBackBtn = document.getElementById('analysis-back-btn');
+    if (analysisBackBtn) {
+      analysisBackBtn.addEventListener('click', () => {
+        clearDateTimeInterval();
+        localStorage.setItem('appState', 'shiftInProgress');
+        showShiftInProgress();
+      });
+    }
 
     function renderTable(data, type) {
       if (data.length === 0) {
@@ -545,18 +624,160 @@ function showExtraForm(savedData = {}) {
     });
   }
 
-  function endShift() {
-    if (confirm('Are you sure you want to end the shift? This will clear all saved data.')) {
-      localStorage.removeItem('extraData');
-      localStorage.removeItem('deliveryData');
-      localStorage.removeItem('issueData');
-      localStorage.removeItem('appState');
-      localStorage.removeItem('extraFormData');
-      localStorage.removeItem('deliveryFormData');
-      localStorage.removeItem('issueFormData');
-      localStorage.removeItem('shiftStarted');
-    alert('Shift ended and data cleared.');
+function endShift() {
+  if (!confirm("Warning: All data will be erased. Do you want to continue?")) {
+    return;
+  }
+
+  const analysisContent = document.getElementById('analysis-content');
+  if (!analysisContent) {
+    // Remove alert, show modal with checkbox and buttons
+    showScreenshotCheckModal();
+    return;
+  }
+
+  // Use html2canvas to capture screenshot of analysis section
+  html2canvas(analysisContent).then(canvas => {
+    const imageData = canvas.toDataURL('image/png');
+
+    // Placeholder function to send screenshot to admin
+    sendScreenshotToAdmin(imageData).then(() => {
+      alert("Screenshot sent to admin for verification. Now clearing data.");
+      clearDataAndReset();
+    }).catch(() => {
+      alert("Failed to send screenshot to admin. Data will not be erased.");
+    });
+  }).catch(() => {
+    alert("Failed to capture screenshot. Data will not be erased.");
+  });
+
+  function clearDataAndReset() {
+    // Clear all relevant localStorage data
+    localStorage.removeItem('extraData');
+    localStorage.removeItem('deliveryData');
+    localStorage.removeItem('issueData');
+    localStorage.removeItem('extraFormData');
+    localStorage.removeItem('deliveryFormData');
+    localStorage.removeItem('issueFormData');
+    localStorage.removeItem('shiftStarted');
+    localStorage.removeItem('appState');
+
+    // Reload the page or reset UI
     location.reload();
+  }
+
+  // Placeholder async function to send screenshot to admin
+  async function sendScreenshotToAdmin(imageData) {
+    // TODO: Implement actual sending logic here, e.g., POST to server API
+    // For now, simulate success with a resolved promise after delay
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log("Screenshot data sent to admin (simulated).");
+        resolve();
+      }, 1000);
+    });
+  }
+
+  // Show modal with checkbox and buttons for screenshot confirmation
+  function showScreenshotCheckModal() {
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = 'screenshot-check-modal';
+    modalOverlay.style.position = 'fixed';
+    modalOverlay.style.top = '0';
+    modalOverlay.style.left = '0';
+    modalOverlay.style.width = '100%';
+    modalOverlay.style.height = '100%';
+    modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    modalOverlay.style.display = 'flex';
+    modalOverlay.style.flexDirection = 'column';
+    modalOverlay.style.justifyContent = 'center';
+    modalOverlay.style.alignItems = 'center';
+    modalOverlay.style.zIndex = '10000';
+
+    // Modal content container
+    const modalContent = document.createElement('div');
+    modalContent.style.backgroundColor = 'white';
+    modalContent.style.padding = '30px';
+    modalContent.style.borderRadius = '10px';
+    modalContent.style.textAlign = 'center';
+    modalContent.style.color = '#4b0082';
+    modalContent.style.fontFamily = 'Arial, sans-serif';
+    modalContent.style.width = '350px';
+
+    // Message
+    const message = document.createElement('p');
+    message.textContent = 'Did you take a screenshot of the analysis section?';
+    message.style.marginBottom = '20px';
+    modalContent.appendChild(message);
+
+    // Checkbox container
+    const checkboxLabel = document.createElement('label');
+    checkboxLabel.style.display = 'flex';
+    checkboxLabel.style.alignItems = 'center';
+    checkboxLabel.style.justifyContent = 'center';
+    checkboxLabel.style.marginBottom = '20px';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = 'screenshot-confirm-checkbox';
+    checkbox.style.marginRight = '10px';
+
+    const labelText = document.createTextNode('Yes, I took the screenshot');
+
+    checkboxLabel.appendChild(checkbox);
+    checkboxLabel.appendChild(labelText);
+    modalContent.appendChild(checkboxLabel);
+
+    // Buttons container
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.style.display = 'flex';
+    buttonsDiv.style.justifyContent = 'space-around';
+
+    // Yes button
+    const yesButton = document.createElement('button');
+    yesButton.textContent = 'Proceed to End Shift';
+    yesButton.style.backgroundColor = '#4b0082';
+    yesButton.style.color = 'white';
+    yesButton.style.border = 'none';
+    yesButton.style.padding = '10px 20px';
+    yesButton.style.borderRadius = '5px';
+    yesButton.style.cursor = 'pointer';
+    yesButton.disabled = true;
+
+    // No button
+    const noButton = document.createElement('button');
+    noButton.textContent = 'Go to Analysis';
+    noButton.style.backgroundColor = '#ff0000';
+    noButton.style.color = 'white';
+    noButton.style.border = 'none';
+    noButton.style.padding = '10px 20px';
+    noButton.style.borderRadius = '5px';
+    noButton.style.cursor = 'pointer';
+
+    buttonsDiv.appendChild(yesButton);
+    buttonsDiv.appendChild(noButton);
+    modalContent.appendChild(buttonsDiv);
+
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+
+    // Enable yes button only if checkbox is checked
+    checkbox.addEventListener('change', () => {
+      yesButton.disabled = !checkbox.checked;
+    });
+
+    // Yes button click handler
+    yesButton.addEventListener('click', () => {
+      document.body.removeChild(modalOverlay);
+      clearDataAndReset();
+    });
+
+    // No button click handler
+    noButton.addEventListener('click', () => {
+      document.body.removeChild(modalOverlay);
+      showAnalysis();
+    });
   }
 }
 });
