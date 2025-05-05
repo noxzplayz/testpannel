@@ -500,8 +500,10 @@ function showExtraForm(savedData = {}) {
       localStorage.removeItem('deliveryFormData');
       localStorage.removeItem('issueFormData');
       localStorage.removeItem('shiftStarted');
-      alert('Shift ended and data cleared.');
-      location.reload();
-    }
+    alert('Shift ended and data cleared.');
+    location.reload();
   }
+}
 });
+
+// Calculator functionality
