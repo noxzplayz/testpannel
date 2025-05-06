@@ -12,6 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedDeliveryFormData = JSON.parse(localStorage.getItem('deliveryFormData') || '{}');
   const savedIssueFormData = JSON.parse(localStorage.getItem('issueFormData') || '{}');
 
+  // Global event listener for autoFillExtraAmount to redirect to extra form with autofill
+  window.addEventListener('autoFillExtraAmount', (e) => {
+    const detail = e.detail || {};
+    // Show extra form with autofill data, allow editing
+    showExtraForm({
+      completelyExtra: detail.completelyExtra || false,
+      billNumber: detail.billNumber || '',
+      extraAmount: detail.value || '',
+      modePay: detail.modePay || '',
+      itemCategory: detail.itemCategory || ''
+    });
+  });
+
   if (shiftStarted) {
     if (savedState === 'shiftInProgress') {
       showShiftInProgress();
@@ -102,29 +115,116 @@ function showShiftInProgress() {
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
 
-function showExtraForm(savedData = {}) {
-    localStorage.setItem('appState', 'extraForm');
-    mainContent.innerHTML = `
-      <form id="extra-form" class="extra-form">
-        <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
-        <label for="bill-number">Bill Number:</label><br/>
-        <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
-        <label for="extra-amount">Extra Amount:</label><br/>
-        <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
-        <label for="mode-pay">Mode of Pay:</label><br/>
-        <select id="mode-pay" name="mode-pay" required class="input-field">
-          <option value="">Select</option>
-          <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
-          <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
-          <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
-          <option value="Multiple" ${savedData.modePay === 'Multiple' ? 'selected' : ''}>Multiple</option>
-        </select><br/>
-        <label for="item-category">Item Category:</label><br/>
-        <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
-        <button type="submit" class="action-button">Submit</button>
-        <button type="button" id="extra-back-btn" class="action-button">Back</button>
-      </form>
-    `;
+  function showExtraForm(savedData = {}) {
+      localStorage.setItem('appState', 'extraForm');
+      mainContent.innerHTML = `
+        <form id="extra-form" class="extra-form">
+          <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
+          <label for="bill-number">Bill Number:</label><br/>
+          <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
+          <label for="extra-amount">Extra Amount:</label><br/>
+          <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
+          <label for="mode-pay">Mode of Pay:</label><br/>
+          <select id="mode-pay" name="mode-pay" required class="input-field">
+            <option value="">Select</option>
+            <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
+            <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
+            <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+            <option value="Multiple" ${savedData.modePay === 'Multiple' ? 'selected' : ''}>Multiple</option>
+          </select><br/>
+          <label for="item-category">Item Category:</label><br/>
+          <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
+          <button type="submit" class="action-button">Submit</button>
+          <button type="button" id="calculator-btn" class="action-button">Calculator</button>
+          <button type="button" id="extra-back-btn" class="action-button">Back</button>
+        </form>
+      `;
+
+      // Create calculator modal container if not exists
+      if (!document.getElementById('calculator-modal')) {
+        const modal = document.createElement('div');
+        modal.id = 'calculator-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '50%';
+        modal.style.left = '50%';
+        modal.style.transform = 'translate(-50%, -50%)';
+        modal.style.backgroundColor = 'white';
+        modal.style.borderRadius = '15px';
+        modal.style.padding = '20px';
+        modal.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
+        modal.style.maxWidth = '400px';
+        modal.style.width = '90%';
+        modal.style.maxHeight = '90%';
+        modal.style.overflowY = 'auto';
+        modal.style.zIndex = '10000';
+        modal.style.display = 'none';
+
+        // Remove overlay background color to remove overlay effect
+        // So no backgroundColor or transparent background
+        modal.style.backgroundColor = 'white';
+
+        document.body.appendChild(modal);
+      }
+
+      // Add event listener for autoFillExtraAmount event to update extra-amount input and hide modal
+      window.addEventListener('autoFillExtraAmount', (e) => {
+        const extraAmountInput = document.getElementById('extra-amount');
+        if (extraAmountInput) {
+          extraAmountInput.value = e.detail.value;
+        }
+        hideCalculatorModal();
+      });
+
+      // Show calculator modal
+      function showCalculatorModal() {
+        const modal = document.getElementById('calculator-modal');
+        const modalContent = document.getElementById('calculator-modal-content');
+        if (modal && modalContent) {
+          modal.style.display = 'flex';
+          if (!modalContent.innerHTML) {
+            fetch('calculator.html')
+              .then(response => response.text())
+              .then(html => {
+                modalContent.innerHTML = html;
+                const script = document.createElement('script');
+                script.src = 'calculator.js';
+                modalContent.appendChild(script);
+              });
+          }
+        }
+      }
+
+      // Hide calculator modal
+      function hideCalculatorModal() {
+        const modal = document.getElementById('calculator-modal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Close modal when clicking outside modal content
+      document.getElementById('calculator-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'calculator-modal') {
+          hideCalculatorModal();
+        }
+      });
+
+      document.getElementById('calculator-btn').addEventListener('click', () => {
+        const modal = document.getElementById('calculator-modal');
+        if (modal.style.display === 'flex') {
+          hideCalculatorModal();
+        } else {
+          showCalculatorModal();
+        }
+      });
+
+      // Add event listener for autoFillExtraAmount event to update extra-amount input
+      window.addEventListener('autoFillExtraAmount', (e) => {
+        const extraAmountInput = document.getElementById('extra-amount');
+        if (extraAmountInput) {
+          extraAmountInput.value = e.detail.value;
+        }
+      });
 
     const extraForm = document.getElementById('extra-form');
     const completelyExtraCheckbox = document.getElementById('completely-extra');
@@ -199,6 +299,10 @@ function showExtraForm(savedData = {}) {
       localStorage.setItem('appState', 'shiftInProgress');
       localStorage.removeItem('extraFormData');
       showShiftInProgress();
+    });
+
+    document.getElementById('calculator-btn').addEventListener('click', () => {
+      window.open('calculator.html', '_blank');
     });
   }
 

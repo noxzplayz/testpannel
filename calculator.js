@@ -1,111 +1,126 @@
-// Professional Calculator JavaScript
+// Professional Calculator JavaScript with history, expression display, and auto fill extra
 
 document.addEventListener('DOMContentLoaded', () => {
   const screen = document.getElementById('calculator-screen');
   const keys = document.querySelector('.calculator-keys');
+  const historyList = document.getElementById('history-list');
+  const autoFillButton = document.getElementById('auto-fill-extra');
 
-  let firstOperand = null;
-  let operator = null;
-  let waitingForSecondOperand = false;
+  let expression = '';
+  let lastInputIsOperator = false;
+  let lastResult = null;
 
-  function inputDigit(digit) {
-    if (waitingForSecondOperand) {
-      screen.value = digit;
-      waitingForSecondOperand = false;
+  function updateScreen() {
+    screen.value = expression || '0';
+  }
+
+  function appendToExpression(value) {
+    if (lastInputIsOperator && isOperator(value)) {
+      // Replace last operator with new one
+      expression = expression.slice(0, -1) + value;
     } else {
-      screen.value = screen.value === '0' ? digit : screen.value + digit;
+      expression += value;
+    }
+    lastInputIsOperator = isOperator(value);
+    updateScreen();
+  }
+
+  function isOperator(char) {
+    return ['+', '−', '×', '÷'].includes(char);
+  }
+
+  function calculateExpression(expr) {
+    // Replace operator symbols with JS operators
+    const sanitizedExpr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/\+/g, '+');
+    try {
+      // Use Function constructor to evaluate expression safely
+      // eslint-disable-next-line no-new-func
+      const result = Function(`"use strict";return (${sanitizedExpr})`)();
+      return result;
+    } catch {
+      return 'Error';
     }
   }
 
-  function inputDecimal() {
-    if (waitingForSecondOperand) {
-      screen.value = '0.';
-      waitingForSecondOperand = false;
-      return;
-    }
-    if (!screen.value.includes('.')) {
-      screen.value += '.';
-    }
+  function saveHistory(entry) {
+    let history = JSON.parse(localStorage.getItem('calcHistory')) || [];
+    history.push(entry);
+    localStorage.setItem('calcHistory', JSON.stringify(history));
+    renderHistory();
   }
 
-  function handleOperator(nextOperator) {
-    const inputValue = parseFloat(screen.value);
-
-    if (operator && waitingForSecondOperand) {
-      operator = nextOperator;
-      return;
-    }
-
-    if (firstOperand === null) {
-      firstOperand = inputValue;
-    } else if (operator) {
-      const result = calculate(firstOperand, inputValue, operator);
-      screen.value = String(result);
-      firstOperand = result;
-    }
-
-    operator = nextOperator;
-    waitingForSecondOperand = true;
-  }
-
-  function calculate(first, second, operator) {
-    switch (operator) {
-      case 'add':
-        return first + second;
-      case 'subtract':
-        return first - second;
-      case 'multiply':
-        return first * second;
-      case 'divide':
-        return second === 0 ? 'Error' : first / second;
-      default:
-        return second;
-    }
+  function renderHistory() {
+    let history = JSON.parse(localStorage.getItem('calcHistory')) || [];
+    historyList.innerHTML = '';
+    history.slice().reverse().forEach(({ expression, result }) => {
+      const li = document.createElement('li');
+      li.textContent = `${expression} = ${result}`;
+      historyList.appendChild(li);
+    });
   }
 
   function resetCalculator() {
-    screen.value = '0';
-    firstOperand = null;
-    operator = null;
-    waitingForSecondOperand = false;
+    expression = '';
+    lastInputIsOperator = false;
+    updateScreen();
   }
 
   keys.addEventListener('click', (event) => {
     const { target } = event;
     if (!target.matches('button')) return;
 
+    const action = target.dataset.action;
+    const keyContent = target.textContent;
+
     if (target.id === 'clear') {
       resetCalculator();
+      lastResult = null;
       return;
     }
 
     if (target.id === 'equals') {
-      if (operator && !waitingForSecondOperand) {
-        const inputValue = parseFloat(screen.value);
-        const result = calculate(firstOperand, inputValue, operator);
-        screen.value = String(result);
-        firstOperand = null;
-        operator = null;
-        waitingForSecondOperand = false;
+      if (expression && !lastInputIsOperator) {
+        const result = calculateExpression(expression);
+        saveHistory({ expression, result });
+        expression = String(result);
+        lastInputIsOperator = false;
+        lastResult = result;
+        updateScreen();
       }
       return;
     }
 
     if (target.classList.contains('operator')) {
-      handleOperator(target.dataset.action);
+      appendToExpression(keyContent);
       return;
     }
 
-    if (target.dataset.action === 'decimal') {
-      inputDecimal();
+    if (action === 'decimal') {
+      // Prevent multiple decimals in the current number segment
+      const parts = expression.split(/[\+\−\×\÷]/);
+      const currentNumber = parts[parts.length - 1];
+      if (!currentNumber.includes('.')) {
+        appendToExpression('.');
+      }
       return;
     }
 
-    if (!isNaN(target.dataset.action)) {
-      inputDigit(target.dataset.action);
+    if (!isNaN(action)) {
+      appendToExpression(action);
       return;
     }
   });
 
+  autoFillButton.addEventListener('click', () => {
+    if (window.opener && !window.opener.closed) {
+      const event = new CustomEvent('showExtraForm');
+      window.opener.dispatchEvent(event);
+      window.close();
+    } else {
+      alert('Main window is not available to redirect.');
+    }
+  });
+
+  renderHistory();
   resetCalculator();
 });
