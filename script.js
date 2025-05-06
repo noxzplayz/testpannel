@@ -586,6 +586,31 @@ function showAnalysis() {
         </table>
       `;
 
+      // Add sum of UPI and Cash payments below the table for Extra section
+      if (type === 'Extra') {
+        const sumUPI = data.reduce((sum, item) => {
+          return sum + (item.modePay === 'UPI' ? parseFloat(item.extraAmount) || 0 : 0);
+        }, 0);
+        const sumCash = data.reduce((sum, item) => {
+          return sum + (item.modePay === 'Cash' ? parseFloat(item.extraAmount) || 0 : 0);
+        }, 0);
+        const sumCard = data.reduce((sum, item) => {
+          return sum + (item.modePay === 'Card' ? parseFloat(item.extraAmount) || 0 : 0);
+        }, 0);
+
+        const sumDiv = document.createElement('div');
+        sumDiv.style.marginTop = '15px';
+        sumDiv.style.fontWeight = 'bold';
+        sumDiv.style.fontSize = '1.2em';
+        sumDiv.style.color = '#007acc';
+        sumDiv.innerHTML = `
+          <div>Total UPI: ₹${sumUPI.toFixed(2)}</div>
+          <div>Total Cash: ₹${sumCash.toFixed(2)}</div>
+          <div>Total Card: ₹${sumCard.toFixed(2)}</div>
+        `;
+        analysisContent.appendChild(sumDiv);
+      }
+
       // Add delete button event listeners
       const deleteButtons = analysisContent.querySelectorAll('.delete-btn');
       deleteButtons.forEach(btn => {
