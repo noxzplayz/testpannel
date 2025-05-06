@@ -357,13 +357,16 @@ footer {
 .analysis-table tbody tr {
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 10px;
-  display: block;
+  /* Removed margin-bottom to avoid spacing issues */
+  margin-bottom: 0;
+  /* Changed display from block to table-row for proper alignment */
+  display: table-row;
   background-color: #f9f9f9;
 }
 
 .analysis-table tbody tr td {
-  display: inline-block;
+  /* Changed display from inline-block to table-cell for proper alignment */
+  display: table-cell;
   vertical-align: middle;
 }
 

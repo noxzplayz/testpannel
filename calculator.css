@@ -312,6 +312,23 @@ body {
   text-align: left;
 }
 
+/* Right align numeric columns: # (1st column), Extra Amount/Amount (3rd column) */
+.analysis-table th:nth-child(1),
+.analysis-table td:nth-child(1),
+.analysis-table th:nth-child(3),
+.analysis-table td:nth-child(3) {
+  text-align: right;
+}
+
+/* Center align columns with checkboxes and action buttons */
+/* Paid checkbox is 5th column in Delivery, Action buttons are last column */
+.analysis-table th:nth-child(5),
+.analysis-table td:nth-child(5),
+.analysis-table th:nth-child(6),
+.analysis-table td:nth-child(6) {
+  text-align: center;
+}
+
 .analysis-table tbody tr:hover {
   background-color: #f0f8ff;
 }
