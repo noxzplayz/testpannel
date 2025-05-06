@@ -302,7 +302,7 @@ function showShiftInProgress() {
     });
 
     document.getElementById('calculator-btn').addEventListener('click', () => {
-      window.open('calculator.html', '_blank');
+      window.location.href = 'calculator.html';
     });
   }
 
