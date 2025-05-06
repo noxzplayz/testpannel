@@ -115,15 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newBackButton) {
     newBackButton.addEventListener('click', () => {
       console.log('New back button clicked');
-      if (window.opener && !window.opener.closed) {
-        console.log('Window opener exists, navigating to index.html');
-        window.opener.location.href = 'index.html';
-        window.close();
-      } else {
-        console.log('No window opener, just closing window');
-        // Just close the calculator window without alert
-        window.close();
-      }
+      window.location.href = 'index.html';
     });
   }
 
