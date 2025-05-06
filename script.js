@@ -2,7 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const mainContent = document.getElementById('main-content');
-  const startShiftButton = document.querySelector('.start-shift-button');
+  const deliveryPortalButton = document.querySelector('.delivery-portal-button');
+  const billingPortalButton = document.querySelector('.billing-portal-button');
 
   // Check if shift started
   const shiftStarted = localStorage.getItem('shiftStarted') === 'true';
@@ -26,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
       showShiftInProgress();
     }
   } else {
-    if (!startShiftButton) return;
+    if (!billingPortalButton) return;
   }
 
-  if (startShiftButton) {
-    startShiftButton.addEventListener('click', () => {
+  if (billingPortalButton) {
+    billingPortalButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
       localStorage.setItem('shiftStartTime', new Date().toISOString());
       localStorage.setItem('appState', 'upiForm');
