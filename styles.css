@@ -74,6 +74,7 @@ main .start-shift-button {
   user-select: none;
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
+  margin: 15px 10px; /* Added margin for spacing */
 }
 main .start-shift-button:hover {
   background-color: #005fa3;
@@ -307,5 +308,3 @@ footer {
     padding: 10px;
   }
 }
-
-
