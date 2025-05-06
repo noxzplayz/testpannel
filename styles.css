@@ -308,3 +308,87 @@ footer {
     padding: 10px;
   }
 }
+
+/* Analysis section styles */
+#analysis-content {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
+}
+
+.analysis-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.analysis-table thead {
+  background-color: #007acc;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.analysis-table th,
+.analysis-table td {
+  padding: 12px 15px;
+  border-bottom: none;
+  text-align: left;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.analysis-table tbody tr:hover {
+  background-color: #e6f0ff;
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analysis-table tbody tr {
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+  display: block;
+  background-color: #f9f9f9;
+}
+
+.analysis-table tbody tr td {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.analysis-table tbody tr td:last-child {
+  text-align: right;
+}
+
+.analysis-table button {
+  background-color: #0984e3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 12px rgba(9, 132, 227, 0.5);
+  transition: background-color 0.3s ease;
+  margin-left: 8px;
+}
+
+.analysis-table button:hover {
+  background-color: #065a9e;
+}
+
+.analysis-table button:active {
+  background-color: #043d6b;

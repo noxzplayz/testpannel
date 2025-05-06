@@ -587,7 +587,10 @@ function showAnalysis() {
               <td>${item.extraAmount}</td>
               <td>${item.modePay}</td>
               <td>${item.itemCategory}</td>
-              <td><button class="delete-btn" data-index="${index}" data-type="extra">Delete</button></td>
+              <td>
+                <button class="edit-btn" data-index="${index}" data-type="extra">Edit</button>
+                <button class="delete-btn" data-index="${index}" data-type="extra">Delete</button>
+              </td>
             </tr>
           `;
         } else if (type === 'Delivery') {
@@ -598,7 +601,10 @@ function showAnalysis() {
               <td>${item.amount}</td>
               <td>${item.modePay}</td>
               <td><input type="checkbox" class="paid-checkbox" data-index="${index}" ${item.paid ? 'checked' : ''}></td>
-              <td><button class="delete-btn" data-index="${index}" data-type="delivery">Delete</button></td>
+              <td>
+                <button class="edit-btn" data-index="${index}" data-type="delivery">Edit</button>
+                <button class="delete-btn" data-index="${index}" data-type="delivery">Delete</button>
+              </td>
             </tr>
           `;
         } else if (type === 'Issue') {
@@ -607,7 +613,10 @@ function showAnalysis() {
               <td>${index + 1}</td>
               <td>${item.billNumber}</td>
               <td colspan="4">${item.issueText}</td>
-              <td><button class="delete-btn" data-index="${index}" data-type="issue">Delete</button></td>
+              <td>
+                <button class="edit-btn" data-index="${index}" data-type="issue">Edit</button>
+                <button class="delete-btn" data-index="${index}" data-type="issue">Delete</button>
+              </td>
             </tr>
           `;
         }
@@ -695,6 +704,22 @@ function showAnalysis() {
             issueData.splice(idx, 1);
             localStorage.setItem('issueData', JSON.stringify(issueData));
             renderTable(issueData, 'Issue');
+          }
+        });
+      });
+
+      // Add edit button event listeners
+      const editButtons = analysisContent.querySelectorAll('.edit-btn');
+      editButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-index'));
+          const dataType = btn.getAttribute('data-type');
+          if (dataType === 'extra') {
+            showExtraForm(extraData[idx]);
+          } else if (dataType === 'delivery') {
+            showDeliveryForm(deliveryData[idx]);
+          } else if (dataType === 'issue') {
+            showIssueForm(issueData[idx]);
           }
         });
       });
