@@ -111,15 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  autoFillButton.addEventListener('click', () => {
-    if (window.opener && !window.opener.closed) {
-      const event = new CustomEvent('showExtraForm');
-      window.opener.dispatchEvent(event);
-      window.close();
-    } else {
-      alert('Main window is not available to redirect.');
-    }
-  });
+  const newBackButton = document.getElementById('new-back-button');
+  if (newBackButton) {
+    newBackButton.addEventListener('click', () => {
+      console.log('New back button clicked');
+      if (window.opener && !window.opener.closed) {
+        console.log('Window opener exists, navigating to index.html');
+        window.opener.location.href = 'index.html';
+        window.close();
+      } else {
+        console.log('No window opener, just closing window');
+        // Just close the calculator window without alert
+        window.close();
+      }
+    });
+  }
 
   renderHistory();
   resetCalculator();

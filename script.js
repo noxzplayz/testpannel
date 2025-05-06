@@ -25,6 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Global event listener for showExtraForm to redirect to extra form without autofill
+  window.addEventListener('showExtraForm', (e) => {
+    showExtraForm(e.detail);
+    // Focus the extra amount input field after showing the form
+    setTimeout(() => {
+      const extraAmountInput = document.getElementById('extra-amount');
+      if (extraAmountInput) {
+        extraAmountInput.focus();
+        extraAmountInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  });
+
   if (shiftStarted) {
     if (savedState === 'shiftInProgress') {
       showShiftInProgress();
