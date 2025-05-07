@@ -452,3 +452,10 @@ footer {
 .analysis-table button:active {
   background-color: #043d6b;
 }
+
+.analysis-table th:nth-child(2),
+.analysis-table td:nth-child(2) {
+  /* Bill Number column */
+  width: 100px; /* Fixed width for bill number */
+  min-width: 80px;
+}
