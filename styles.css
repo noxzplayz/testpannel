@@ -357,6 +357,28 @@ footer {
   }
 }
 
+@media (max-width: 480px) {
+  main {
+    padding: 15px 10px;
+    margin: 10px 5px;
+  }
+
+  main .welcome-text {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  main .start-shift-button,
+  main .counter-button,
+  main .action-button {
+    font-size: 0.9em;
+    padding: 10px 20px;
+    margin: 8px 4px;
+    width: 90%;
+    max-width: 200px;
+  }
+}
+
 /* Analysis section styles */
 #analysis-content {
   background-color: #ffffff;
