@@ -1,3 +1,8 @@
+/* Global box-sizing for better layout control */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* Reset and base styles */
 body {
   margin: 0;
@@ -8,17 +13,22 @@ body {
   background: #f9f9f9;
   color: #333;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; /* Improve font rendering on Android */
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth; /* Smooth scrolling */
 }
 
 /* Header styles */
 header {
   background-color: #4a4a4a;
   color: white;
-  padding: 20px 25px;
-  text-align: left;
+  padding: 20px 15px;
+  text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on Android */
+  touch-action: manipulation; /* Improve touch responsiveness */
 }
 header .logo {
   font-size: 2.2em;
@@ -41,7 +51,7 @@ header .subtitle {
 /* Main content */
 main {
   flex: 1;
-  padding: 50px 20px;
+  padding: 40px 15px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -52,6 +62,11 @@ main {
   margin: 30px auto;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  width: 100%;
+  min-width: 280px;
+  box-sizing: border-box;
 }
 main .welcome-text {
   font-weight: 700;
@@ -75,6 +90,10 @@ main .start-shift-button {
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
   margin: 15px 10px; /* Added margin for spacing */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  max-width: 300px;
+  width: 90%;
 }
 main .start-shift-button:hover {
   background-color: #005fa3;
@@ -97,6 +116,10 @@ main .counter-button {
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  max-width: 300px;
+  width: 90%;
 }
 main .counter-button:hover {
   background-color: #005fa3;
@@ -119,6 +142,10 @@ main .action-button {
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  max-width: 300px;
+  width: 90%;
 }
 main .action-button:hover {
   background-color: #005fa3;
@@ -139,6 +166,9 @@ main .upi-form {
   max-width: 320px;
   width: 100%;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-sizing: border-box;
 }
 main .upi-form label {
   font-weight: 600;
@@ -154,6 +184,10 @@ main .upi-form input[type="number"] {
   margin-bottom: 25px;
   outline: none;
   transition: border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  width: 100%;
+  box-sizing: border-box;
 }
 main .upi-form input[type="number"]:focus {
   border-color: #005fa3;
@@ -169,6 +203,10 @@ main .upi-form .submit-button {
   cursor: pointer;
   box-shadow: 0 6px 12px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  max-width: 300px;
+  width: 90%;
 }
 main .upi-form .submit-button:hover {
   background-color: #005fa3;
@@ -189,6 +227,9 @@ main .extra-form {
   max-width: 360px;
   width: 100%;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-sizing: border-box;
 }
 main .extra-form label {
   font-weight: 600;
@@ -207,6 +248,10 @@ main .extra-form textarea {
   margin-bottom: 25px;
   outline: none;
   transition: border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  width: 100%;
+  box-sizing: border-box;
 }
 main .extra-form input[type="text"]:focus,
 main .extra-form input[type="number"]:focus,
@@ -227,13 +272,16 @@ main .shift-status {
 /* Footer styles */
 footer {
   text-align: center;
-  padding: 13px 20px; /* reduced padding-top and padding-bottom by 2px */
+  padding: 13px 15px;
   font-size: 0.9em;
   color: #666;
   border-top: 1px solid #ccc;
   user-select: none;
   font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-sizing: border-box;
 }
 
 /* Mobile-first responsive enhancements for Android devices */
@@ -395,3 +443,4 @@ footer {
 
 .analysis-table button:active {
   background-color: #043d6b;
+}
