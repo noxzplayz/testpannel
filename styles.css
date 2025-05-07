@@ -426,9 +426,18 @@ footer {
 
 .analysis-card-label {
   font-weight: 600;
-  color: #555;
+  color: black;
   margin-right: 10px;
   min-width: 120px;
+}
+
+.analysis-card-value {
+  color: black;
+}
+
+.analysis-table th,
+.analysis-table td {
+  color: black;
 }
 
 .analysis-card-value {
