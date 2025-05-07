@@ -370,6 +370,84 @@ footer {
   margin-bottom: 20px;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   word-break: break-word; /* Allow breaking long words */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Card styles for analysis entries */
+.analysis-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  word-break: break-word;
+}
+
+.analysis-card-header {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #007acc;
+  margin-bottom: 8px;
+}
+
+.analysis-card-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1em;
+  color: #333;
+}
+
+.analysis-card-label {
+  font-weight: 600;
+  color: #555;
+  margin-right: 10px;
+  min-width: 120px;
+}
+
+.analysis-card-value {
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+}
+
+.analysis-card-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.analysis-card button {
+  background-color: #0984e3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 12px rgba(9, 132, 227, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+.analysis-card button:hover {
+  background-color: #065a9e;
+}
+
+.analysis-card button:active {
+  background-color: #043d6b;
+}
+
+.analysis-paid-checkbox {
+  margin-left: 10px;
+  transform: scale(1.2);
+  cursor: pointer;
 }
 
 .analysis-table {
