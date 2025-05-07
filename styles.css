@@ -368,6 +368,8 @@ footer {
   overflow-x: auto; /* Added horizontal scroll */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  word-break: break-word; /* Allow breaking long words */
 }
 
 .analysis-table {
@@ -379,6 +381,7 @@ footer {
   border-radius: 12px;
   overflow: hidden;
   min-width: 600px; /* Added min width to prevent column collapse */
+  table-layout: fixed; /* Fix table layout to respect widths */
 }
 
 .analysis-table thead {
@@ -396,6 +399,9 @@ footer {
   text-align: left;
   background-color: #f9f9f9;
   border-bottom: 1px solid #ddd;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Show ellipsis for overflow */
 }
 
 .analysis-table tbody tr:hover {
