@@ -377,6 +377,20 @@ footer {
     width: 90%;
     max-width: 200px;
   }
+
+  .analysis-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .analysis-table thead, .analysis-table tbody, .analysis-table tr, .analysis-table td, .analysis-table th {
+    display: inline-block;
+  }
+
+  .analysis-table td, .analysis-table th {
+    min-width: 120px;
+  }
 }
 
 /* Analysis section styles */
@@ -408,6 +422,36 @@ footer {
   flex-direction: column;
   gap: 8px;
   word-break: break-word;
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+#analysis-back-btn {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  padding: 14px 40px;
+  border-radius: 30px;
+}
+
+.total-summary {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 12px;
+  font-weight: bold;
+  color: #007acc;
+  font-size: 1rem;
+  border-top: 1px solid #ccc;
 }
 
 .analysis-card-header {
@@ -474,16 +518,10 @@ footer {
 
 .analysis-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-  min-width: 600px; /* Added min width to prevent column collapse */
-  table-layout: fixed; /* Fix table layout to respect widths */
+  table-layout: fixed;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
-
 .analysis-table thead {
   background-color: #007acc;
   color: white;
@@ -491,17 +529,15 @@ footer {
   font-size: 1.1rem;
   border-radius: 12px 12px 0 0;
 }
-
 .analysis-table th,
 .analysis-table td {
-  padding: 12px 15px;
+  padding: 10px;
+  font-size: 0.95rem;
+  text-align: center;
+  word-break: break-word;
   border-bottom: none;
-  text-align: left;
   background-color: #f9f9f9;
   border-bottom: 1px solid #ddd;
-  white-space: nowrap; /* Prevent wrapping */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Show ellipsis for overflow */
 }
 
 .analysis-table tbody tr:hover {
