@@ -39,9 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (shiftStarted) {
-    // Show analysis view by default instead of shift in progress buttons
-    if (savedState === 'shiftInProgress' || !savedState) {
-      showAnalysis();
+    if (savedState === 'shiftInProgress') {
+      showShiftInProgress();
     } else if (savedState === 'extraForm') {
       showExtraForm(savedExtraFormData);
     } else if (savedState === 'deliveryForm') {
@@ -51,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (savedState === 'analysisView') {
       showAnalysis();
     } else {
-      showAnalysis();
+      showShiftInProgress();
     }
   } else {
     if (!billingPortalButton) return;
