@@ -292,34 +292,34 @@ footer {
   }
 
   header .logo {
-    font-size: 1.6em;
+    font-size: 1.4em; /* Reduced font size */
   }
 
   header .subtitle {
-    font-size: 0.95em;
+    font-size: 0.85em; /* Reduced font size */
   }
 
   main {
-    padding: 30px 15px;
-    margin: 20px 10px;
+    padding: 25px 15px; /* Reduced padding */
+    margin: 15px 10px; /* Reduced margin */
     max-width: 100%;
     box-shadow: none;
     border-radius: 10px;
   }
 
   main .welcome-text {
-    font-size: 2em;
-    margin-bottom: 30px;
+    font-size: 1.8em; /* Reduced font size */
+    margin-bottom: 25px; /* Reduced margin */
   }
 
   main .start-shift-button,
   main .counter-button,
   main .action-button {
-    font-size: 1.2em;
-    padding: 14px 30px;
-    margin: 12px 5px;
-    width: 90%;
-    max-width: 300px;
+    font-size: 1em; /* Reduced font size for better fit */
+    padding: 12px 25px; /* Reduced padding */
+    margin: 10px 5px; /* Adjusted margin */
+    width: 80%; /* Reduced width */
+    max-width: 250px; /* Reduced max-width */
   }
 
   main .shift-status {
