@@ -310,8 +310,17 @@ function showShiftInProgress() {
         return;
       }
 
+      // Create structured data object with consistent keys and types
+      const newExtraEntry = {
+        completelyExtra: Boolean(completelyExtra),
+        billNumber: billNumber || null,
+        extraAmount: parseFloat(extraAmount),
+        modePay: modePay,
+        itemCategory: itemCategory
+      };
+
       let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
+      extraData.push(newExtraEntry);
       localStorage.setItem('extraData', JSON.stringify(extraData));
       localStorage.removeItem('extraFormData');
 
