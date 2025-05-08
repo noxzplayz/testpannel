@@ -342,10 +342,11 @@ footer {
   background-color: #f9f9f9;
   color: #222;
   vertical-align: middle;
-  word-wrap: normal;
-  word-break: normal;
-  white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
   font-size: 0.75rem; /* Reduced font size */
+  overflow-wrap: break-word;
 }
 .analysis-table tbody tr:hover {
   background-color: #e6f0ff;
