@@ -206,53 +206,66 @@ footer {
 
 /* Mobile-first responsive enhancements for Android devices */
 @media (max-width: 600px) {
+  html, body {
+    font-size: 16px;
+    line-height: 1.4;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   header {
-    padding: 15px 20px;
+    padding: 12px 15px;
     text-align: center;
   }
 
   header .logo {
-    font-size: 1.6em;
+    font-size: 1.8em;
+    letter-spacing: 1.5px;
   }
 
   header .subtitle {
-    font-size: 0.95em;
+    font-size: 1em;
+    letter-spacing: 1px;
   }
 
   main {
-    padding: 30px 15px;
-    margin: 20px 10px;
+    padding: 20px 15px;
+    margin: 15px 10px;
     max-width: 100%;
     box-shadow: none;
-    border-radius: 10px;
+    border-radius: 8px;
+    width: 100%;
   }
 
   main .welcome-text {
-    font-size: 2em;
-    margin-bottom: 30px;
+    font-size: 2.2em;
+    margin-bottom: 25px;
   }
 
   main .start-shift-button,
   main .counter-button,
   main .action-button {
-    font-size: 1.2em;
-    padding: 14px 30px;
-    margin: 12px 5px;
-    width: 90%;
-    max-width: 300px;
+    font-size: 1.3em;
+    padding: 16px 35px;
+    margin: 10px 5px;
+    width: 95%;
+    max-width: 320px;
+    border-radius: 25px;
   }
 
   main .shift-status {
-    font-size: 1.8em;
-    margin-bottom: 30px;
+    font-size: 2em;
+    margin-bottom: 25px;
   }
 
   main .upi-form,
   main .extra-form {
-    padding: 20px 25px;
+    padding: 15px 20px;
     max-width: 100%;
     box-shadow: none;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
   main .upi-form input[type="number"],
@@ -260,20 +273,20 @@ footer {
   main .extra-form input[type="number"],
   main .extra-form select,
   main .extra-form textarea {
-    font-size: 1em;
-    padding: 10px 12px;
+    font-size: 1.1em;
+    padding: 12px 15px;
     width: 100%;
   }
 
   main .upi-form .submit-button {
-    font-size: 1.1em;
-    padding: 12px 25px;
-    width: 90%;
+    font-size: 1.2em;
+    padding: 14px 30px;
+    width: 95%;
   }
 
   footer {
-    font-size: 0.8em;
-    padding: 10px;
+    font-size: 0.85em;
+    padding: 12px;
   }
 }
 
