@@ -703,10 +703,7 @@ function showAnalysis() {
         }, 0);
 
         const sumDiv = document.createElement('div');
-        sumDiv.style.marginTop = '15px';
-        sumDiv.style.fontWeight = 'bold';
-        sumDiv.style.fontSize = '1.2em';
-        sumDiv.style.color = '#007acc';
+        // Remove all custom styles to use default browser styles
         sumDiv.innerHTML = `
           <div>Total UPI: ₹${sumUPI.toFixed(2)}</div>
           <div>Total Cash: ₹${sumCash.toFixed(2)}</div>
