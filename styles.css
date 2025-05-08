@@ -4,7 +4,8 @@
 }
 
 /* Reset and base styles */
-body {
+html, body {
+  overflow: hidden;
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;

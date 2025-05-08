@@ -1,6 +1,19 @@
 // JavaScript functionality for Start Shift button and counters and next screens with UPI balance input, shift in progress, extra form, delivery form, issue form, and data persistence with delete, filter, and paid checkbox in analysis
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Prevent zooming via keyboard shortcuts (Ctrl + +, Ctrl + -, Ctrl + 0)
+  // and mouse wheel zoom (Ctrl + wheel)
+  window.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+      e.preventDefault();
+    }
+  });
+
+  window.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+    }
+  }, { passive: false });
   const mainContent = document.getElementById('main-content');
   const deliveryPortalButton = document.querySelector('.delivery-portal-button');
   const billingPortalButton = document.querySelector('.billing-portal-button');
