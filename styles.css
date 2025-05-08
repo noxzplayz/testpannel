@@ -317,6 +317,15 @@ footer {
 
 .analysis-table {
   all: unset;
+  width: auto;
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
 }
 .analysis-table thead {
   all: unset;
@@ -324,6 +333,12 @@ footer {
 .analysis-table th,
 .analysis-table td {
   all: unset;
+  padding: 0;
+  border: none;
+  text-align: left;
+  background: none;
+  color: inherit;
+  font-weight: normal;
 }
 .analysis-table tbody tr:hover {
   all: unset;
@@ -342,6 +357,14 @@ footer {
 }
 .analysis-table button {
   all: unset;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  box-shadow: none;
 }
 .analysis-table button:hover {
   all: unset;
