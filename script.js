@@ -610,43 +610,31 @@ function showAnalysis() {
       let rows = data.map((item, index) => {
         if (type === 'Extra') {
           return `
-            <tr>
-              <td>${index + 1}</td>
-              <td>${item.completelyExtra ? 'CE' : item.billNumber}</td>
-              <td>${formatCurrency(item.extraAmount)}</td>
-              <td>${item.modePay}</td>
-              <td>${item.itemCategory}</td>
-              <td>
-                <button class="edit-btn" data-index="${index}" data-type="extra">Edit</button>
-                <button class="delete-btn" data-index="${index}" data-type="extra">Delete</button>
-              </td>
-            </tr>
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.completelyExtra ? 'CE' : item.billNumber}</td>
+        <td>${formatCurrency(item.extraAmount)}</td>
+        <td>${item.modePay}</td>
+        <td>${item.itemCategory}</td>
+      </tr>
           `;
         } else if (type === 'Delivery') {
           return `
-            <tr>
-              <td>${index + 1}</td>
-              <td>${item.billNumber}</td>
-              <td>${formatCurrency(item.amount)}</td>
-              <td>${item.modePay}</td>
-              <td><input type="checkbox" class="paid-checkbox" data-index="${index}" ${item.paid ? 'checked' : ''}></td>
-              <td>
-                <button class="edit-btn" data-index="${index}" data-type="delivery">Edit</button>
-                <button class="delete-btn" data-index="${index}" data-type="delivery">Delete</button>
-              </td>
-            </tr>
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.billNumber}</td>
+        <td>${formatCurrency(item.amount)}</td>
+        <td>${item.modePay}</td>
+        <td><input type="checkbox" class="paid-checkbox" data-index="${index}" ${item.paid ? 'checked' : ''}></td>
+      </tr>
           `;
         } else if (type === 'Issue') {
           return `
-            <tr>
-              <td>${index + 1}</td>
-              <td>${item.billNumber}</td>
-              <td colspan="4">${item.issueText}</td>
-              <td>
-                <button class="edit-btn" data-index="${index}" data-type="issue">Edit</button>
-                <button class="delete-btn" data-index="${index}" data-type="issue">Delete</button>
-              </td>
-            </tr>
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.billNumber}</td>
+        <td colspan="4">${item.issueText}</td>
+      </tr>
           `;
         }
       }).join('');
@@ -654,28 +642,25 @@ function showAnalysis() {
       let headers = '';
       if (type === 'Extra') {
         headers = `
-          <th>#</th>
-          <th>Bill Number</th>
-          <th>Extra Amount</th>
-          <th>Mode of Pay</th>
-          <th>Item Category</th>
-          <th>Action</th>
+      <th>#</th>
+      <th>Bill Number</th>
+      <th>Extra Amount</th>
+      <th>Mode of Pay</th>
+      <th>Item Category</th>
         `;
       } else if (type === 'Delivery') {
         headers = `
-          <th>#</th>
-          <th>Bill Number</th>
-          <th>Amount</th>
-          <th>Mode of Pay</th>
-          <th>Paid</th>
-          <th>Action</th>
+      <th>#</th>
+      <th>Bill Number</th>
+      <th>Amount</th>
+      <th>Mode of Pay</th>
+      <th>Paid</th>
         `;
       } else if (type === 'Issue') {
         headers = `
-          <th>#</th>
-          <th>Bill Number</th>
-          <th colspan="4">Issue Description</th>
-          <th>Action</th>
+      <th>#</th>
+      <th>Bill Number</th>
+      <th colspan="4">Issue Description</th>
         `;
       }
 
