@@ -69,7 +69,6 @@ main {
   min-width: 280px;
   box-sizing: border-box;
   overflow-y: auto;
-  max-height: 100vh;
 }
 main .welcome-text {
   font-weight: 700;
