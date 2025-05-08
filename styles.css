@@ -156,109 +156,28 @@ main .action-button:active {
 }
 
 /* UPI form styles */
-main .upi-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fefefe;
-  padding: 30px 40px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 320px;
-  width: 100%;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  box-sizing: border-box;
+main .upi-form,
+form,
+input,
+textarea,
+select,
+button {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
 }
-main .upi-form label {
-  font-weight: 600;
-  font-size: 1.1em;
-  margin-bottom: 15px;
-  color: #222;
-}
-main .upi-form input[type="number"] {
-  padding: 12px 15px;
-  font-size: 1.1em;
-  border: 1.5px solid #007acc;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  outline: none;
-  transition: border-color 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  width: 100%;
-  box-sizing: border-box;
-}
-main .upi-form input[type="number"]:focus {
-  border-color: #005fa3;
-}
-main .upi-form .submit-button {
-  background-color: #007acc;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 15px 40px;
-  font-size: 1.3em;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0, 122, 204, 0.5);
-  transition: background-color 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  max-width: 300px;
-  width: 90%;
-}
-main .upi-form .submit-button:hover {
-  background-color: #005fa3;
-}
-main .upi-form .submit-button:active {
-  background-color: #00497a;
-}
-
-/* Extra form styles */
 main .extra-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fefefe;
-  padding: 30px 40px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 360px;
-  width: 100%;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  box-sizing: border-box;
-}
-main .extra-form label {
-  font-weight: 600;
-  font-size: 1.1em;
-  margin-bottom: 15px;
-  color: #222;
-}
-main .extra-form input[type="text"],
-main .extra-form input[type="number"],
-main .extra-form select,
-main .extra-form textarea {
-  padding: 12px 15px;
-  font-size: 1.1em;
-  border: 1.5px solid #007acc;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  outline: none;
-  transition: border-color 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  width: 100%;
-  box-sizing: border-box;
-}
-main .extra-form input[type="text"]:focus,
-main .extra-form input[type="number"]:focus,
-main .extra-form select:focus,
-main .extra-form textarea:focus {
-  border-color: #005fa3;
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
 }
 
 /* Shift status text */
