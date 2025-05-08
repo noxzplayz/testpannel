@@ -264,8 +264,6 @@ footer {
   main .extra-form {
     padding: 15px 20px;
     max-width: 100%;
-    box-shadow: none;
-    border-radius: 10px;
   }
 
   main .upi-form input[type="number"],
@@ -298,7 +296,7 @@ footer {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   max-height: none;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-bottom: 20px;
   max-width: 480px;
