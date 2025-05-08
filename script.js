@@ -591,13 +591,20 @@ function showAnalysis() {
         filterContainer.innerHTML = '';
       }
 
+      function formatCurrency(value) {
+        if (!value) return '';
+        const number = parseFloat(value);
+        if (isNaN(number)) return value;
+        return '₹' + number.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
       let rows = data.map((item, index) => {
         if (type === 'Extra') {
           return `
             <tr>
               <td>${index + 1}</td>
               <td>${item.completelyExtra ? 'CE' : item.billNumber}</td>
-              <td>${item.extraAmount}</td>
+              <td>${formatCurrency(item.extraAmount)}</td>
               <td>${item.modePay}</td>
               <td>${item.itemCategory}</td>
               <td>
@@ -611,7 +618,7 @@ function showAnalysis() {
             <tr>
               <td>${index + 1}</td>
               <td>${item.billNumber}</td>
-              <td>${item.amount}</td>
+              <td>${formatCurrency(item.amount)}</td>
               <td>${item.modePay}</td>
               <td><input type="checkbox" class="paid-checkbox" data-index="${index}" ${item.paid ? 'checked' : ''}></td>
               <td>

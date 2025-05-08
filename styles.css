@@ -403,6 +403,27 @@ footer {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Zebra striping for table rows */
+.analysis-table tbody tr:nth-child(odd) {
+  background-color: #f7f9fc;
+}
+
+/* Improved padding and font size for table cells */
+.analysis-table th,
+.analysis-table td {
+  padding: 14px 20px;
+  font-size: 1rem;
+}
+
+/* Table container with subtle shadow and border */
+.analysis-table {
+  border: 1px solid #d1d9e6;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+}
+
 .analysis-table tbody tr {
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
