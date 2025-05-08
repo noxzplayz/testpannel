@@ -320,7 +320,7 @@ footer {
   font-size: 0.8rem; /* Reduced font size */
   color: #333;
   background-color: white;
-  border: 1px solid #d1d9e6;
+  border: none; /* Removed border */
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
