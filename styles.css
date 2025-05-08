@@ -1,10 +1,5 @@
-/* Global box-sizing for better layout control */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 /* Reset and base styles */
-html, body {
+body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
@@ -13,22 +8,17 @@ html, body {
   background: #f9f9f9;
   color: #333;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased; /* Improve font rendering on Android */
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth; /* Smooth scrolling */
 }
 
 /* Header styles */
 header {
   background-color: #4a4a4a;
   color: white;
-  padding: 20px 15px;
-  text-align: center;
+  padding: 20px 25px;
+  text-align: left;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on Android */
-  touch-action: manipulation; /* Improve touch responsiveness */
 }
 header .logo {
   font-size: 2.2em;
@@ -51,7 +41,7 @@ header .subtitle {
 /* Main content */
 main {
   flex: 1;
-  padding: 40px 15px;
+  padding: 50px 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -62,12 +52,6 @@ main {
   margin: 30px auto;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  width: 100%;
-  min-width: 280px;
-  box-sizing: border-box;
-  overflow-y: auto;
 }
 main .welcome-text {
   font-weight: 700;
@@ -90,11 +74,6 @@ main .start-shift-button {
   user-select: none;
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
-  margin: 15px 10px; /* Added margin for spacing */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  max-width: 300px;
-  width: 90%;
 }
 main .start-shift-button:hover {
   background-color: #005fa3;
@@ -117,10 +96,6 @@ main .counter-button {
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  max-width: 300px;
-  width: 90%;
 }
 main .counter-button:hover {
   background-color: #005fa3;
@@ -143,10 +118,6 @@ main .action-button {
   box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  max-width: 300px;
-  width: 90%;
 }
 main .action-button:hover {
   background-color: #005fa3;
@@ -156,28 +127,91 @@ main .action-button:active {
 }
 
 /* UPI form styles */
-main .upi-form,
-form,
-input,
-textarea,
-select,
-button {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
+main .upi-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fefefe;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 320px;
+  width: 100%;
+  user-select: none;
 }
+main .upi-form label {
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  color: #222;
+}
+main .upi-form input[type="number"] {
+  padding: 12px 15px;
+  font-size: 1.1em;
+  border: 1.5px solid #007acc;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+main .upi-form input[type="number"]:focus {
+  border-color: #005fa3;
+}
+main .upi-form .submit-button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 40px;
+  font-size: 1.3em;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 122, 204, 0.5);
+  transition: background-color 0.3s ease;
+}
+main .upi-form .submit-button:hover {
+  background-color: #005fa3;
+}
+main .upi-form .submit-button:active {
+  background-color: #00497a;
+}
+
+/* Extra form styles */
 main .extra-form {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fefefe;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 360px;
+  width: 100%;
+  user-select: none;
+}
+main .extra-form label {
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  color: #222;
+}
+main .extra-form input[type="text"],
+main .extra-form input[type="number"],
+main .extra-form select,
+main .extra-form textarea {
+  padding: 12px 15px;
+  font-size: 1.1em;
+  border: 1.5px solid #007acc;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+main .extra-form input[type="text"]:focus,
+main .extra-form input[type="number"]:focus,
+main .extra-form select:focus,
+main .extra-form textarea:focus {
+  border-color: #005fa3;
 }
 
 /* Shift status text */
@@ -192,305 +226,11 @@ main .shift-status {
 /* Footer styles */
 footer {
   text-align: center;
-  padding: 13px 15px;
+  padding: 15px 20px;
   font-size: 0.9em;
   color: #666;
   border-top: 1px solid #ccc;
   user-select: none;
   font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  box-sizing: border-box;
-}
-
-/* Mobile-first responsive enhancements for Android devices */
-@media (max-width: 600px) {
-  html, body {
-    font-size: 16px;
-    line-height: 1.4;
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  header {
-    padding: 12px 15px;
-    text-align: center;
-  }
-
-  header .logo {
-    font-size: 1.8em;
-    letter-spacing: 1.5px;
-  }
-
-  header .subtitle {
-    font-size: 1em;
-    letter-spacing: 1px;
-  }
-
-  main {
-    padding: 20px 15px;
-    margin: 15px 10px;
-    max-width: 100%;
-    box-shadow: none;
-    border-radius: 8px;
-    width: 100%;
-  }
-
-  main .welcome-text {
-    font-size: 2.2em;
-    margin-bottom: 25px;
-  }
-
-  main .start-shift-button,
-  main .counter-button,
-  main .action-button {
-    font-size: 1.3em;
-    padding: 16px 35px;
-    margin: 10px 5px;
-    width: 95%;
-    max-width: 320px;
-    border-radius: 25px;
-  }
-
-  main .shift-status {
-    font-size: 2em;
-    margin-bottom: 25px;
-  }
-
-  main .upi-form,
-  main .extra-form {
-    padding: 15px 20px;
-    max-width: 100%;
-  }
-
-  main .upi-form input[type="number"],
-  main .extra-form input[type="text"],
-  main .extra-form input[type="number"],
-  main .extra-form select,
-  main .extra-form textarea {
-    font-size: 1.1em;
-    padding: 12px 15px;
-    width: 100%;
-  }
-
-  main .upi-form .submit-button {
-    font-size: 1.2em;
-    padding: 14px 30px;
-    width: 95%;
-  }
-
-  footer {
-    font-size: 0.85em;
-    padding: 12px;
-  }
-}
-
-/* Analysis section styles */
-#analysis-content {
-  background-color: #f0f4f8;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  max-height: none;
-  overflow-y: auto;
-  overflow-x: auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-bottom: 20px;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #d1d9e6;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  transition: box-shadow 0.3s ease;
-}
-#analysis-content:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.analysis-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.8rem; /* Reduced font size */
-  color: #333;
-  background-color: white;
-  border: none; /* Removed border */
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  table-layout: auto;
-  word-wrap: normal;
-}
-.analysis-table thead {
-  background-color: #007acc;
-  color: white;
-  font-weight: 700;
-  font-size: 0.9rem; /* Reduced font size */
-  border-radius: 12px 12px 0 0;
-}
-.analysis-table th,
-.analysis-table td {
-  padding: 3px 5px; /* Reduced padding for compactness */
-  border-bottom: 1px solid #d1d9e6;
-  text-align: left;
-  background-color: #f9f9f9;
-  color: #222;
-  vertical-align: middle;
-  white-space: nowrap;
-  font-size: 0.75rem; /* Reduced font size */
-}
-.analysis-table tbody tr:hover {
-  background-color: #e6f0ff;
-  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-.analysis-table tbody tr:nth-child(odd) {
-  background-color: #f7f9fc;
-}
-.analysis-table tbody tr {
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 0;
-  display: table-row;
-  background-color: #f9f9f9;
-}
-.analysis-table tbody tr td {
-  display: table-cell;
-  vertical-align: middle;
-  word-wrap: break-word;
-  word-break: break-word;
-}
-.analysis-table tbody tr td:last-child {
-  text-align: right;
-}
-.analysis-table button {
-  background-color: #0984e3;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 8px 15px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0 6px 12px rgba(9, 132, 227, 0.5);
-  transition: background-color 0.3s ease;
-  margin-left: 8px;
-  max-width: 100%;
-  box-sizing: border-box;
-  word-wrap: break-word;
-  white-space: normal;
-}
-.analysis-table button:hover {
-  background-color: #065a9e;
-}
-.analysis-table button:active {
-  background-color: #043d6b;
-}
-
-.analysis-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.analysis-table thead {
-  background-color: #007acc;
-  color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
-  border-radius: 12px 12px 0 0;
-}
-
-.analysis-table th,
-.analysis-table td {
-  padding: 12px 15px;
-  border-bottom: none;
-  text-align: left;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-}
-
-.analysis-table tbody tr:hover {
-  background-color: #e6f0ff;
-  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Zebra striping for table rows */
-.analysis-table tbody tr:nth-child(odd) {
-  background-color: #f7f9fc;
-}
-
-/* Improved padding and font size for table cells */
-.analysis-table th,
-.analysis-table td {
-  padding: 14px 20px;
-  font-size: 1rem;
-}
-
-/* Table container with subtle shadow and border */
-.analysis-table {
-  border: 1px solid #d1d9e6;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: white;
-}
-
-.analysis-table tbody tr {
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  /* Removed margin-bottom to avoid spacing issues */
-  margin-bottom: 0;
-  /* Changed display from block to table-row for proper alignment */
-  display: table-row;
-  background-color: #f9f9f9;
-}
-
-.analysis-table tbody tr td {
-  /* Changed display from inline-block to table-cell for proper alignment */
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.analysis-table tbody tr td:last-child {
-  text-align: right;
-}
-
-.analysis-table button {
-  background-color: #0984e3;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 8px 15px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0 6px 12px rgba(9, 132, 227, 0.5);
-  transition: background-color 0.3s ease;
-  margin-left: 8px;
-  max-width: 100%;
-  box-sizing: border-box;
-  word-wrap: break-word;
-  white-space: normal;
-}
-
-.analysis-table button:hover {
-  background-color: #065a9e;
-}
-
-.analysis-table button:active {
-  background-color: #043d6b;
 }
