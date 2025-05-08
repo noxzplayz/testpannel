@@ -292,18 +292,102 @@ footer {
 
 /* Analysis section styles */
 #analysis-content {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 15px 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: #f0f4f8;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   max-height: none;
-  overflow-y: visible;
+  overflow-y: auto;
   overflow-x: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-bottom: 15px;
-  max-width: 400px;
+  margin-bottom: 20px;
+  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid #d1d9e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transition: box-shadow 0.3s ease;
+}
+#analysis-content:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.analysis-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.analysis-table thead {
+  background-color: #005fa3;
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  border-radius: 12px 12px 0 0;
+}
+.analysis-table th,
+.analysis-table td {
+  padding: 14px 18px;
+  border-bottom: none;
+  text-align: left;
+  background-color: #f9fafe;
+  border-bottom: 1px solid #d1d9e6;
+  font-size: 0.95rem;
+  color: #222;
+}
+.analysis-table tbody tr:hover {
+  background-color: #e3eaf6;
+  box-shadow: 0 3px 10px rgba(0, 95, 163, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.analysis-table tbody tr:nth-child(odd) {
+  background-color: #f7f9fc;
+}
+.analysis-table tbody tr {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 0;
+  display: table-row;
+  background-color: #f9fafe;
+}
+.analysis-table tbody tr td {
+  display: table-cell;
+  vertical-align: middle;
+}
+.analysis-table tbody tr td:last-child {
+  text-align: right;
+}
+.analysis-table button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.analysis-table button:hover {
+  background-color: #005fa3;
+}
+.analysis-table button:active {
+  background-color: #00497a;
 }
 
 .analysis-table {
