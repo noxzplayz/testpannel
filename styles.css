@@ -316,66 +316,82 @@ footer {
 }
 
 .analysis-table {
-  all: unset;
   width: 100%;
   border-collapse: collapse;
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
-  overflow: visible;
-  table-layout: fixed;
-  word-wrap: break-word;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  border: 1px solid #d1d9e6;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  table-layout: auto;
+  word-wrap: normal;
 }
 .analysis-table thead {
-  all: unset;
+  background-color: #007acc;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 12px 12px 0 0;
 }
 .analysis-table th,
 .analysis-table td {
-  all: unset;
-  padding: 8px 10px;
-  border: none;
+  padding: 12px 15px;
+  border-bottom: 1px solid #d1d9e6;
   text-align: left;
-  background: none;
-  color: inherit;
-  font-weight: normal;
+  background-color: #f9f9f9;
+  color: #222;
   vertical-align: middle;
-  overflow-wrap: break-word;
+  word-wrap: break-word;
   word-break: break-word;
 }
 .analysis-table tbody tr:hover {
-  all: unset;
+  background-color: #e6f0ff;
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 .analysis-table tbody tr:nth-child(odd) {
-  all: unset;
+  background-color: #f7f9fc;
 }
 .analysis-table tbody tr {
-  all: unset;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 0;
+  display: table-row;
+  background-color: #f9f9f9;
 }
 .analysis-table tbody tr td {
-  all: unset;
+  display: table-cell;
+  vertical-align: middle;
 }
 .analysis-table tbody tr td:last-child {
-  all: unset;
+  text-align: right;
 }
 .analysis-table button {
-  all: unset;
-  background: none;
+  background-color: #0984e3;
+  color: white;
   border: none;
-  padding: 0;
-  margin: 0;
+  border-radius: 12px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  color: inherit;
-  font: inherit;
-  box-shadow: none;
+  user-select: none;
+  box-shadow: 0 6px 12px rgba(9, 132, 227, 0.5);
+  transition: background-color 0.3s ease;
+  margin-left: 8px;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  white-space: normal;
 }
 .analysis-table button:hover {
-  all: unset;
+  background-color: #065a9e;
 }
 .analysis-table button:active {
-  all: unset;
+  background-color: #043d6b;
 }
 
 .analysis-table {
