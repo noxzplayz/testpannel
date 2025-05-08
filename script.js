@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <input type="number" id="upi-balance" name="upi-balance" class="input-field"/><br/>
         <label><input type="checkbox" id="counter2-checkbox" name="counter2-checkbox"/> I am in counter 2</label><br/>
         <button type="submit" class="submit-button">Submit</button>
-      </form>
+      </form>g
       `;
 
       const upiForm = document.getElementById('upi-form');
