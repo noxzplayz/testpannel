@@ -336,7 +336,7 @@ footer {
 }
 .analysis-table th,
 .analysis-table td {
-  padding: 4px 6px; /* Reduced padding */
+  padding: 3px 5px; /* Reduced padding for compactness */
   border-bottom: 1px solid #d1d9e6;
   text-align: left;
   background-color: #f9f9f9;
@@ -345,6 +345,7 @@ footer {
   word-wrap: normal;
   word-break: normal;
   white-space: nowrap;
+  font-size: 0.75rem; /* Reduced font size */
 }
 .analysis-table tbody tr:hover {
   background-color: #e6f0ff;
