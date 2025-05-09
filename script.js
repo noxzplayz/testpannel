@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
             <button type="submit" class="submit-button">Submit</button>
           </form>
+          <button id="counter1-delivery-btn" class="action-button" style="margin-top: 20px;">Add Delivery Data</button>
+          <button id="counter1-back-btn" class="action-button" style="margin-top: 10px;">Back</button>
         `;
 
         const upiForm = document.getElementById('upi-form');
@@ -64,7 +66,74 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('appState', 'shiftInProgress');
           showShiftInProgress();
         });
+
+        document.getElementById('counter1-delivery-btn').addEventListener('click', () => {
+          showCounter1DeliveryForm();
+        });
+
+        document.getElementById('counter1-back-btn').addEventListener('click', () => {
+          localStorage.setItem('appState', 'shiftInProgress');
+          showShiftInProgress();
+        });
       });
+
+  async function showCounter1DeliveryForm(savedData = {}) {
+    localStorage.setItem('appState', 'counter1DeliveryForm');
+    mainContent.innerHTML = `
+      <form id="counter1-delivery-form" class="extra-form">
+        <label for="bill-number-counter1">Bill Number:</label><br/>
+        <input type="text" id="bill-number-counter1" name="bill-number-counter1" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
+        <label for="amount-counter1">Amount:</label><br/>
+        <input type="number" id="amount-counter1" name="amount-counter1" value="${savedData.amount || ''}" required class="input-field"/><br/>
+        <label for="mode-pay-counter1">Mode of Pay:</label><br/>
+        <select id="mode-pay-counter1" name="mode-pay-counter1" required class="input-field">
+          <option value="">Select</option>
+          <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
+          <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
+          <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
+        </select><br/>
+        <button type="submit" class="action-button">Save</button>
+        <button type="button" id="counter1-delivery-back-btn" class="action-button">Back</button>
+      </form>
+    `;
+
+    const deliveryForm = document.getElementById('counter1-delivery-form');
+
+    deliveryForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const billNumber = document.getElementById('bill-number-counter1').value.trim();
+      const amount = document.getElementById('amount-counter1').value.trim();
+      const modePay = document.getElementById('mode-pay-counter1').value;
+
+      if (!billNumber || !amount || !modePay) {
+        alert('Please fill all fields.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5000/deliveries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ billNumber, amount, modePay, paid: false }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to save delivery data');
+        }
+        alert('Delivery data saved.');
+        localStorage.setItem('appState', 'shiftInProgress');
+        showShiftInProgress();
+      } catch (error) {
+        alert('Error saving delivery data: ' + error.message);
+      }
+    });
+
+    document.getElementById('counter1-delivery-back-btn').addEventListener('click', () => {
+      localStorage.setItem('appState', 'shiftInProgress');
+      showShiftInProgress();
+    });
+  }
 
       counter2.addEventListener('click', () => {
         showDeliveryPortalPage();
