@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <form id="upi-form" class="upi-form">
             <label for="upi-balance">What's my previous UPI balance?</label><br/>
             <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
-            <button type="submit" class="submit-button">Submit</button>
+            <button type="submit" class="action-button">Submit</button>
           </form>
         `;
 
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-function showShiftInProgress() {
+  function showShiftInProgress() {
     localStorage.setItem('appState', 'shiftInProgress');
     mainContent.innerHTML = `
       <div class="shift-status">Shift in progress</div>
@@ -102,13 +102,12 @@ function showShiftInProgress() {
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
 
-function showExtraForm(savedData = {}) {
+  function showExtraForm(savedData = {}) {
     localStorage.setItem('appState', 'extraForm');
     mainContent.innerHTML = `
       <form id="extra-form" class="extra-form">
-        <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
         <label for="bill-number">Bill Number:</label><br/>
-        <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
+        <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
         <label for="extra-amount">Extra Amount:</label><br/>
         <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
         <label for="mode-pay">Mode of Pay:</label><br/>
@@ -126,38 +125,9 @@ function showExtraForm(savedData = {}) {
     `;
 
     const extraForm = document.getElementById('extra-form');
-    const completelyExtraCheckbox = document.getElementById('completely-extra');
-    const billNumberInput = document.getElementById('bill-number');
-
-    function toggleBillNumber() {
-      if (completelyExtraCheckbox.checked) {
-        billNumberInput.disabled = true;
-        billNumberInput.required = false;
-      } else {
-        billNumberInput.disabled = false;
-        billNumberInput.required = true;
-      }
-    }
-
-    completelyExtraCheckbox.addEventListener('change', () => {
-      toggleBillNumber();
-      // Save form data on checkbox change
-      const formData = {
-        completelyExtra: completelyExtraCheckbox.checked,
-        billNumber: billNumberInput.value,
-        extraAmount: document.getElementById('extra-amount').value,
-        modePay: document.getElementById('mode-pay').value,
-        itemCategory: document.getElementById('item-category').value,
-      };
-      localStorage.setItem('extraFormData', JSON.stringify(formData));
-    });
-
-    toggleBillNumber();
-
     extraForm.addEventListener('input', () => {
       const formData = {
-        completelyExtra: completelyExtraCheckbox.checked,
-        billNumber: billNumberInput.value,
+        billNumber: document.getElementById('bill-number').value,
         extraAmount: document.getElementById('extra-amount').value,
         modePay: document.getElementById('mode-pay').value,
         itemCategory: document.getElementById('item-category').value,
@@ -167,23 +137,18 @@ function showExtraForm(savedData = {}) {
 
     extraForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const completelyExtra = completelyExtraCheckbox.checked;
-      const billNumber = billNumberInput.value.trim();
+      const billNumber = document.getElementById('bill-number').value.trim();
       const extraAmount = document.getElementById('extra-amount').value.trim();
       const modePay = document.getElementById('mode-pay').value;
       const itemCategory = document.getElementById('item-category').value.trim();
 
-      if (!completelyExtra && !billNumber) {
-        alert('Please fill all fields.');
-        return;
-      }
-      if (!extraAmount || !modePay || !itemCategory) {
+      if (!billNumber || !extraAmount || !modePay || !itemCategory) {
         alert('Please fill all fields.');
         return;
       }
 
       let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
+      extraData.push({ billNumber, extraAmount, modePay, itemCategory });
       localStorage.setItem('extraData', JSON.stringify(extraData));
       localStorage.removeItem('extraFormData');
 
@@ -368,7 +333,7 @@ function showExtraForm(savedData = {}) {
           return `
             <tr>
               <td>${index + 1}</td>
-              <td>${item.completelyExtra ? 'CE' : item.billNumber}</td>
+              <td>${item.billNumber}</td>
               <td>${item.extraAmount}</td>
               <td>${item.modePay}</td>
               <td>${item.itemCategory}</td>
