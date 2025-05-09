@@ -234,3 +234,41 @@ footer {
   font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* Responsive styles for Android devices */
+@media (max-width: 600px) {
+  main {
+    max-width: 100%;
+    margin: 15px;
+    padding: 20px 10px;
+  }
+
+  main .start-shift-button,
+  main .counter-button,
+  main .action-button {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    margin: 10px 5px;
+    border-radius: 20px;
+  }
+
+  main .upi-form,
+  main .extra-form {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+
+  main .upi-form input[type="number"],
+  main .extra-form input[type="text"],
+  main .extra-form input[type="number"],
+  main .extra-form select,
+  main .extra-form textarea {
+    font-size: 1em;
+    padding: 10px 12px;
+  }
+
+  main .upi-form .submit-button {
+    padding: 12px 30px;
+    font-size: 1.1em;
+  }
+}
