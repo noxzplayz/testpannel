@@ -30,44 +30,48 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (startShiftButton) {
-    startShiftButton.addEventListener('click', () => {
+startShiftButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
-      localStorage.setItem('appState', 'shiftInProgress');
       mainContent.innerHTML = `
-        <button id="counter1" class="counter-button">Counter 1</button>
-        <button id="counter2" class="counter-button">Counter 2</button>
+        <form id="upi-form" class="upi-form">
+          <label for="upi-balance">Enter Previous UPI balance.</label><br/>
+          <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
+          <label><input type="checkbox" id="upi-check" name="upi-check"/> I am in counter 2</label><br/>
+          <button type="submit" class="submit-button">Submit</button>
+        </form>
       `;
-
-      const counter1 = document.getElementById('counter1');
-      const counter2 = document.getElementById('counter2');
-
-      if (!counter1 || !counter2) return;
-
-      counter1.addEventListener('click', () => {
-        mainContent.innerHTML = `
-          <form id="upi-form" class="upi-form">
-            <label for="upi-balance">What's my previous UPI balance?</label><br/>
-            <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
-            <button type="submit" class="submit-button">Submit</button>
-          </form>
-        `;
-
-        const upiForm = document.getElementById('upi-form');
-        if (!upiForm) return;
-        upiForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const upiBalance = document.getElementById('upi-balance').value;
-          if (upiBalance.trim() === '') {
-            alert('Please enter your previous UPI balance.');
-            return;
+      const upiCheckBox = mainContent.querySelector('#upi-check');
+      const upiBalanceInput = mainContent.querySelector('#upi-balance');
+      if (upiCheckBox && upiBalanceInput) {
+        upiCheckBox.addEventListener('change', () => {
+          if (upiCheckBox.checked) {
+            upiBalanceInput.disabled = true;
+            upiBalanceInput.required = false;
+            upiBalanceInput.value = '';
+          } else {
+            upiBalanceInput.disabled = false;
+            upiBalanceInput.required = true;
           }
-          localStorage.setItem('appState', 'shiftInProgress');
-          showShiftInProgress();
         });
-      });
+      }
 
-      counter2.addEventListener('click', () => {
-        alert('Counter 2 clicked');
+      const upiForm = document.getElementById('upi-form');
+      if (!upiForm) return;
+      upiForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const upiBalanceInput = document.getElementById('upi-balance');
+        const upiBalance = upiBalanceInput.value;
+        const upiCheck = document.getElementById('upi-check').checked;
+        if (!upiCheck && upiBalance.trim() === '') {
+          alert('Please enter your previous UPI balance or check the box.');
+          upiBalanceInput.focus();
+          return;
+        }
+        // Save UPI balance and counter state
+        localStorage.setItem('upiBalance', upiBalance);
+        localStorage.setItem('counterState', upiCheck ? '2' : '1');
+        localStorage.setItem('appState', 'shiftInProgress');
+        showShiftInProgress();
       });
     });
   }
@@ -314,6 +318,8 @@ function showExtraForm(savedData = {}) {
     let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
     let issueData = JSON.parse(localStorage.getItem('issueData')) || [];
+    let upiBalance = localStorage.getItem('upiBalance') || '';
+    let counterState = localStorage.getItem('counterState') || '';
 
     mainContent.innerHTML = `
       <div class="shift-status analysis-title">Analysis</div>
@@ -321,6 +327,7 @@ function showExtraForm(savedData = {}) {
         <button class="tab-button" id="tab-extra">View Extra</button>
         <button class="tab-button" id="tab-delivery">View Delivery</button>
         <button class="tab-button" id="tab-issue">View Issue</button>
+        <button class="tab-button" id="tab-upi">View UPI Balance</button>
       </div>
       <div id="filter-container" class="filter-container"></div>
       <div id="analysis-content"></div>
@@ -482,6 +489,17 @@ function showExtraForm(savedData = {}) {
     });
     document.getElementById('tab-issue').addEventListener('click', () => {
       renderTable(issueData, 'Issue');
+    });
+
+    document.getElementById('tab-upi').addEventListener('click', () => {
+      filterContainer.innerHTML = '';
+      analysisContent.innerHTML = `
+        <div>
+          <h3>UPI Balance and Counter State</h3>
+          <p>UPI Balance: ${upiBalance ? upiBalance : 'Not provided'}</p>
+          <p>Counter State: ${counterState ? counterState : 'Not set'}</p>
+        </div>
+      `;
     });
 
     document.getElementById('analysis-back-btn').addEventListener('click', () => {
