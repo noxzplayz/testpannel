@@ -30,53 +30,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (startShiftButton) {
-startShiftButton.addEventListener('click', () => {
+    startShiftButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
-      mainContent.innerHTML = `
-        <form id="upi-form" class="upi-form">
-          <label for="upi-balance">Enter Previous UPI balance.</label><br/>
-          <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
-          <label><input type="checkbox" id="upi-check" name="upi-check"/> I am in counter 2</label><br/>
-          <button type="submit" class="submit-button">Submit</button>
-        </form>
-      `;
-      const upiCheckBox = mainContent.querySelector('#upi-check');
-      const upiBalanceInput = mainContent.querySelector('#upi-balance');
-      if (upiCheckBox && upiBalanceInput) {
-        upiCheckBox.addEventListener('change', () => {
-          if (upiCheckBox.checked) {
-            upiBalanceInput.disabled = true;
-            upiBalanceInput.required = false;
-            upiBalanceInput.value = '';
-          } else {
-            upiBalanceInput.disabled = false;
-            upiBalanceInput.required = true;
-          }
-        });
-      }
+      showUPIForm();
+    });
+  }
 
-      const upiForm = document.getElementById('upi-form');
-      if (!upiForm) return;
+  function showUPIForm() {
+    mainContent.innerHTML = `
+      <form id="upi-form" class="upi-form">
+        <label for="upi-balance">Enter Previous UPI balance:</label><br/>
+        <input type="number" id="upi-balance" name="upi-balance" required class="input-field"/><br/>
+        <label><input type="checkbox" id="upi-check" name="upi-check"/> I am in counter 2</label><br/>
+        <button type="submit" class="submit-button">Submit</button>
+      </form>
+    `;
+
+    const upiForm = document.getElementById('upi-form');
+    if (upiForm) {
       upiForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const upiBalanceInput = document.getElementById('upi-balance');
         const upiBalance = upiBalanceInput.value;
         const upiCheck = document.getElementById('upi-check').checked;
+
         if (!upiCheck && upiBalance.trim() === '') {
           alert('Please enter your previous UPI balance or check the box.');
           upiBalanceInput.focus();
           return;
         }
+
         // Save UPI balance and counter state
         localStorage.setItem('upiBalance', upiBalance);
         localStorage.setItem('counterState', upiCheck ? '2' : '1');
         localStorage.setItem('appState', 'shiftInProgress');
         showShiftInProgress();
       });
-    });
+    }
   }
 
-function showShiftInProgress() {
+  function showShiftInProgress() {
     localStorage.setItem('appState', 'shiftInProgress');
     mainContent.innerHTML = `
       <div class="shift-status">Shift in progress</div>
@@ -106,7 +99,7 @@ function showShiftInProgress() {
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
 
-function showExtraForm(savedData = {}) {
+  function showExtraForm(savedData = {}) {
     localStorage.setItem('appState', 'extraForm');
     mainContent.innerHTML = `
       <form id="extra-form" class="extra-form">
@@ -313,7 +306,7 @@ function showExtraForm(savedData = {}) {
     });
   }
 
-function showAnalysis() {
+  function showAnalysis() {
     localStorage.setItem('appState', 'analysisView');
     let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
@@ -541,152 +534,146 @@ function showAnalysis() {
     });
   }
 
-function endShift() {
-  // Show countdown interface
-  let countdown = 10;
-  mainContent.innerHTML = `
-    <div class="countdown-container">
-      <h2>Ending Shift in <span id="countdown-timer">${countdown}</span> seconds</h2>
-      <button id="cancel-end-shift" class="action-button">Cancel</button>
-    </div>
-  `;
-
-  const countdownTimer = document.getElementById('countdown-timer');
-  const cancelButton = document.getElementById('cancel-end-shift');
-
-  const intervalId = setInterval(() => {
-    countdown--;
-    countdownTimer.textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(intervalId);
-      showThankYouInterface();
-    }
-  }, 1000);
-
-  cancelButton.addEventListener('click', () => {
-    clearInterval(intervalId);
-    localStorage.setItem('appState', 'shiftInProgress');
-    showShiftInProgress();
-  });
-
-  function showThankYouInterface() {
-    const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-    const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
-    const issueData = JSON.parse(localStorage.getItem('issueData')) || [];
-    const upiBalance = localStorage.getItem('upiBalance') || 'Not provided';
-    const counterState = localStorage.getItem('counterState') || 'Not set';
-    const shiftStartTime = new Date(localStorage.getItem('shiftStartTime')).toLocaleString() || 'Unknown';
-    const shiftEndTime = new Date().toLocaleString();
-
+  function endShift() {
+    // Show countdown interface
+    let countdown = 10;
     mainContent.innerHTML = `
-      <div class="thank-you-container">
-        <h2>Shift Analysis Summary</h2>
-        <div class="analysis-summary">
-          <p><strong>Shift Start Time:</strong> ${shiftStartTime}</p>
-          <p><strong>Shift End Time:</strong> ${shiftEndTime}</p>
-          <p><strong>UPI Balance:</strong> ${upiBalance}</p>
-          <p><strong>Counter State:</strong> ${counterState}</p>
-        </div>
-        <div class="data-section">
-          <h3>Extra Data</h3>
-          ${extraData.length > 0 ? generateTable(extraData, ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category']) : '<p>No Extra Data Available</p>'}
-        </div>
-        <div class="data-section">
-          <h3>Delivery Data</h3>
-          ${deliveryData.length > 0 ? generateTable(deliveryData, ['Bill Number', 'Amount', 'Mode of Pay', 'Paid']) : '<p>No Delivery Data Available</p>'}
-        </div>
-        <div class="data-section">
-          <h3>Issue Data</h3>
-          ${issueData.length > 0 ? generateTable(issueData, ['Bill Number', 'Issue Description']) : '<p>No Issue Data Available</p>'}
-        </div>
-        <button id="end-shift-final" class="action-button" style="background-color: red; color: white;">End Shift</button>
+      <div class="countdown-container">
+        <h2>Ending Shift in <span id="countdown-timer">${countdown}</span> seconds</h2>
+        <button id="cancel-end-shift" class="action-button">Cancel</button>
       </div>
     `;
 
-    document.getElementById('end-shift-final').addEventListener('click', () => {
-      if (confirm('Are you sure you want to end the shift? All data will be cleared!')) {
-        endShiftProcess();
-        alert('Shift ended. All data has been cleared.');
+    const countdownTimer = document.getElementById('countdown-timer');
+    const cancelButton = document.getElementById('cancel-end-shift');
+
+    const intervalId = setInterval(() => {
+      countdown--;
+      countdownTimer.textContent = countdown;
+      if (countdown <= 0) {
+        clearInterval(intervalId);
+        showThankYouInterface();
       }
-    });
-  }
+    }, 1000);
 
-  function generateTable(data, headers) {
-    let tableHTML = '<table class="analysis-table"><thead><tr>';
-    headers.forEach(header => {
-      tableHTML += `<th>${header}</th>`;
+    cancelButton.addEventListener('click', () => {
+      clearInterval(intervalId);
+      localStorage.setItem('appState', 'shiftInProgress');
+      showShiftInProgress();
     });
-    tableHTML += '</tr></thead><tbody>';
-    data.forEach(row => {
-      tableHTML += '<tr>';
-      Object.values(row).forEach(cell => {
-        tableHTML += `<td>${cell}</td>`;
+
+    function showThankYouInterface() {
+      const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+      const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+      const issueData = JSON.parse(localStorage.getItem('issueData')) || [];
+      const upiBalance = localStorage.getItem('upiBalance') || 'Not provided';
+      const counterState = localStorage.getItem('counterState') || 'Not set';
+      const shiftStartTime = new Date(localStorage.getItem('shiftStartTime')).toLocaleString() || 'Unknown';
+      const shiftEndTime = new Date().toLocaleString();
+
+      mainContent.innerHTML = `
+        <div class="thank-you-container">
+          <h2>Shift Analysis Summary</h2>
+          <div class="analysis-summary">
+            <p><strong>Shift Start Time:</strong> ${shiftStartTime}</p>
+            <p><strong>Shift End Time:</strong> ${shiftEndTime}</p>
+            <p><strong>UPI Balance:</strong> ${upiBalance}</p>
+            <p><strong>Counter State:</strong> ${counterState}</p>
+          </div>
+          <div class="data-section">
+            <h3>Extra Data</h3>
+            ${extraData.length > 0 ? generateTable(extraData, ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category']) : '<p>No Extra Data Available</p>'}
+          </div>
+          <div class="data-section">
+            <h3>Delivery Data</h3>
+            ${deliveryData.length > 0 ? generateTable(deliveryData, ['Bill Number', 'Amount', 'Mode of Pay', 'Paid']) : '<p>No Delivery Data Available</p>'}
+          </div>
+          <div class="data-section">
+            <h3>Issue Data</h3>
+            ${issueData.length > 0 ? generateTable(issueData, ['Bill Number', 'Issue Description']) : '<p>No Issue Data Available</p>'}
+          </div>
+          <button id="end-shift-final" class="action-button" style="background-color: red; color: white;">End Shift</button>
+        </div>
+      `;
+
+      document.getElementById('end-shift-final').addEventListener('click', () => {
+        if (confirm('Are you sure you want to end the shift? All data will be cleared!')) {
+          endShiftProcess();
+          alert('Shift ended. All data has been cleared.');
+        }
       });
-      tableHTML += '</tr>';
-    });
-    tableHTML += '</tbody></table>';
-    return tableHTML;
+    }
+
+    function generateTable(data, headers) {
+      let tableHTML = '<table class="analysis-table"><thead><tr>';
+      headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+      });
+      tableHTML += '</tr></thead><tbody>';
+      data.forEach(row => {
+        tableHTML += '<tr>';
+        Object.values(row).forEach(cell => {
+          tableHTML += `<td>${cell}</td>`;
+        });
+        tableHTML += '</tr>';
+      });
+      tableHTML += '</tbody></table>';
+      return tableHTML;
+    }
   }
-}
 
-function addTable(doc, title, headers, data, startY) {
-  doc.setFontSize(14);
-  doc.setTextColor(40, 40, 40);
-  doc.text(title, 14, startY);
-  doc.setFontSize(10);
+  function addTable(doc, title, headers, data, startY) {
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text(title, 14, startY);
+    doc.setFontSize(10);
 
-  const tableStartY = startY + 6;
-  const rowHeight = 8;
-  const pageWidth = 200; // Total width of the page (excluding margins)
-  const colWidths = headers.map(() => pageWidth / headers.length); // Dynamically calculate column widths
-  let y = tableStartY;
+    const tableStartY = startY + 6;
+    const rowHeight = 8;
+    const pageWidth = 200; // Total width of the page (excluding margins)
+    const colWidths = headers.map(() => pageWidth / headers.length); // Dynamically calculate column widths
+    let y = tableStartY;
 
-  // Draw table headers
-  doc.setFillColor(0, 0, 0); // Black background for headers
-  doc.setTextColor(255, 255, 255); // White text for headers
-  headers.forEach((header, i) => {
-    doc.rect(10 + i * colWidths[i], y, colWidths[i], rowHeight, 'F'); // Fill the header background
-    doc.text(header, 12 + i * colWidths[i], y + 6); // Add header text with padding
-  });
-  y += rowHeight;
-
-  // Draw table rows
-  doc.setTextColor(60, 60, 60); // Gray text for data
-  data.forEach(row => {
-    row.forEach((cell, i) => {
-      doc.rect(10 + i * colWidths[i], y, colWidths[i], rowHeight); // Draw cell borders
-      doc.text(String(cell), 12 + i * colWidths[i], y + 6); // Add cell text with padding
+    // Draw table headers
+    doc.setFillColor(0, 0, 0); // Black background for headers
+    doc.setTextColor(255, 255, 255); // White text for headers
+    headers.forEach((header, i) => {
+      doc.rect(10 + i * colWidths[i], y, colWidths[i], rowHeight, 'F'); // Fill the header background
+      doc.text(header, 12 + i * colWidths[i], y + 6); // Add header text with padding
     });
     y += rowHeight;
-  });
 
-  return y + 10; // Add spacing after the table
-}
-
-function endShiftProcess() {
-  // Clear all shift-related data from localStorage
-  localStorage.removeItem('shiftStarted');
-  localStorage.removeItem('appState');
-  localStorage.removeItem('extraData');
-  localStorage.removeItem('deliveryData');
-  localStorage.removeItem('issueData');
-  localStorage.removeItem('upiBalance');
-  localStorage.removeItem('counterState');
-  localStorage.removeItem('shiftStartTime');
-  localStorage.removeItem('shiftEndTime');
-
-  // Reset the application to the initial state
-  mainContent.innerHTML = `
-    <div class="welcome-text">Welcome</div>
-    <button class="start-shift-button">Start Shift</button>
-  `;
-
-  const startShiftButton = document.querySelector('.start-shift-button');
-  if (startShiftButton) {
-    startShiftButton.addEventListener('click', () => {
-      localStorage.setItem('shiftStarted', 'true');
-      showUPIForm();
+    // Draw table rows
+    doc.setTextColor(60, 60, 60); // Gray text for data
+    data.forEach(row => {
+      row.forEach((cell, i) => {
+        doc.rect(10 + i * colWidths[i], y, colWidths[i], rowHeight); // Draw cell borders
+        doc.text(String(cell), 12 + i * colWidths[i], y + 6); // Add cell text with padding
+      });
+      y += rowHeight;
     });
+
+    return y + 10; // Add spacing after the table
   }
-}
+
+  function endShiftProcess() {
+    // Clear all shift-related data from localStorage
+    localStorage.clear(); // Clear all localStorage data (optional, if no other data is stored)
+
+    // Reset the application to the initial state
+    mainContent.innerHTML = `
+      <div class="welcome-text">Welcome</div>
+      <button class="start-shift-button">Start Shift</button>
+    `;
+
+    const startShiftButton = document.querySelector('.start-shift-button');
+    if (startShiftButton) {
+      startShiftButton.addEventListener('click', () => {
+        // Reinitialize shift state
+        localStorage.setItem('shiftStarted', 'true');
+        localStorage.setItem('shiftStartTime', new Date().toISOString());
+        showUPIForm();
+      });
+    }
+  }
 });
