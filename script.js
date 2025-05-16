@@ -313,7 +313,7 @@ function showExtraForm(savedData = {}) {
     });
   }
 
-  function showAnalysis() {
+function showAnalysis() {
     localStorage.setItem('appState', 'analysisView');
     let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
@@ -336,6 +336,36 @@ function showExtraForm(savedData = {}) {
 
     const analysisContent = document.getElementById('analysis-content');
     const filterContainer = document.getElementById('filter-container');
+
+    function renderLiveTotals(data) {
+      let totalUPI = 0;
+      let totalCash = 0;
+      let totalCard = 0;
+
+      data.forEach(item => {
+        const amount = parseFloat(item.extraAmount) || 0;
+        switch (item.modePay) {
+          case 'UPI':
+            totalUPI += amount;
+            break;
+          case 'Cash':
+            totalCash += amount;
+            break;
+          case 'Card':
+            totalCard += amount;
+            break;
+        }
+      });
+
+      return `
+        <div class="live-totals">
+          <h3>Live Totals</h3>
+          <p>Total UPI: ${totalUPI.toFixed(2)}</p>
+          <p>Total Cash: ${totalCash.toFixed(2)}</p>
+          <p>Total Card: ${totalCard.toFixed(2)}</p>
+        </div>
+      `;
+    }
 
     function renderTable(data, type) {
       if (data.length === 0) {
@@ -442,26 +472,29 @@ function showExtraForm(savedData = {}) {
             ${rows}
           </tbody>
         </table>
+        ${type === 'Extra' ? renderLiveTotals(extraData) : ''}
       `;
 
       // Add delete button event listeners
       const deleteButtons = analysisContent.querySelectorAll('.delete-btn');
       deleteButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          const idx = parseInt(btn.getAttribute('data-index'));
-          const dataType = btn.getAttribute('data-type');
-          if (dataType === 'extra') {
-            extraData.splice(idx, 1);
-            localStorage.setItem('extraData', JSON.stringify(extraData));
-            renderTable(extraData, 'Extra');
-          } else if (dataType === 'delivery') {
-            deliveryData.splice(idx, 1);
-            localStorage.setItem('deliveryData', JSON.stringify(deliveryData));
-            renderTable(deliveryData, 'Delivery');
-          } else if (dataType === 'issue') {
-            issueData.splice(idx, 1);
-            localStorage.setItem('issueData', JSON.stringify(issueData));
-            renderTable(issueData, 'Issue');
+          if (confirm('Do you want to delete this entry?')) {
+            const idx = parseInt(btn.getAttribute('data-index'));
+            const dataType = btn.getAttribute('data-type');
+            if (dataType === 'extra') {
+              extraData.splice(idx, 1);
+              localStorage.setItem('extraData', JSON.stringify(extraData));
+              renderTable(extraData, 'Extra');
+            } else if (dataType === 'delivery') {
+              deliveryData.splice(idx, 1);
+              localStorage.setItem('deliveryData', JSON.stringify(deliveryData));
+              renderTable(deliveryData, 'Delivery');
+            } else if (dataType === 'issue') {
+              issueData.splice(idx, 1);
+              localStorage.setItem('issueData', JSON.stringify(issueData));
+              renderTable(issueData, 'Issue');
+            }
           }
         });
       });

@@ -23,7 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
         <button type="submit" class="submit-button">Submit</button>
         <button type="button" id="extra-back-btn" class="submit-button">Back</button>
       </form>
+      <div id="live-totals" class="live-totals">
+        <h3>Live Totals</h3>
+        <p>Total UPI: <span id="total-upi">0</span></p>
+        <p>Total Cash: <span id="total-cash">0</span></p>
+        <p>Total Card: <span id="total-card">0</span></p>
+      </div>
     `;
+
 
     const extraForm = document.getElementById('extra-form');
     const completelyExtraCheckbox = document.getElementById('completely-extra');
@@ -38,6 +45,40 @@ document.addEventListener('DOMContentLoaded', () => {
         billNumberInput.required = true;
       }
     }
+
+    function updateLiveTotals() {
+      const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+      let totalUPI = 0;
+      let totalCash = 0;
+      let totalCard = 0;
+
+      extraData.forEach(item => {
+        const amount = parseFloat(item.extraAmount) || 0;
+        switch (item.modePay) {
+          case 'UPI':
+            totalUPI += amount;
+            break;
+          case 'Cash':
+            totalCash += amount;
+            break;
+          case 'Card':
+            totalCard += amount;
+            break;
+        }
+      });
+
+      document.getElementById('total-upi').textContent = totalUPI.toFixed(2);
+      document.getElementById('total-cash').textContent = totalCash.toFixed(2);
+      document.getElementById('total-card').textContent = totalCard.toFixed(2);
+    }
+
+    // Initial update of live totals
+    updateLiveTotals();
+
+    // Update live totals when extra data is saved
+    document.addEventListener('extraDataSaved', () => {
+      updateLiveTotals();
+    });
 
     completelyExtraCheckbox.addEventListener('change', () => {
       toggleBillNumber();
