@@ -570,124 +570,62 @@ function endShift() {
   });
 
   function showThankYouInterface() {
+    const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+    const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
+    const issueData = JSON.parse(localStorage.getItem('issueData')) || [];
+    const upiBalance = localStorage.getItem('upiBalance') || 'Not provided';
+    const counterState = localStorage.getItem('counterState') || 'Not set';
+    const shiftStartTime = new Date(localStorage.getItem('shiftStartTime')).toLocaleString() || 'Unknown';
+    const shiftEndTime = new Date().toLocaleString();
+
     mainContent.innerHTML = `
       <div class="thank-you-container">
-        <h2>Thank You!</h2>
-        <button id="download-analysis" class="action-button">Download Analysis</button>
-        <div id="confirmation-container" style="display: none; margin-top: 20px;">
-          <p style="color: red;">Are you sure you want to end the shift? All data will be cleared!</p>
-          <button id="confirm-end-shift" class="action-button">Yes, End Shift</button>
-          <button id="cancel-end-shift" class="action-button">Cancel</button>
+        <h2>Shift Analysis Summary</h2>
+        <div class="analysis-summary">
+          <p><strong>Shift Start Time:</strong> ${shiftStartTime}</p>
+          <p><strong>Shift End Time:</strong> ${shiftEndTime}</p>
+          <p><strong>UPI Balance:</strong> ${upiBalance}</p>
+          <p><strong>Counter State:</strong> ${counterState}</p>
         </div>
+        <div class="data-section">
+          <h3>Extra Data</h3>
+          ${extraData.length > 0 ? generateTable(extraData, ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category']) : '<p>No Extra Data Available</p>'}
+        </div>
+        <div class="data-section">
+          <h3>Delivery Data</h3>
+          ${deliveryData.length > 0 ? generateTable(deliveryData, ['Bill Number', 'Amount', 'Mode of Pay', 'Paid']) : '<p>No Delivery Data Available</p>'}
+        </div>
+        <div class="data-section">
+          <h3>Issue Data</h3>
+          ${issueData.length > 0 ? generateTable(issueData, ['Bill Number', 'Issue Description']) : '<p>No Issue Data Available</p>'}
+        </div>
+        <button id="end-shift-final" class="action-button" style="background-color: red; color: white;">End Shift</button>
       </div>
     `;
 
-    document.getElementById('download-analysis').addEventListener('click', () => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Prepare data for PDF
-      const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      const deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
-      const issueData = JSON.parse(localStorage.getItem('issueData')) || [];
-      const upiBalance = localStorage.getItem('upiBalance') || 'Not provided';
-      const counterState = localStorage.getItem('counterState') || 'Not set';
-      const shiftStartTime = new Date(localStorage.getItem('shiftStartTime')).toLocaleString() || 'Unknown';
-      const shiftEndTime = new Date().toLocaleString();
-
-      // Save shift end time
-      localStorage.setItem('shiftEndTime', shiftEndTime);
-
-      // Add a styled header
-      doc.setFontSize(22);
-      doc.setTextColor(40, 40, 40);
-      doc.text('Shift Analysis Report', 105, 20, { align: 'center' });
-
-      // Add a horizontal line below the header
-      doc.setDrawColor(0, 0, 0);
-      doc.line(10, 25, 200, 25);
-
-      // Add shift details
-      doc.setFontSize(12);
-      doc.setTextColor(60, 60, 60);
-      doc.text(`Shift Start Time: ${shiftStartTime}`, 14, 35);
-      doc.text(`Shift End Time: ${shiftEndTime}`, 14, 42);
-      doc.text(`UPI Balance: ${upiBalance}`, 14, 49);
-      doc.text(`Counter State: ${counterState}`, 14, 56);
-
-      // Add tables for Extra Data, Delivery Data, and Issue Data
-      let currentY = 64;
-
-      // Extra Data Table
-      if (extraData.length > 0) {
-        currentY = addTable(
-          doc,
-          'Extra Data',
-          ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category'],
-          extraData.map(item => [
-            item.completelyExtra ? 'CE' : item.billNumber,
-            item.extraAmount,
-            item.modePay,
-            item.itemCategory
-          ]),
-          currentY
-        );
+    document.getElementById('end-shift-final').addEventListener('click', () => {
+      if (confirm('Are you sure you want to end the shift? All data will be cleared!')) {
+        endShiftProcess();
+        alert('Shift ended. All data has been cleared.');
       }
-
-      // Delivery Data Table
-      if (deliveryData.length > 0) {
-        currentY = addTable(
-          doc,
-          'Delivery Data',
-          ['Bill Number', 'Amount', 'Mode of Pay', 'Paid'],
-          deliveryData.map(item => [
-            item.billNumber,
-            item.amount,
-            item.modePay,
-            item.paid ? 'Yes' : 'No'
-          ]),
-          currentY
-        );
-      }
-
-      // Issue Data Table
-      if (issueData.length > 0) {
-        currentY = addTable(
-          doc,
-          'Issue Data',
-          ['Bill Number', 'Issue Description'],
-          issueData.map(item => [
-            item.billNumber,
-            item.issueText
-          ]),
-          currentY
-        );
-      }
-
-      // Add footer
-      doc.setFontSize(10);
-      doc.setTextColor(100, 100, 100);
-      doc.text('Generated by Namma Mart Employee Portal', 105, 290, { align: 'center' });
-
-      // Open the PDF in a new tab
-      const pdfBlob = doc.output('blob');
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      window.open(pdfUrl, '_blank');
-
-      // Show confirmation container
-      document.getElementById('confirmation-container').style.display = 'block';
     });
+  }
 
-    // Handle confirmation to end shift
-    document.getElementById('confirm-end-shift').addEventListener('click', () => {
-      endShiftProcess();
-      alert('Shift ended. All data has been cleared.');
+  function generateTable(data, headers) {
+    let tableHTML = '<table class="analysis-table"><thead><tr>';
+    headers.forEach(header => {
+      tableHTML += `<th>${header}</th>`;
     });
-
-    // Handle cancellation of end shift
-    document.getElementById('cancel-end-shift').addEventListener('click', () => {
-      document.getElementById('confirmation-container').style.display = 'none';
+    tableHTML += '</tr></thead><tbody>';
+    data.forEach(row => {
+      tableHTML += '<tr>';
+      Object.values(row).forEach(cell => {
+        tableHTML += `<td>${cell}</td>`;
+      });
+      tableHTML += '</tr>';
     });
+    tableHTML += '</tbody></table>';
+    return tableHTML;
   }
 }
 
