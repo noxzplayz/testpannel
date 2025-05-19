@@ -82,6 +82,28 @@ main .start-shift-button:active {
   background-color: #00497a;
 }
 
+/* New button below start shift */
+main .new-shift-button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 18px 50px;
+  font-size: 1.5em;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+main .new-shift-button:hover {
+  background-color: #005fa3;
+}
+main .new-shift-button:active {
+  background-color: #00497a;
+}
+
 /* Counter buttons */
 main .counter-button {
   background-color: #007acc;
