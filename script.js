@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (startShiftButton) {
     startShiftButton.addEventListener('click', () => {
       localStorage.setItem('shiftStarted', 'true');
+      localStorage.setItem('shiftStartTime', new Date().toISOString());
       showUPIForm();
     });
   }
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="action-button" id="delivery-btn">Delivery</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
+      <button class="action-button" id="sale-without-bill-btn">Sale Without Bill</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
     `;
 
@@ -96,7 +98,132 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('appState', 'analysisView');
       showAnalysis();
     });
+    document.getElementById('sale-without-bill-btn').addEventListener('click', () => {
+      showSaleWithoutBill();
+    });
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
+  }
+
+
+  // Data for Sale Without Bill search
+  const saleWithoutBillData = [
+    { item: 'A4 SHEETS', price: 1.25, quantity: '1 SHEET' },
+    { item: 'A4 SHEETS BUNDLE', price: 160, quantity: '500 Sheet' },
+    { item: 'Plastic Glass', price: 0.85, quantity: '1 glass' },
+    { item: 'Mixed Masala', price: 10, quantity: '1' }
+  ];
+
+  function showSaleWithoutBill() {
+    mainContent.innerHTML = `
+      <div class="sale-without-bill-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff; text-align: center;">
+        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Sale Without Bill</h2>
+        <form id="sale-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <input type="text" id="sale-search-input" placeholder="Search items..." autocomplete="off" style="flex-grow: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"/>
+          <button type="submit" class="action-button" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+        </form>
+        <div id="sale-search-results" style="text-align: left; max-height: 300px; overflow-y: auto;"></div>
+        <button id="sale-back-btn" class="action-button" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Back</button>
+      </div>
+    `;
+
+    const saleSearchForm = document.getElementById('sale-search-form');
+    const saleBackBtn = document.getElementById('sale-back-btn');
+    const saleSearchResults = document.getElementById('sale-search-results');
+
+    function renderResults(results) {
+      if (results.length === 0) {
+        saleSearchResults.innerHTML = '<p>No results found.</p>';
+        return;
+      }
+      let html = '<table style="width: 100%; border-collapse: collapse; cursor: pointer;">';
+      html += '<thead><tr style="background-color: #007bff; color: white;">' +
+              '<th style="padding: 8px; border: 1px solid #ddd;">Item</th>' +
+              '<th style="padding: 8px; border: 1px solid #ddd;">Price</th>' +
+              '<th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>' +
+              '</tr></thead><tbody>';
+      results.forEach((row, index) => {
+        html += `<tr data-index="${index}">
+          <td style="padding: 8px; border: 1px solid #ddd;">${row.item}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${row.price}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${row.quantity}</td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      saleSearchResults.innerHTML = html;
+
+      // Add click event listeners to rows
+      const rows = saleSearchResults.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        row.addEventListener('click', () => {
+          const idx = parseInt(row.getAttribute('data-index'));
+          showSaleItemDetails(results[idx]);
+        });
+      });
+    }
+
+    // Render all items initially
+    renderResults(saleWithoutBillData);
+
+    saleSearchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = document.getElementById('sale-search-input').value.trim().toLowerCase();
+      if (query === '') {
+        // If search is empty, show all items
+        renderResults(saleWithoutBillData);
+        return;
+      }
+      const filtered = saleWithoutBillData.filter(d => d.item.toLowerCase().includes(query));
+      renderResults(filtered);
+    });
+
+    saleBackBtn.addEventListener('click', () => {
+      localStorage.setItem('appState', 'shiftInProgress');
+      showShiftInProgress();
+    });
+
+    function showSaleItemDetails(item) {
+      mainContent.innerHTML = `
+        <div class="sale-item-details" style="max-width: 400px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff;">
+          <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">${item.item}</h2>
+          <div style="margin-bottom: 10px;">
+            <label>Price per piece:</label>
+            <input type="number" id="price-per-piece" value="${item.price}" readonly style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Quantity:</label>
+            <input type="number" id="quantity" min="1" value="1" style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label>Total Value:</label>
+            <input type="number" id="total-value" value="${item.price}" readonly style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
+          </div>
+          <button id="confirm-sale-btn" class="action-button" style="margin-right: 10px;">Confirm</button>
+          <button id="back-to-list-btn" class="action-button" style="background-color: #6c757d;">Back</button>
+        </div>
+      `;
+
+      const quantityInput = document.getElementById('quantity');
+      const totalValueInput = document.getElementById('total-value');
+      const pricePerPiece = item.price;
+
+      quantityInput.addEventListener('input', () => {
+        const qty = parseInt(quantityInput.value);
+        if (isNaN(qty) || qty < 1) {
+          totalValueInput.value = 0;
+        } else {
+          totalValueInput.value = (qty * pricePerPiece).toFixed(2);
+        }
+      });
+
+      document.getElementById('confirm-sale-btn').addEventListener('click', () => {
+        alert(`Total value for ${item.item}: ${totalValueInput.value}`);
+        // You can add further logic here to save or process the sale
+      });
+
+      document.getElementById('back-to-list-btn').addEventListener('click', () => {
+        showSaleWithoutBill();
+      });
+    }
   }
 
   function showExtraForm(savedData = {}) {
@@ -582,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="data-section">
             <h3>Extra Data</h3>
-            ${extraData.length > 0 ? generateTable(extraData, ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category']) : '<p>No Extra Data Available</p>'}
+            ${extraData.length > 0 ? generateExtraDataSummaryTable(extraData) : '<p>No Extra Data Available</p>'}
           </div>
           <div class="data-section">
             <h3>Delivery Data</h3>
@@ -615,6 +742,27 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.values(row).forEach(cell => {
           tableHTML += `<td>${cell}</td>`;
         });
+        tableHTML += '</tr>';
+      });
+      tableHTML += '</tbody></table>';
+      return tableHTML;
+    }
+
+    // New function to generate Extra Data summary table without boolean values
+    function generateExtraDataSummaryTable(data) {
+      let tableHTML = '<table class="analysis-table"><thead><tr>';
+      const headers = ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category'];
+      headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+      });
+      tableHTML += '</tr></thead><tbody>';
+      data.forEach(row => {
+        tableHTML += '<tr>';
+        // Only include the specific fields, excluding completelyExtra boolean
+        tableHTML += `<td>${row.billNumber}</td>`;
+        tableHTML += `<td>${row.extraAmount}</td>`;
+        tableHTML += `<td>${row.modePay}</td>`;
+        tableHTML += `<td>${row.itemCategory}</td>`;
         tableHTML += '</tr>';
       });
       tableHTML += '</tbody></table>';
