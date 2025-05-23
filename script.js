@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mainContent.innerHTML = `
       <div class="sale-without-bill-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff; text-align: center;">
-        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Sale Without Bill (Under DEV)</h2>
+        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Choose The Extra Amount To Add (Read Carefully)</h2>
         <form id="sale-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
           <input type="text" id="sale-search-input" placeholder="Search items..." autocomplete="off" style="flex-grow: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"/>
           <button type="submit" class="action-button" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
