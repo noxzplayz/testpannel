@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const hasMoreItems = confirm(`Do You Have More Extra items?`);
           if (hasMoreItems) {
             // Allow the user to select another item
-            alert(`You can now select another item.`);
+            alert(`Select another item Buddy !.`);
           } else {
             // Send the total value and concatenated item names to the Extra Form
             const concatenatedItems = selectedItems.join(', ');
