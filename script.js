@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
           totalValue += itemTotal;
 
           // Ask if the user has more SWB items
-          const hasMoreItems = confirm(`Do you have more SWB items?`);
+          const hasMoreItems = confirm(`Do You Have More Extra items?`);
           if (hasMoreItems) {
             // Allow the user to select another item
             alert(`You can now select another item.`);
