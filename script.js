@@ -108,14 +108,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // Data for Sale Without Bill search
   const saleWithoutBillData = [
     { item: 'A4 SHEETS', price: 1.25, quantity: '1 SHEET' },
     { item: 'A4 SHEETS BUNDLE', price: 360, quantity: '500 Sheet' },
     { item: '250ML Plastic Glass', price: 0.85, quantity: '1 glass' },
     { item: 'Mixed Masala', price: 10, quantity: '1' },
     { item: 'Pan', price: 5, quantity: '1' },
-    { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' }
+    { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' }, 
+    { item: '130 ml flower ice cream bowl', price: 0.25, quantity: '1' }, 
+    { item: 'plastic spoon', price: 0.70, quantity: '1' }, 
+    { item: 'plastic fork', price: 0.80, quantity: '1' }, 
+    { item: '750 food cointainer', price: 4, quantity: '1' }, 
+    { item: '450 food cointainer', price: 3, quantity: '1' }, 
+    { item: 'ezee taj tooth picks', price: 30, quantity: '1' }, 
+    { item: 'classic silver pouch 8×10 (pack)', price: 110, quantity: '1' }, 
+    { item: 'classic silver pouch 6×8(pack)', price: 70, quantity: '1' }, 
+    { item: 'black straw(pack) ', price: 30, quantity: '1' }, 
+    { item: 'sprite', price: 10, quantity: '1' }, 
+    { item: 'fanta', price: 10, quantity: '1' }, 
+    { item: 'coca cola', price: 10, quantity: '1' }, 
+    { item: 'kinley soda', price: 10, quantity: '1' }, 
+    { item: 'ice cream bowl cap', price: 1.25, quantity: '1' },  
+    { item: '8 paper plate', price: 10, quantity: '1' }
   ];
 
   function showSaleWithoutBill() {
