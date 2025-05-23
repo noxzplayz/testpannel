@@ -112,9 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const saleWithoutBillData = [
     { item: 'A4 SHEETS', price: 1.25, quantity: '1 SHEET' },
     { item: 'A4 SHEETS BUNDLE', price: 360, quantity: '500 Sheet' },
-    { item: 'Plastic Glass', price: 0.85, quantity: '1 glass' },
+    { item: '250ML Plastic Glass', price: 0.85, quantity: '1 glass' },
     { item: 'Mixed Masala', price: 10, quantity: '1' },
-    { item: 'Pan', price: 5, quantity: '1' }
+    { item: 'Pan', price: 5, quantity: '1' },
+    { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' }
   ];
 
   function showSaleWithoutBill() {
