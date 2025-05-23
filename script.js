@@ -129,7 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
     { item: 'coca cola', price: 10, quantity: '1' }, 
     { item: 'kinley soda', price: 10, quantity: '1' }, 
     { item: 'ice cream bowl cap', price: 1.25, quantity: '1' },  
-    { item: '8 paper plate', price: 10, quantity: '1' }
+    { item: '8 paper plate', price: 10, quantity: '1' }, 
+    { item: 'Masala Kadle', price: 40, quantity: '1' }, 
+    { item: 'Oil Kadle', price: 35, quantity: '1' }, 
+    { item: 'Batani Kadle', price: 35, quantity: '1' }, 
+    { item: 'Sweet Potato Stick', price: 40, quantity: '1' }, 
+    { item: 'Puffed Channa', price: 40, quantity: '1' },
+    { item: 'Mixture', price: 35, quantity: '1' },
+    { item: 'Horse Gram Mixture', price: 35, quantity: '1' },
+    { item: 'Puffed Channa', price: 35, quantity: '1' }, 
   ];
 
   function showSaleWithoutBill() {
