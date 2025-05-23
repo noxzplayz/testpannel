@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { item: 'A4 SHEETS', price: 1.25, quantity: '1 SHEET' },
     { item: 'A4 SHEETS BUNDLE', price: 160, quantity: '500 Sheet' },
     { item: 'Plastic Glass', price: 0.85, quantity: '1 glass' },
-    { item: 'Mixed Masala', price: 10, quantity: '1' }
+    { item: 'Mixed Masala', price: 10, quantity: '1' },
+    { item: 'Pan', price: 5, quantity: '1' }
   ];
 
   function showSaleWithoutBill() {
