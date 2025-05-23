@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="action-button" id="delivery-btn">Delivery</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
-      <button class="action-button" id="sale-without-bill-btn">Sale Without Bill</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
     `;
 
@@ -105,9 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('appState', 'analysisView');
       showAnalysis();
     });
-    document.getElementById('sale-without-bill-btn').addEventListener('click', () => {
-      showSaleWithoutBill();
-    });
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
 
@@ -121,9 +117,12 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function showSaleWithoutBill() {
+    let selectedItems = []; // Array to store selected items
+    let totalValue = 0; // Variable to store the total value
+
     mainContent.innerHTML = `
       <div class="sale-without-bill-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff; text-align: center;">
-        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Sale Without Bill ( Under DEV)</h2>
+        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Sale Without Bill (Under DEV)</h2>
         <form id="sale-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
           <input type="text" id="sale-search-input" placeholder="Search items..." autocomplete="off" style="flex-grow: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"/>
           <button type="submit" class="action-button" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
@@ -147,23 +146,47 @@ document.addEventListener('DOMContentLoaded', () => {
               '<th style="padding: 8px; border: 1px solid #ddd;">Item</th>' +
               '<th style="padding: 8px; border: 1px solid #ddd;">Price</th>' +
               '<th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>' +
+              '<th style="padding: 8px; border: 1px solid #ddd;">Action</th>' +
               '</tr></thead><tbody>';
       results.forEach((row, index) => {
         html += `<tr data-index="${index}">
           <td style="padding: 8px; border: 1px solid #ddd;">${row.item}</td>
           <td style="padding: 8px; border: 1px solid #ddd;">${row.price}</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${row.quantity}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">
+            <input type="number" id="quantity-${index}" min="1" value="1" style="width: 60px;"/>
+          </td>
+          <td style="padding: 8px; border: 1px solid #ddd;">
+            <button class="confirm-sale-btn" data-index="${index}" style="padding: 5px 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm</button>
+          </td>
         </tr>`;
       });
       html += '</tbody></table>';
       saleSearchResults.innerHTML = html;
 
-      // Add click event listeners to rows
-      const rows = saleSearchResults.querySelectorAll('tbody tr');
-      rows.forEach(row => {
-        row.addEventListener('click', () => {
-          const idx = parseInt(row.getAttribute('data-index'));
-          showSaleItemDetails(results[idx]);
+      // Add click event listeners to Confirm buttons
+      const confirmButtons = saleSearchResults.querySelectorAll('.confirm-sale-btn');
+      confirmButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const index = parseInt(button.getAttribute('data-index'));
+          const quantityInput = document.getElementById(`quantity-${index}`);
+          const quantity = parseInt(quantityInput.value);
+          const item = results[index];
+          const itemTotal = Math.round(quantity * item.price); // Calculate total for the item
+
+          // Add item to selectedItems and update totalValue
+          selectedItems.push(item.item);
+          totalValue += itemTotal;
+
+          // Ask if the user has more SWB items
+          const hasMoreItems = confirm(`Do you have more SWB items?`);
+          if (hasMoreItems) {
+            // Allow the user to select another item
+            alert(`You can now select another item.`);
+          } else {
+            // Send the total value and concatenated item names to the Extra Form
+            const concatenatedItems = selectedItems.join(', ');
+            showExtraForm({ extraAmount: totalValue, itemCategory: concatenatedItems });
+          }
         });
       });
     }
@@ -187,50 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('appState', 'shiftInProgress');
       showShiftInProgress();
     });
-
-    function showSaleItemDetails(item) {
-      mainContent.innerHTML = `
-        <div class="sale-item-details" style="max-width: 400px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff;">
-          <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">${item.item}</h2>
-          <div style="margin-bottom: 10px;">
-            <label>Price per piece:</label>
-            <input type="number" id="price-per-piece" value="${item.price}" readonly style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
-          </div>
-          <div style="margin-bottom: 10px;">
-            <label>Quantity:</label>
-            <input type="number" id="quantity" min="1" value="1" style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
-          </div>
-          <div style="margin-bottom: 20px;">
-            <label>Total Value:</label>
-            <input type="number" id="total-value" value="${item.price}" readonly style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;"/>
-          </div>
-          <button id="confirm-sale-btn" class="action-button" style="margin-right: 10px;">Confirm</button>
-          <button id="back-to-list-btn" class="action-button" style="background-color: #6c757d;">Back</button>
-        </div>
-      `;
-
-      const quantityInput = document.getElementById('quantity');
-      const totalValueInput = document.getElementById('total-value');
-      const pricePerPiece = item.price;
-
-      quantityInput.addEventListener('input', () => {
-        const qty = parseInt(quantityInput.value);
-        if (isNaN(qty) || qty < 1) {
-          totalValueInput.value = 0;
-        } else {
-          totalValueInput.value = (qty * pricePerPiece).toFixed(2);
-        }
-      });
-
-      document.getElementById('confirm-sale-btn').addEventListener('click', () => {
-        alert(`Total value for ${item.item}: ${totalValueInput.value}`);
-        // You can add further logic here to save or process the sale
-      });
-
-      document.getElementById('back-to-list-btn').addEventListener('click', () => {
-        showSaleWithoutBill();
-      });
-    }
   }
 
   function showExtraForm(savedData = {}) {
@@ -238,10 +217,21 @@ document.addEventListener('DOMContentLoaded', () => {
     mainContent.innerHTML = `
       <form id="extra-form" class="extra-form">
         <label><input type="checkbox" id="completely-extra" name="completely-extra" ${savedData.completelyExtra ? 'checked' : ''}/> Completely Extra</label><br/>
+        
+        <label for="item-category">Item Category:</label><br/>
+        <div style="position: relative; display: inline-block; width: 100%;">
+          <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field" style="padding-right: 30px;"/>
+          <span id="item-category-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+            🔍
+          </span>
+        </div><br/>
+
         <label for="bill-number">Bill Number:</label><br/>
         <input type="text" id="bill-number" name="bill-number" value="${savedData.billNumber || ''}" ${savedData.completelyExtra ? '' : 'required'} class="input-field" ${savedData.completelyExtra ? 'disabled' : ''}/><br/>
+        
         <label for="extra-amount">Extra Amount:</label><br/>
         <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" required class="input-field"/><br/>
+        
         <label for="mode-pay">Mode of Pay:</label><br/>
         <select id="mode-pay" name="mode-pay" required class="input-field">
           <option value="">Select</option>
@@ -249,8 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
           <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
         </select><br/>
-        <label for="item-category">Item Category:</label><br/>
-        <input type="text" id="item-category" name="item-category" value="${savedData.itemCategory || ''}" required class="input-field"/><br/>
+        
         <button type="submit" class="action-button">Submit</button>
         <button type="button" id="extra-back-btn" class="action-button">Back</button>
       </form>
@@ -272,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     completelyExtraCheckbox.addEventListener('change', () => {
       toggleBillNumber();
-      // Save form data on checkbox change
       const formData = {
         completelyExtra: completelyExtraCheckbox.checked,
         billNumber: billNumberInput.value,
@@ -328,6 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('appState', 'shiftInProgress');
       localStorage.removeItem('extraFormData');
       showShiftInProgress();
+    });
+
+    // Add functionality to the magnifying glass
+    document.getElementById('item-category-search').addEventListener('click', () => {
+      showSaleWithoutBill();
     });
   }
 
