@@ -108,33 +108,81 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // Data for Sale Without Bill search
   const saleWithoutBillData = [
     { item: 'A4 SHEETS', price: 1.25, quantity: '1 SHEET' },
-    { item: 'A4 SHEETS BUNDLE', price: 160, quantity: '500 Sheet' },
-    { item: 'Plastic Glass', price: 0.85, quantity: '1 glass' },
-    { item: 'Mixed Masala', price: 10, quantity: '1' }
+    { item: 'A4 SHEETS BUNDLE', price: 360, quantity: '500 Sheet' },
+    { item: '250ML Plastic Glass', price: 0.85, quantity: '1 glass' },
+    { item: 'Mixed Masala', price: 10, quantity: '1' },
+    { item: 'Pan', price: 5, quantity: '1' },
+    { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' }, 
+    { item: '130 ml flower ice cream bowl', price: 0.25, quantity: '1' }, 
+    { item: 'plastic spoon', price: 0.70, quantity: '1' }, 
+    { item: 'plastic fork', price: 0.80, quantity: '1' }, 
+    { item: '750 food cointainer', price: 4, quantity: '1' }, 
+    { item: '450 food cointainer', price: 3, quantity: '1' }, 
+    { item: 'ezee taj tooth picks', price: 30, quantity: '1' }, 
+    { item: 'classic silver pouch 8×10 (pack)', price: 110, quantity: '1' }, 
+    { item: 'classic silver pouch 6×8(pack)', price: 70, quantity: '1' }, 
+    { item: 'black straw(pack) ', price: 30, quantity: '1' }, 
+    { item: 'sprite', price: 10, quantity: '1' }, 
+    { item: 'fanta', price: 10, quantity: '1' }, 
+    { item: 'coca cola', price: 10, quantity: '1' }, 
+    { item: 'kinley soda', price: 10, quantity: '1' }, 
+    { item: 'ice cream bowl cap', price: 1.25, quantity: '1' },  
+    { item: '8 paper plate', price: 10, quantity: '1' }, 
+    { item: 'Masala Kadle', price: 40, quantity: '1' }, 
+    { item: 'Oil Kadle', price: 35, quantity: '1' }, 
+    { item: 'Batani Kadle', price: 35, quantity: '1' }, 
+    { item: 'Sweet Potato Stick', price: 40, quantity: '1' }, 
+    { item: 'Puffed Channa', price: 40, quantity: '1' },
+    { item: 'Mixture', price: 35, quantity: '1' },
+    { item: 'Horse Gram Mixture', price: 35, quantity: '1' },
+    { item: 'Spicy Mixture', price: 35, quantity: '1' },
+    { item: 'Mask', price: 5, quantity: '1' },
+    { item: 'Gloves Pair ', price: 15, quantity: '1' },
+    { item: 'Black Straw Pack', price: 50, quantity: '1' },
+    { item: 'Lighter ', price: 15, quantity: '1' },
+    { item: 'ParaMount Rubber Band (Pack)', price: 60, quantity: '1' },
+    { item: 'Tulip Cotton Swab', price: 40, quantity: '1' },
+    { item: 'Candle ₹8', price: 8, quantity: '1' },
+    { item: 'Candle ₹10', price: 10, quantity: '1' },
+    { item: 'Candle ₹10 ( Long )', price: 10, quantity: '1' },
+    { item: 'Tissue MRP 65', price: 40, quantity: '1' },
+    { item: 'Tissue MRP 30', price: 25, quantity: '1' },
+    { item: 'S.K.S Karpoora', price: 40, quantity: '1' },
+    { item: 'HYM BATTERY', price: 60, quantity: '1' },
+    { item: 'Tea Cup (Paper ) ', price: 50, quantity: '1' },
+    { item: '250ml Plastic Cup', price: 65, quantity: '1' },
+    { item: '250ml Paper Cup', price: 80, quantity: '1' },
+    { item: '350ml Plastic Cup', price: 60, quantity: '1' },
+    { item: 'Jaggery ', price: 46, quantity: '1' },
+    { item: 'Deepak Khajoor Paan', price: 5, quantity: '1' },
   ];
 
   function showSaleWithoutBill() {
-    let selectedItems = []; // Array to store selected items
+    let selectedItems = []; // Array to store selected items and their quantities
     let totalValue = 0; // Variable to store the total value
 
     mainContent.innerHTML = `
       <div class="sale-without-bill-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff; text-align: center;">
-        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Sale Without Bill (Under DEV)</h2>
+        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Select Extra Items</h2>
         <form id="sale-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
           <input type="text" id="sale-search-input" placeholder="Search items..." autocomplete="off" style="flex-grow: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"/>
           <button type="submit" class="action-button" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
         </form>
         <div id="sale-search-results" style="text-align: left; max-height: 300px; overflow-y: auto;"></div>
-        <button id="sale-back-btn" class="action-button" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Back</button>
+        <button id="confirm-selection-btn" class="action-button" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm Selection</button>
+        <button id="sale-back-btn" class="action-button" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Back</button>
       </div>
     `;
 
     const saleSearchForm = document.getElementById('sale-search-form');
     const saleBackBtn = document.getElementById('sale-back-btn');
     const saleSearchResults = document.getElementById('sale-search-results');
+    const confirmSelectionBtn = document.getElementById('confirm-selection-btn');
+
+    // Object to persist selected items and their quantities
+    const selectedState = {};
 
     function renderResults(results) {
       if (results.length === 0) {
@@ -146,46 +194,50 @@ document.addEventListener('DOMContentLoaded', () => {
               '<th style="padding: 8px; border: 1px solid #ddd;">Item</th>' +
               '<th style="padding: 8px; border: 1px solid #ddd;">Price</th>' +
               '<th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>' +
-              '<th style="padding: 8px; border: 1px solid #ddd;">Action</th>' +
+              '<th style="padding: 8px; border: 1px solid #ddd;">Select</th>' +
               '</tr></thead><tbody>';
       results.forEach((row, index) => {
+        const isChecked = selectedState[row.item] ? 'checked' : '';
+        const quantity = selectedState[row.item]?.quantity || 1;
         html += `<tr data-index="${index}">
           <td style="padding: 8px; border: 1px solid #ddd;">${row.item}</td>
           <td style="padding: 8px; border: 1px solid #ddd;">${row.price}</td>
           <td style="padding: 8px; border: 1px solid #ddd;">
-            <input type="number" id="quantity-${index}" min="1" value="1" style="width: 60px;"/>
+            <input type="number" id="quantity-${index}" min="1" value="${quantity}" style="width: 60px;" />
           </td>
           <td style="padding: 8px; border: 1px solid #ddd;">
-            <button class="confirm-sale-btn" data-index="${index}" style="padding: 5px 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm</button>
+            <input type="checkbox" id="select-item-${index}" data-index="${index}" data-item="${row.item}" ${isChecked} />
           </td>
         </tr>`;
       });
       html += '</tbody></table>';
       saleSearchResults.innerHTML = html;
 
-      // Add click event listeners to Confirm buttons
-      const confirmButtons = saleSearchResults.querySelectorAll('.confirm-sale-btn');
-      confirmButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const index = parseInt(button.getAttribute('data-index'));
+      // Add event listeners to checkboxes and quantity inputs
+      const checkboxes = saleSearchResults.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const item = e.target.getAttribute('data-item');
+          const index = parseInt(e.target.getAttribute('data-index'));
           const quantityInput = document.getElementById(`quantity-${index}`);
-          const quantity = parseInt(quantityInput.value);
-          const item = results[index];
-          const itemTotal = Math.round(quantity * item.price); // Calculate total for the item
-
-          // Add item to selectedItems and update totalValue
-          selectedItems.push(item.item);
-          totalValue += itemTotal;
-
-          // Ask if the user has more SWB items
-          const hasMoreItems = confirm(`Do you have more SWB items?`);
-          if (hasMoreItems) {
-            // Allow the user to select another item
-            alert(`You can now select another item.`);
+          if (e.target.checked) {
+            selectedState[item] = {
+              quantity: parseInt(quantityInput.value),
+              price: saleWithoutBillData[index].price,
+            };
           } else {
-            // Send the total value and concatenated item names to the Extra Form
-            const concatenatedItems = selectedItems.join(', ');
-            showExtraForm({ extraAmount: totalValue, itemCategory: concatenatedItems });
+            delete selectedState[item];
+          }
+        });
+      });
+
+      const quantityInputs = saleSearchResults.querySelectorAll('input[type="number"]');
+      quantityInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+          const index = parseInt(e.target.id.split('-')[1]);
+          const item = saleWithoutBillData[index].item;
+          if (selectedState[item]) {
+            selectedState[item].quantity = parseInt(e.target.value);
           }
         });
       });
@@ -204,6 +256,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const filtered = saleWithoutBillData.filter(d => d.item.toLowerCase().includes(query));
       renderResults(filtered);
+    });
+
+    confirmSelectionBtn.addEventListener('click', () => {
+      // Reset totalValue before recalculating
+      totalValue = 0;
+
+      // Calculate the total value and prepare the selected items array
+      const selectedItemsArray = Object.keys(selectedState).map(item => {
+        const { quantity, price } = selectedState[item];
+        const itemTotal = Math.round(quantity * price * 100) / 100; // Round off each item's total
+        totalValue += itemTotal; // Accumulate the rounded-off total value
+        return `${item} (x${quantity})`;
+      });
+
+      if (selectedItemsArray.length === 0) {
+        alert('Please select at least one item.');
+        return;
+      }
+
+      // Round off the final total value to the nearest integer
+      totalValue = Math.round(totalValue); // Round off the total value
+
+      // Send the total value and concatenated item names to the Extra Form
+      const concatenatedItems = selectedItemsArray.join(', ');
+      showExtraForm({ extraAmount: totalValue, itemCategory: concatenatedItems });
     });
 
     saleBackBtn.addEventListener('click', () => {
