@@ -114,8 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { item: '250ML Plastic Glass', price: 0.85, quantity: '1 glass' },
     { item: 'Mixed Masala', price: 10, quantity: '1' },
     { item: 'Pan', price: 5, quantity: '1' },
+<<<<<<< HEAD
     { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' },
     { item: '125ml Icecream Round Bowl (PACK)', price: 50, quantity: '1' },  
+=======
+    { item: '125ml Icecream Round Bowl', price: 0.65, quantity: '1' }, 
+>>>>>>> ef00c02958c0c032db181c8bbfb547eecf44e19e
     { item: '130 ml flower ice cream bowl', price: 0.25, quantity: '1' }, 
     { item: 'plastic spoon', price: 0.70, quantity: '1' }, 
     { item: 'plastic fork', price: 0.80, quantity: '1' }, 
@@ -166,7 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mainContent.innerHTML = `
       <div class="sale-without-bill-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #fff; text-align: center;">
+<<<<<<< HEAD
         <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Select Extra Items</h2>
+=======
+        <h2 style="margin-bottom: 20px; font-family: Arial, sans-serif; color: #333;">Choose The Extra Item To Add (Read Carefully)</h2>
+>>>>>>> ef00c02958c0c032db181c8bbfb547eecf44e19e
         <form id="sale-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
           <input type="text" id="sale-search-input" placeholder="Search items..." autocomplete="off" style="flex-grow: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"/>
           <button type="submit" class="action-button" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
@@ -221,11 +229,27 @@ document.addEventListener('DOMContentLoaded', () => {
           const item = e.target.getAttribute('data-item');
           const index = parseInt(e.target.getAttribute('data-index'));
           const quantityInput = document.getElementById(`quantity-${index}`);
+<<<<<<< HEAD
           if (e.target.checked) {
             selectedState[item] = {
               quantity: parseInt(quantityInput.value),
               price: saleWithoutBillData[index].price,
             };
+=======
+          const quantity = parseInt(quantityInput.value);
+          const item = results[index];
+          const itemTotal = Math.round(quantity * item.price); // Calculate total for the item
+
+          // Add item to selectedItems and update totalValue
+          selectedItems.push(item.item);
+          totalValue += itemTotal;
+
+          // Ask if the user has more SWB items
+          const hasMoreItems = confirm(`Do You Have More Extra items?`);
+          if (hasMoreItems) {
+            // Allow the user to select another item
+            alert(`Select another item Buddy !.`);
+>>>>>>> ef00c02958c0c032db181c8bbfb547eecf44e19e
           } else {
             delete selectedState[item];
           }
