@@ -80,9 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function showShiftInProgress() {
     localStorage.setItem('appState', 'shiftInProgress');
     mainContent.innerHTML = `
+      <marquee style="color:#b71c1c;font-weight:bold;margin-bottom:10px;">
+        This application has been updated with new feature, make sure to check carefully :)
+      </marquee>
       <div class="shift-status">Shift in progress</div>
       <button class="action-button" id="extra-btn">Extra</button>
       <button class="action-button" id="delivery-btn">Delivery</button>
+      <button class="action-button" id="bill-paid-btn">Bill Paid</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
@@ -95,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('delivery-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'deliveryForm');
       showDeliveryForm();
+    });
+    document.getElementById('bill-paid-btn').addEventListener('click', () => {
+      showBillPaidForm();
     });
     document.getElementById('issue-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'issueForm');
@@ -380,12 +387,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
-      extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
+      if (savedData.editIndex !== undefined) {
+        // Edit mode: update existing entry
+        extraData[savedData.editIndex] = { completelyExtra, billNumber, extraAmount, modePay, itemCategory };
+      } else {
+        // Add mode: push new entry
+        extraData.push({ completelyExtra, billNumber, extraAmount, modePay, itemCategory });
+      }
       localStorage.setItem('extraData', JSON.stringify(extraData));
       localStorage.removeItem('extraFormData');
-
       alert('Extra data saved.');
-
       localStorage.setItem('appState', 'shiftInProgress');
       showShiftInProgress();
     });
@@ -405,9 +416,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function showDeliveryForm(savedData = {}) {
     localStorage.setItem('appState', 'deliveryForm');
     mainContent.innerHTML = `
+      <marquee style="color:#b71c1c;font-weight:bold;margin-bottom:10px;">
+        1) If the delivery has extra item, Check the below box and use the fields below.            2) If the delivery is complete extra then fill 10 digit phone number instead of bill number and check the bill with extra box and aslo note that the  AMOUNT WITHOUT EXTRA is filled as "0" .                     3) Once the extra is being add here no need to re-enter in extra field this will auto fill it .
+      </marquee>
       <form id="delivery-form" class="extra-form">
-        <label for="bill-number-delivery">Bill Number:</label><br/>
-        <input type="text" id="bill-number-delivery" name="bill-number-delivery" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
+        <label for="bill-number-delivery" id="bill-number-label">Bill Number:</label><br/>
+        <input type="text" id="bill-number-delivery" name="bill-number-delivery" 
+          value="${savedData.billNumber || ''}" 
+          required 
+          class="input-field"
+        /><br/>
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="bill-with-extra" ${savedData.billWithExtra ? 'checked' : ''}/>
+          <label for="bill-with-extra">Bill with Extra</label>
+        </div>
+        <div id="extra-fields" style="display:${savedData.billWithExtra ? 'block' : 'none'};width:100%;">
+          <label for="amount-without-extra">Amount Without Extra:</label><br/>
+          <input type="number" id="amount-without-extra" name="amount-without-extra" value="${savedData.amountWithoutExtra || ''}" class="input-field"/><br/>
+          <label for="extra-amount">Extra Amount:</label><br/>
+          <input type="number" id="extra-amount" name="extra-amount" value="${savedData.extraAmount || ''}" class="input-field"/><br/>
+          <label for="extra-item-category">Extra Item Category:</label><br/>
+          <input type="text" id="extra-item-category" name="extra-item-category" value="${savedData.extraItemCategory || ''}" class="input-field"/><br/>
+        </div>
         <label for="amount-delivery">Amount:</label><br/>
         <input type="number" id="amount-delivery" name="amount-delivery" value="${savedData.amount || ''}" required class="input-field"/><br/>
         <label for="mode-pay-delivery">Mode of Pay:</label><br/>
@@ -423,10 +453,54 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     const deliveryForm = document.getElementById('delivery-form');
+    const billWithExtraCheckbox = document.getElementById('bill-with-extra');
+    const extraFields = document.getElementById('extra-fields');
+    const amountInput = document.getElementById('amount-delivery');
+    const amountWithoutExtraInput = document.getElementById('amount-without-extra');
+    const extraAmountInput = document.getElementById('extra-amount');
+    const extraItemCategoryInput = document.getElementById('extra-item-category');
+    const billNumberInput = document.getElementById('bill-number-delivery');
+
+    function toggleExtraFields() {
+      if (billWithExtraCheckbox.checked) {
+        extraFields.style.display = 'block';
+        amountInput.readOnly = true;
+        if (amountWithoutExtraInput && extraAmountInput) {
+          const base = parseFloat(amountWithoutExtraInput.value) || 0;
+          const extra = parseFloat(extraAmountInput.value) || 0;
+          amountInput.value = base + extra ? (base + extra).toFixed(2) : '';
+        }
+      } else {
+        extraFields.style.display = 'none';
+        amountInput.readOnly = false;
+        if (amountWithoutExtraInput) amountWithoutExtraInput.value = '';
+        if (extraAmountInput) extraAmountInput.value = '';
+        if (extraItemCategoryInput) extraItemCategoryInput.value = '';
+      }
+    }
+
+    billWithExtraCheckbox.addEventListener('change', toggleExtraFields);
+
+    [amountWithoutExtraInput, extraAmountInput].forEach(input => {
+      if (input) {
+        input.addEventListener('input', () => {
+          const base = parseFloat(amountWithoutExtraInput.value) || 0;
+          const extra = parseFloat(extraAmountInput.value) || 0;
+          amountInput.value = (base + extra).toFixed(2);
+        });
+      }
+    });
+
+    toggleExtraFields();
+
     deliveryForm.addEventListener('input', () => {
       const formData = {
-        billNumber: document.getElementById('bill-number-delivery').value,
-        amount: document.getElementById('amount-delivery').value,
+        billWithExtra: billWithExtraCheckbox.checked,
+        billNumber: billNumberInput.value,
+        amount: amountInput.value,
+        amountWithoutExtra: amountWithoutExtraInput ? amountWithoutExtraInput.value : '',
+        extraAmount: extraAmountInput ? extraAmountInput.value : '',
+        extraItemCategory: extraItemCategoryInput ? extraItemCategoryInput.value : '',
         modePay: document.getElementById('mode-pay-delivery').value,
       };
       localStorage.setItem('deliveryFormData', JSON.stringify(formData));
@@ -434,22 +508,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deliveryForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const billNumber = document.getElementById('bill-number-delivery').value.trim();
-      const amount = document.getElementById('amount-delivery').value.trim();
+      const billWithExtra = billWithExtraCheckbox.checked;
+      const billNumber = billNumberInput.value.trim();
+      const amount = amountInput.value.trim();
       const modePay = document.getElementById('mode-pay-delivery').value;
+      const amountWithoutExtra = amountWithoutExtraInput ? amountWithoutExtraInput.value.trim() : '';
+      const extraAmount = extraAmountInput ? extraAmountInput.value.trim() : '';
+      const extraItemCategory = extraItemCategoryInput ? extraItemCategoryInput.value.trim() : '';
 
       if (!billNumber || !amount || !modePay) {
         alert('Please fill all fields.');
         return;
       }
 
+      // --- Save to Delivery Data as usual ---
       let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
-      deliveryData.push({ billNumber, amount, modePay, paid: false });
+      if (savedData.editIndex !== undefined) {
+        deliveryData[savedData.editIndex] = { billWithExtra, billNumber, amount, amountWithoutExtra, extraAmount, extraItemCategory, modePay, paid: deliveryData[savedData.editIndex].paid || false };
+      } else {
+        deliveryData.push({ billWithExtra, billNumber, amount, amountWithoutExtra, extraAmount, extraItemCategory, modePay, paid: false });
+      }
       localStorage.setItem('deliveryData', JSON.stringify(deliveryData));
+
+      // --- Save to Extra Data if Bill With Extra is checked and extraAmount is present ---
+      if (billWithExtra && extraAmount && extraItemCategory) {
+        let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+        extraData.push({
+          completelyExtra: false,
+          billNumber: billNumber,
+          extraAmount: extraAmount,
+          modePay: modePay,
+          itemCategory: extraItemCategory
+        });
+        localStorage.setItem('extraData', JSON.stringify(extraData));
+      }
+
       localStorage.removeItem('deliveryFormData');
-
       alert('Delivery data saved.');
-
       localStorage.setItem('appState', 'shiftInProgress');
       showShiftInProgress();
     });
@@ -465,8 +560,13 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('appState', 'issueForm');
     mainContent.innerHTML = `
       <form id="issue-form" class="extra-form">
-        <label for="bill-number-issue">Bill Number:</label><br/>
-        <input type="text" id="bill-number-issue" name="bill-number-issue" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <input type="checkbox" id="non-bill-issue" ${savedData.nonBillIssue ? 'checked' : ''}/> Non Bill Issue
+        </label>
+        <div id="bill-number-row">
+          <label for="bill-number-issue">Bill Number:</label><br/>
+          <input type="text" id="bill-number-issue" name="bill-number-issue" value="${savedData.billNumber || ''}" required class="input-field"/><br/>
+        </div>
         <label for="issue-text">Issue:</label><br/>
         <textarea id="issue-text" name="issue-text" rows="4" required class="input-field">${savedData.issueText || ''}</textarea><br/>
         <button type="submit" class="action-button">Submit</button>
@@ -475,9 +575,36 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     const issueForm = document.getElementById('issue-form');
+    const nonBillCheckbox = document.getElementById('non-bill-issue');
+    const billNumberRow = document.getElementById('bill-number-row');
+    const billNumberInput = document.getElementById('bill-number-issue');
+
+    function toggleBillNumber() {
+      if (nonBillCheckbox.checked) {
+        billNumberRow.style.display = 'none';
+        billNumberInput.required = false;
+      } else {
+        billNumberRow.style.display = '';
+        billNumberInput.required = true;
+      }
+    }
+
+    nonBillCheckbox.addEventListener('change', () => {
+      toggleBillNumber();
+      const formData = {
+        nonBillIssue: nonBillCheckbox.checked,
+        billNumber: billNumberInput.value,
+        issueText: document.getElementById('issue-text').value,
+      };
+      localStorage.setItem('issueFormData', JSON.stringify(formData));
+    });
+
+    toggleBillNumber();
+
     issueForm.addEventListener('input', () => {
       const formData = {
-        billNumber: document.getElementById('bill-number-issue').value,
+        nonBillIssue: nonBillCheckbox.checked,
+        billNumber: billNumberInput.value,
         issueText: document.getElementById('issue-text').value,
       };
       localStorage.setItem('issueFormData', JSON.stringify(formData));
@@ -485,16 +612,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     issueForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const billNumber = document.getElementById('bill-number-issue').value.trim();
+      const nonBillIssue = nonBillCheckbox.checked;
+      const billNumber = billNumberInput.value.trim();
       const issueText = document.getElementById('issue-text').value.trim();
 
-      if (!billNumber || !issueText) {
+      if (!nonBillIssue && !billNumber) {
+        alert('Please fill all fields.');
+        return;
+      }
+      if (!issueText) {
         alert('Please fill all fields.');
         return;
       }
 
       let issueData = JSON.parse(localStorage.getItem('issueData')) || [];
-      issueData.push({ billNumber, issueText });
+      issueData.push({ nonBillIssue, billNumber, issueText });
       localStorage.setItem('issueData', JSON.stringify(issueData));
       localStorage.removeItem('issueFormData');
 
@@ -511,11 +643,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function showBillPaidForm(savedData = {}) {
+    localStorage.setItem('appState', 'billPaidForm');
+    mainContent.innerHTML = `
+      <form id="bill-paid-form" class="extra-form">
+        <label for="vendor-name">Vendor/Supplier Brand:</label><br/>
+        <input type="text" id="vendor-name" name="vendor-name" value="${savedData.vendorName || ''}" required class="input-field"/><br/>
+        <label for="amount-paid">Amount Paid:</label><br/>
+        <input type="number" id="amount-paid" name="amount-paid" value="${savedData.amountPaid || ''}" required class="input-field"/><br/>
+        <button type="submit" class="action-button">Save</button>
+        <button type="button" id="bill-paid-back-btn" class="action-button">Back</button>
+      </form>
+    `;
+
+    const billPaidForm = document.getElementById('bill-paid-form');
+    billPaidForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const vendorName = document.getElementById('vendor-name').value.trim();
+      const amountPaid = document.getElementById('amount-paid').value.trim();
+
+      if (!vendorName || !amountPaid) {
+        alert('Please fill all fields.');
+        return;
+      }
+
+      let billPaidData = JSON.parse(localStorage.getItem('billPaidData')) || [];
+      billPaidData.push({ vendorName, amountPaid });
+      localStorage.setItem('billPaidData', JSON.stringify(billPaidData));
+      localStorage.removeItem('billPaidFormData');
+
+      alert('Bill Paid data saved.');
+
+      localStorage.setItem('appState', 'shiftInProgress');
+      showShiftInProgress();
+    });
+
+    document.getElementById('bill-paid-back-btn').addEventListener('click', () => {
+      localStorage.setItem('appState', 'shiftInProgress');
+      localStorage.removeItem('billPaidFormData');
+      showShiftInProgress();
+    });
+  }
+
   function showAnalysis() {
     localStorage.setItem('appState', 'analysisView');
     let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
     let issueData = JSON.parse(localStorage.getItem('issueData')) || [];
+    let billPaidData = JSON.parse(localStorage.getItem('billPaidData')) || [];
     let upiBalance = localStorage.getItem('upiBalance') || '';
     let counterState = localStorage.getItem('counterState') || '';
 
@@ -525,6 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="tab-button" id="tab-extra">View Extra</button>
         <button class="tab-button" id="tab-delivery">View Delivery</button>
         <button class="tab-button" id="tab-issue">View Issue</button>
+        <button class="tab-button" id="tab-billpaid">View Bill Paid</button>
         <button class="tab-button" id="tab-upi">View UPI Balance</button>
       </div>
       <div id="filter-container" class="filter-container"></div>
@@ -607,7 +783,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${item.extraAmount}</td>
               <td>${item.modePay}</td>
               <td>${item.itemCategory}</td>
-              <td><button class="delete-btn" data-index="${index}" data-type="extra">Delete</button></td>
+              <td>
+                <button class="edit-btn" data-index="${index}" data-type="extra">Edit</button>
+                <button class="delete-btn" data-index="${index}" data-type="extra">Delete</button>
+              </td>
             </tr>
           `;
         } else if (type === 'Delivery') {
@@ -618,7 +797,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${item.amount}</td>
               <td>${item.modePay}</td>
               <td><input type="checkbox" class="paid-checkbox" data-index="${index}" ${item.paid ? 'checked' : ''}></td>
-              <td><button class="delete-btn" data-index="${index}" data-type="delivery">Delete</button></td>
+              <td>
+                <button class="edit-btn" data-index="${index}" data-type="delivery">Edit</button>
+                <button class="delete-btn" data-index="${index}" data-type="delivery">Delete</button>
+              </td>
             </tr>
           `;
         } else if (type === 'Issue') {
@@ -628,6 +810,14 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${item.billNumber}</td>
               <td colspan="4">${item.issueText}</td>
               <td><button class="delete-btn" data-index="${index}" data-type="issue">Delete</button></td>
+            </tr>
+          `;
+        } else if (type === 'Bill Paid') {
+          return `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${item.vendorName}</td>
+              <td>${item.amountPaid}</td>
             </tr>
           `;
         }
@@ -658,6 +848,12 @@ document.addEventListener('DOMContentLoaded', () => {
           <th>Bill Number</th>
           <th colspan="4">Issue Description</th>
           <th>Action</th>
+        `;
+      } else if (type === 'Bill Paid') {
+        headers = `
+          <th>#</th>
+          <th>Vendor/Supplier Brand</th>
+          <th>Amount Paid</th>
         `;
       }
 
@@ -697,6 +893,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
+      // Add edit button event listeners
+      const editButtons = analysisContent.querySelectorAll('.edit-btn');
+      editButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-index'));
+          const dataType = btn.getAttribute('data-type');
+          if (dataType === 'extra') {
+            // Pass the selected entry to the extra form for editing
+            showExtraForm({ ...extraData[idx], editIndex: idx });
+          } else if (dataType === 'delivery') {
+            showDeliveryForm({ ...deliveryData[idx], editIndex: idx });
+          }
+        });
+      });
+
       // Add paid checkbox event listeners for delivery
       if (type === 'Delivery') {
         const paidCheckboxes = analysisContent.querySelectorAll('.paid-checkbox');
@@ -720,6 +931,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('tab-issue').addEventListener('click', () => {
       renderTable(issueData, 'Issue');
+    });
+    document.getElementById('tab-billpaid').addEventListener('click', () => {
+      filterContainer.innerHTML = '';
+      if (billPaidData.length === 0) {
+        analysisContent.innerHTML = `<div>No Bill Paid Data Available</div>`;
+        return;
+      }
+      let rows = billPaidData.map((item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.vendorName}</td>
+          <td>${item.amountPaid}</td>
+        </tr>
+      `).join('');
+      analysisContent.innerHTML = `
+        <table class="analysis-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Vendor/Supplier Brand</th>
+              <th>Amount Paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
     });
 
     document.getElementById('tab-upi').addEventListener('click', () => {
@@ -777,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const shiftEndTime = new Date().toLocaleString();
 
       mainContent.innerHTML = `
-        <div class="thank-you-container">
+        <div class="thank-you-container" id="summary-snapshot">
           <h2>Shift Analysis Summary</h2>
           <div class="analysis-summary">
             <p><strong>Shift Start Time:</strong> ${shiftStartTime}</p>
@@ -797,9 +1036,43 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Issue Data</h3>
             ${issueData.length > 0 ? generateTable(issueData, ['Bill Number', 'Issue Description']) : '<p>No Issue Data Available</p>'}
           </div>
+          <button id="share-snapshot-btn" class="action-button" style="background-color: #25d366; color: white;">Share Snapshot of Summary</button>
           <button id="end-shift-final" class="action-button" style="background-color: red; color: white;">End Shift</button>
         </div>
       `;
+
+      // Share snapshot button logic
+      document.getElementById('share-snapshot-btn').addEventListener('click', async () => {
+        // Load html2canvas if not already loaded
+        if (typeof html2canvas === "undefined") {
+          const script = document.createElement('script');
+          script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+          document.body.appendChild(script);
+          await new Promise(resolve => { script.onload = resolve; });
+        }
+        const summaryDiv = document.getElementById('summary-snapshot');
+        html2canvas(summaryDiv).then(canvas => {
+          canvas.toBlob(blob => {
+            // Create a file for WhatsApp sharing
+            const file = new File([blob], "shift-summary.png", { type: "image/png" });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({
+                files: [file],
+                title: "Shift Summary",
+                text: "Shift summary snapshot"
+              }).catch(() => {
+                // fallback to WhatsApp web
+                const url = "https://wa.me/?text=Shift%20summary%20attached%20as%20image.";
+                window.open(url, "_blank");
+              });
+            } else {
+              // fallback to WhatsApp web
+              const url = "https://wa.me/?text=Shift%20summary%20attached%20as%20image.";
+              window.open(url, "_blank");
+            }
+          }, "image/png");
+        });
+      });
 
       document.getElementById('end-shift-final').addEventListener('click', () => {
         if (confirm('Are you sure you want to end the shift? All data will be cleared!')) {
@@ -817,16 +1090,29 @@ document.addEventListener('DOMContentLoaded', () => {
       tableHTML += '</tr></thead><tbody>';
       data.forEach(row => {
         tableHTML += '<tr>';
-        Object.values(row).forEach(cell => {
-          tableHTML += `<td>${cell}</td>`;
-        });
+        if (headers[0] === 'Bill Number' && headers[1] === 'Amount') {
+          // Delivery Data
+          tableHTML += `<td>${row.billNumber || ''}</td>`;
+          tableHTML += `<td>${row.amount || ''}</td>`;
+          tableHTML += `<td>${row.modePay || ''}</td>`;
+          tableHTML += `<td>${row.paid ? 'Yes' : 'No'}</td>`;
+        } else if (headers[0] === 'Bill Number' && headers[1] === 'Extra Amount') {
+          // Extra Data
+          tableHTML += `<td>${row.billNumber || ''}</td>`;
+          tableHTML += `<td>${row.extraAmount || ''}</td>`;
+          tableHTML += `<td>${row.modePay || ''}</td>`;
+          tableHTML += `<td>${row.itemCategory || ''}</td>`;
+        } else if (headers[0] === 'Bill Number' && headers[1] === 'Issue Description') {
+          // Issue Data
+          tableHTML += `<td>${row.billNumber || ''}</td>`;
+          tableHTML += `<td>${row.issueText || ''}</td>`;
+        }
         tableHTML += '</tr>';
       });
       tableHTML += '</tbody></table>';
       return tableHTML;
     }
 
-    // New function to generate Extra Data summary table without boolean values
     function generateExtraDataSummaryTable(data) {
       let tableHTML = '<table class="analysis-table"><thead><tr>';
       const headers = ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category'];
@@ -836,7 +1122,6 @@ document.addEventListener('DOMContentLoaded', () => {
       tableHTML += '</tr></thead><tbody>';
       data.forEach(row => {
         tableHTML += '<tr>';
-        // Only include the specific fields, excluding completelyExtra boolean
         tableHTML += `<td>${row.billNumber}</td>`;
         tableHTML += `<td>${row.extraAmount}</td>`;
         tableHTML += `<td>${row.modePay}</td>`;

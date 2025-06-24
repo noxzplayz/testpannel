@@ -245,14 +245,242 @@ main .shift-status {
   user-select: none;
 }
 
-/* Footer styles */
-footer {
+/* --- Analysis Section Touch-Friendly Styles --- */
+.analysis-title {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #4a148c;
+  margin-bottom: 18px;
   text-align: center;
-  padding: 15px 20px;
-  font-size: 0.9em;
-  color: #666;
-  border-top: 1px solid #ccc;
-  user-select: none;
-  font-weight: 600;
+  letter-spacing: 1px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.analysis-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 8px;
+}
+
+.tab-button {
+  width: 100%;
+  min-width: 0;
+  background: #007acc;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 18px 0;
+  font-size: 1.08em;
+  font-weight: 700;
+  box-shadow: 0 4px 18px 0 rgba(0,122,204,0.13), 0 1.5px 4px 0 rgba(0,0,0,0.07);
+  margin-bottom: 0;
+  transition: background 0.25s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  touch-action: manipulation;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+.tab-button:active {
+  background: #005fa3;
+  color: #fff;
+  transform: scale(0.97);
+}
+.tab-button:focus-visible {
+  outline: 3px solid #005fa3;
+}
+
+/* Blinking black border for active tab (e.g., extra tab) */
+.tab-button.active-extra {
+  border: 3px solid #000;
+  animation: blink-border 1s steps(2, start) infinite;
+}
+@keyframes blink-border {
+  to {
+    border-color: transparent;
+  }
+}
+
+/* Subtle glass effect for premium feel */
+.tab-button::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 16px;
+  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Tab text above the glass effect */
+.tab-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive for touch screens */
+@media (max-width: 600px) {
+  .analysis-tabs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 98vw;
+    padding: 0 2vw;
+  }
+  .tab-button {
+    padding: 14px 0;
+    font-size: 1em;
+  }
+}
+
+/* Add a gentle shadow to the analysis card */
+.analysis-title {
+  font-size: 2.3em;
+  font-weight: bold;
+  color: #a770ef;
+  margin-bottom: 22px;
+  text-align: center;
+  letter-spacing: 1px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-shadow: 0 2px 8px rgba(167,112,239,0.08);
+}
+
+/* Table premium look */
+.analysis-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto 22px auto;
+  font-size: 1.13em;
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px 0 rgba(167,112,239,0.10);
+}
+.analysis-table th, .analysis-table td {
+  padding: 20px 10px;
+  border-bottom: 1.5px solid #e1d5ee;
+  text-align: center;
+}
+.analysis-table th {
+  background: #f6d365;
+  color: #7c1aaa;
+  font-size: 1.08em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.analysis-table tr:last-child td {
+  border-bottom: none;
+}
+.analysis-table tr:active {
+  background: #f3e5f5;
+}
+
+/* Premium delete button */
+.delete-btn {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0 2px;
+  box-shadow: 0 2px 8px rgba(255,59,59,0.10);
+  transition: background 0.2s, transform 0.1s;
+  touch-action: manipulation;
+}
+.delete-btn:hover, .delete-btn:focus {
+  background: #c82333;
+}
+.delete-btn:active {
+  background: #a71d2a;
+  transform: scale(0.97);
+}
+
+/* Large, easy-to-tap checkboxes */
+.paid-checkbox {
+  width: 32px;
+  height: 32px;
+  accent-color: #43a047;
+  vertical-align: middle;
+}
+
+/* Live totals premium style */
+.live-totals {
+  background: #f4f8fb; /* soft light blue */
+  border-radius: 14px;
+  padding: 18px 0;
+  margin: 18px 0;
+  font-size: 1.18em;
+  color: #222;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Premium back button */
+#analysis-back-btn {
+  background: #007acc;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 18px 0;
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 22px auto 0 auto;
+  display: block;
+  box-shadow: 0 2px 8px rgba(167,112,239,0.08);
+  transition: background 0.2s, transform 0.1s;
+  touch-action: manipulation;
+  width: 90%;
+  max-width: 320px;
+}
+#analysis-back-btn:active {
+  background: #005fa3;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+/* Make table rows and buttons easier to tap on small screens */
+@media (max-width: 900px) {
+  .analysis-table th, .analysis-table td {
+    padding: 18px 6px;
+    font-size: 1em;
+  }
+  .tab-button, #analysis-back-btn {
+    padding: 16px 10px;
+    font-size: 1.1em;
+  }
+}
+
+/* Edit button styles */
+.edit-btn {
+  background: #fff;
+  color: #219150;
+  border: 2px solid #219150;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0 6px 0 0;
+  box-shadow: 0 2px 8px rgba(33,145,80,0.07);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.edit-btn:hover, .edit-btn:focus {
+  background: #219150;
+  color: #fff;
+  border-color: #176b38;
+}
+.edit-btn:active {
+  background: #176b38;
+  color: #fff;
+  border-color: #176b38;
+  transform: scale(0.97);
 }
