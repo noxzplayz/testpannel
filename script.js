@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAnalysis();
     });
     document.getElementById('retails-btn').addEventListener('click', () => {
-      showRetailTypeForm();
+      showRetailReceivedForm();
     });
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
@@ -1226,12 +1226,11 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="retail-type-form" style="text-align:center;">
         <h2>Retail Transaction</h2>
         <button id="retail-received-btn" class="action-button" style="margin:10px;">Retail Received</button>
-        <button id="retail-given-btn" class="action-button" style="margin:10px;">Retail Given</button>
         <button id="retail-back-btn" class="action-button" style="margin:10px;">Back</button>
       </div>
     `;
+    // Directly open Retail Received form when the user clicks Retail Credit
     document.getElementById('retail-received-btn').addEventListener('click', showRetailReceivedForm);
-    document.getElementById('retail-given-btn').addEventListener('click', showRetailGivenForm);
     document.getElementById('retail-back-btn').addEventListener('click', () => {
       showShiftInProgress();
     });
@@ -1283,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Retail received entry saved.');
       showShiftInProgress();
     });
-    document.getElementById('retail-received-back-btn').addEventListener('click', showRetailTypeForm);
+    document.getElementById('retail-received-back-btn').addEventListener('click', showShiftInProgress);
   }
 
   function showRetailGivenForm() {
