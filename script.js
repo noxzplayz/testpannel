@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="action-button" id="bill-paid-btn">Bill Paid</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
+      <button class="action-button" id="retails-btn">Retails</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
     `;
 
@@ -110,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('analysis-btn').addEventListener('click', () => {
       localStorage.setItem('appState', 'analysisView');
       showAnalysis();
+    });
+    document.getElementById('retails-btn').addEventListener('click', () => {
+      showRetailTypeForm();
     });
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
@@ -695,6 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let deliveryData = JSON.parse(localStorage.getItem('deliveryData')) || [];
     let issueData = JSON.parse(localStorage.getItem('issueData')) || [];
     let billPaidData = JSON.parse(localStorage.getItem('billPaidData')) || [];
+    let retailGivenData = JSON.parse(localStorage.getItem('retailGivenData')) || [];
     let upiBalance = localStorage.getItem('upiBalance') || '';
     let counterState = localStorage.getItem('counterState') || '';
 
@@ -705,6 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="tab-button" id="tab-delivery">View Delivery</button>
         <button class="tab-button" id="tab-issue">View Issue</button>
         <button class="tab-button" id="tab-billpaid">View Bill Paid</button>
+        <button class="tab-button" id="tab-retailgiven">View Retail Given</button>
         <button class="tab-button" id="tab-upi">View UPI Balance</button>
       </div>
       <div id="filter-container" class="filter-container"></div>
@@ -826,6 +832,14 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${item.amountPaid}</td>
             </tr>
           `;
+        } else if (type === 'Retail Given') {
+          return `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${item.billOrPhone}</td>
+              <td>${item.amount}</td>
+            </tr>
+          `;
         }
       }).join('');
 
@@ -860,6 +874,12 @@ document.addEventListener('DOMContentLoaded', () => {
           <th>#</th>
           <th>Vendor/Supplier Brand</th>
           <th>Amount Paid</th>
+        `;
+      } else if (type === 'Retail Given') {
+        headers = `
+          <th>#</th>
+          <th>Bill/Phone</th>
+          <th>Amount</th>
         `;
       }
 
@@ -958,6 +978,34 @@ document.addEventListener('DOMContentLoaded', () => {
               <th>#</th>
               <th>Vendor/Supplier Brand</th>
               <th>Amount Paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+    });
+    document.getElementById('tab-retailgiven').addEventListener('click', () => {
+      filterContainer.innerHTML = '';
+      if (retailGivenData.length === 0) {
+        analysisContent.innerHTML = `<div>No Retail Given Data Available</div>`;
+        return;
+      }
+      let rows = retailGivenData.map((item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.billOrPhone}</td>
+          <td>${item.amount}</td>
+        </tr>
+      `).join('');
+      analysisContent.innerHTML = `
+        <table class="analysis-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Bill/Phone</th>
+              <th>Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -1095,24 +1143,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       tableHTML += '</tr></thead><tbody>';
       data.forEach(row => {
-        tableHTML += '<tr>';
-        if (headers[0] === 'Bill Number' && headers[1] === 'Amount') {
-          // Delivery Data
-          tableHTML += `<td>${row.billNumber || ''}</td>`;
-          tableHTML += `<td>${row.amount || ''}</td>`;
-          tableHTML += `<td>${row.modePay || ''}</td>`;
-          tableHTML += `<td>${row.paid ? 'Yes' : 'No'}</td>`;
-        } else if (headers[0] === 'Bill Number' && headers[1] === 'Extra Amount') {
-          // Extra Data
-          tableHTML += `<td>${row.billNumber || ''}</td>`;
-          tableHTML += `<td>${row.extraAmount || ''}</td>`;
-          tableHTML += `<td>${row.modePay || ''}</td>`;
-          tableHTML += `<td>${row.itemCategory || ''}</td>`;
-        } else if (headers[0] === 'Bill Number' && headers[1] === 'Issue Description') {
-          // Issue Data
-          tableHTML += `<td>${row.billNumber || ''}</td>`;
-          tableHTML += `<td>${row.issueText || ''}</td>`;
-        }
+        row.forEach((cell, i) => {
+          tableHTML += `<td>${cell}</td>`;
+        });
         tableHTML += '</tr>';
       });
       tableHTML += '</tbody></table>';
@@ -1192,5 +1225,103 @@ document.addEventListener('DOMContentLoaded', () => {
         showUPIForm();
       });
     }
+  }
+
+  function showRetailTypeForm() {
+    mainContent.innerHTML = `
+      <div class="retail-type-form" style="text-align:center;">
+        <h2>Retail Transaction</h2>
+        <button id="retail-received-btn" class="action-button" style="margin:10px;">Retail Received</button>
+        <button id="retail-given-btn" class="action-button" style="margin:10px;">Retail Given</button>
+        <button id="retail-back-btn" class="action-button" style="margin:10px;">Back</button>
+      </div>
+    `;
+    document.getElementById('retail-received-btn').addEventListener('click', showRetailReceivedForm);
+    document.getElementById('retail-given-btn').addEventListener('click', showRetailGivenForm);
+    document.getElementById('retail-back-btn').addEventListener('click', () => {
+      showShiftInProgress();
+    });
+  }
+
+  function showRetailReceivedForm() {
+    mainContent.innerHTML = `
+      <marquee style="color:#b71c1c;font-weight:bold;margin-bottom:10px;">
+        The data entered here will be auto updated to Extra. Don't re-update in Extra.
+      </marquee>
+      <form id="retail-received-form" class="extra-form">
+        <h3>Retail Received</h3>
+        <label for="retail-phone">Phone Number:</label><br/>
+        <input type="text" id="retail-phone" name="retail-phone" required class="input-field" maxlength="10" pattern="\\d{10}"/><br/>
+        <label for="retail-amount">Amount:</label><br/>
+        <input type="number" id="retail-amount" name="retail-amount" required class="input-field"/><br/>
+        <label for="retail-mode-pay">Mode of Pay:</label><br/>
+        <select id="retail-mode-pay" name="retail-mode-pay" required class="input-field">
+          <option value="">Select</option>
+          <option value="UPI Pinelab">UPI Pinelab</option>
+          <option value="UPI Paytm">UPI Paytm</option>
+          <option value="Card Pinelab">Card Pinelab</option>
+          <option value="Card Paytm">Card Paytm</option>
+          <option value="Cash">Cash</option>
+        </select><br/>
+        <button type="submit" class="action-button">Save</button>
+        <button type="button" id="retail-received-back-btn" class="action-button">Back</button>
+      </form>
+    `;
+    document.getElementById('retail-received-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('retail-phone').value.trim();
+      const amount = document.getElementById('retail-amount').value.trim();
+      const modePay = document.getElementById('retail-mode-pay').value;
+      if (!/^\d{10}$/.test(phone) || !amount || !modePay) {
+        alert('Please fill all fields with valid data.');
+        return;
+      }
+      // Add to extraData as a retail received entry
+      let extraData = JSON.parse(localStorage.getItem('extraData')) || [];
+      extraData.push({
+        completelyExtra: false,
+        billNumber: phone,
+        extraAmount: amount,
+        modePay: modePay,
+        itemCategory: 'Retail Received'
+      });
+      localStorage.setItem('extraData', JSON.stringify(extraData));
+      alert('Retail received entry saved.');
+      showShiftInProgress();
+    });
+    document.getElementById('retail-received-back-btn').addEventListener('click', showRetailTypeForm);
+  }
+
+  function showRetailGivenForm() {
+    mainContent.innerHTML = `
+      <form id="retail-given-form" class="extra-form">
+        <h3>Retail Given</h3>
+        <label for="retail-given-bill">Bill Number or Phone Number:</label><br/>
+        <input type="text" id="retail-given-bill" name="retail-given-bill" required class="input-field"/><br/>
+        <label for="retail-given-amount">Amount:</label><br/>
+        <input type="number" id="retail-given-amount" name="retail-given-amount" required class="input-field"/><br/>
+        <button type="submit" class="action-button">Save</button>
+        <button type="button" id="retail-given-back-btn" class="action-button">Back</button>
+      </form>
+    `;
+    document.getElementById('retail-given-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const billOrPhone = document.getElementById('retail-given-bill').value.trim();
+      const amount = document.getElementById('retail-given-amount').value.trim();
+      if (!billOrPhone || !amount) {
+        alert('Please fill all fields.');
+        return;
+      }
+      // Save to a separate retailGivenData array in localStorage
+      let retailGivenData = JSON.parse(localStorage.getItem('retailGivenData')) || [];
+      retailGivenData.push({
+        billOrPhone,
+        amount
+      });
+      localStorage.setItem('retailGivenData', JSON.stringify(retailGivenData));
+      alert('Retail given entry saved.');
+      showShiftInProgress();
+    });
+    document.getElementById('retail-given-back-btn').addEventListener('click', showRetailTypeForm);
   }
 });
