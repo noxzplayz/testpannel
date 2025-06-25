@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="action-button" id="bill-paid-btn">Bill Paid</button>
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
-      <button class="action-button" id="retails-btn">Retails</button>
+      <button class="action-button" id="retails-btn">Retail Credit</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
     `;
 
