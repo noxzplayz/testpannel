@@ -320,9 +320,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <label for="mode-pay">Mode of Pay:</label><br/>
         <select id="mode-pay" name="mode-pay" required class="input-field">
           <option value="">Select</option>
-          <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
+          <option value="UPI Pinelab" ${savedData.modePay === 'UPI Pinelab' ? 'selected' : ''}>UPI Pinelab</option>
+          <option value="UPI Paytm" ${savedData.modePay === 'UPI Paytm' ? 'selected' : ''}>UPI Paytm</option>
+          <option value="Card Pinelab" ${savedData.modePay === 'Card Pinelab' ? 'selected' : ''}>Card Pinelab</option>
+          <option value="Card Paytm" ${savedData.modePay === 'Card Paytm' ? 'selected' : ''}>Card Paytm</option>
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
-          <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
         </select><br/>
         
         <button type="submit" class="action-button">Submit</button>
@@ -443,9 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <label for="mode-pay-delivery">Mode of Pay:</label><br/>
         <select id="mode-pay-delivery" name="mode-pay-delivery" required class="input-field">
           <option value="">Select</option>
-          <option value="UPI" ${savedData.modePay === 'UPI' ? 'selected' : ''}>UPI</option>
+          <option value="UPI Pinelab" ${savedData.modePay === 'UPI Pinelab' ? 'selected' : ''}>UPI Pinelab</option>
+          <option value="UPI Paytm" ${savedData.modePay === 'UPI Paytm' ? 'selected' : ''}>UPI Paytm</option>
+          <option value="Card Pinelab" ${savedData.modePay === 'Card Pinelab' ? 'selected' : ''}>Card Pinelab</option>
+          <option value="Card Paytm" ${savedData.modePay === 'Card Paytm' ? 'selected' : ''}>Card Paytm</option>
           <option value="Cash" ${savedData.modePay === 'Cash' ? 'selected' : ''}>Cash</option>
-          <option value="Card" ${savedData.modePay === 'Card' ? 'selected' : ''}>Card</option>
         </select><br/>
         <button type="submit" class="action-button">Save</button>
         <button type="button" id="delivery-back-btn" class="action-button">Back</button>
@@ -754,9 +758,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <label for="filter-mode-pay">Filter by Mode of Pay:</label>
           <select id="filter-mode-pay" class="input-field" style="margin-bottom: 15px;">
             <option value="All">All</option>
-            <option value="UPI">UPI</option>
+            <option value="UPI Pinelab">UPI Pinelab</option>
+            <option value="UPI Paytm">UPI Paytm</option>
+            <option value="Card Pinelab">Card Pinelab</option>
+            <option value="Card Paytm">Card Paytm</option>
             <option value="Cash">Cash</option>
-            <option value="Card">Card</option>
           </select>
         `;
 
