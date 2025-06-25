@@ -722,21 +722,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterContainer = document.getElementById('filter-container');
 
     function renderLiveTotals(data) {
-      let totalUPI = 0;
+      let totalUPIPinelab = 0;
+      let totalUPIPaytm = 0;
+      let totalCardPinelab = 0;
+      let totalCardPaytm = 0;
       let totalCash = 0;
-      let totalCard = 0;
 
       data.forEach(item => {
         const amount = parseFloat(item.extraAmount) || 0;
         switch (item.modePay) {
-          case 'UPI':
-            totalUPI += amount;
+          case 'UPI Pinelab':
+            totalUPIPinelab += amount;
+            break;
+          case 'UPI Paytm':
+            totalUPIPaytm += amount;
+            break;
+          case 'Card Pinelab':
+            totalCardPinelab += amount;
+            break;
+          case 'Card Paytm':
+            totalCardPaytm += amount;
             break;
           case 'Cash':
             totalCash += amount;
-            break;
-          case 'Card':
-            totalCard += amount;
             break;
         }
       });
@@ -744,9 +752,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return `
         <div class="live-totals">
           <h3>Live Totals</h3>
-          <p>Total UPI: ${totalUPI.toFixed(2)}</p>
-          <p>Total Cash: ${totalCash.toFixed(2)}</p>
-          <p>Total Card: ${totalCard.toFixed(2)}</p>
+          <p> UPI Pinelab: ${totalUPIPinelab.toFixed(2)}</p>
+          <p> Card Pinelab: ${totalCardPinelab.toFixed(2)}</p>
+          <p> UPI Paytm: ${totalUPIPaytm.toFixed(2)}</p>
+          
+          <p> Card Paytm: ${totalCardPaytm.toFixed(2)}</p>
+          <p> Cash: ${totalCash.toFixed(2)}</p>
         </div>
       `;
     }
