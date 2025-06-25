@@ -1033,32 +1033,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function endShift() {
-    // Show countdown interface
-    let countdown = 10;
-    mainContent.innerHTML = `
-      <div class="countdown-container">
-        <h2>Ending Shift in <span id="countdown-timer">${countdown}</span> seconds</h2>
-        <button id="cancel-end-shift" class="action-button">Cancel</button>
-      </div>
-    `;
-
-    const countdownTimer = document.getElementById('countdown-timer');
-    const cancelButton = document.getElementById('cancel-end-shift');
-
-    const intervalId = setInterval(() => {
-      countdown--;
-      countdownTimer.textContent = countdown;
-      if (countdown <= 0) {
-        clearInterval(intervalId);
-        showThankYouInterface();
-      }
-    }, 1000);
-
-    cancelButton.addEventListener('click', () => {
-      clearInterval(intervalId);
-      localStorage.setItem('appState', 'shiftInProgress');
-      showShiftInProgress();
-    });
+    // Directly show the summary interface without timer
+    showThankYouInterface();
 
     function showThankYouInterface() {
       const extraData = JSON.parse(localStorage.getItem('extraData')) || [];
@@ -1097,7 +1073,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Share snapshot button logic
       document.getElementById('share-snapshot-btn').addEventListener('click', async () => {
-        // Load html2canvas if not already loaded
         if (typeof html2canvas === "undefined") {
           const script = document.createElement('script');
           script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
@@ -1107,7 +1082,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const summaryDiv = document.getElementById('summary-snapshot');
         html2canvas(summaryDiv).then(canvas => {
           canvas.toBlob(blob => {
-            // Create a file for WhatsApp sharing
             const file = new File([blob], "shift-summary.png", { type: "image/png" });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
               navigator.share({
@@ -1115,12 +1089,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: "Shift Summary",
                 text: "Shift summary snapshot"
               }).catch(() => {
-                // fallback to WhatsApp web
                 const url = "https://wa.me/?text=Shift%20summary%20attached%20as%20image.";
                 window.open(url, "_blank");
               });
             } else {
-              // fallback to WhatsApp web
               const url = "https://wa.me/?text=Shift%20summary%20attached%20as%20image.";
               window.open(url, "_blank");
             }
@@ -1135,41 +1107,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+  }
 
-    function generateTable(data, headers) {
-      let tableHTML = '<table class="analysis-table"><thead><tr>';
+  function generateTable(data, headers) {
+    let tableHTML = '<table class="analysis-table"><thead><tr>';
+    headers.forEach(header => {
+      tableHTML += `<th>${header}</th>`;
+    });
+    tableHTML += '</tr></thead><tbody>';
+    data.forEach(row => {
+      tableHTML += '<tr>';
       headers.forEach(header => {
-        tableHTML += `<th>${header}</th>`;
+        // Map header to object property (convert header to camelCase or match your object keys)
+        let key = header
+          .replace(/\s+/g, '') // Remove spaces
+          .replace(/^\w/, c => c.toLowerCase()); // Lowercase first letter
+        // Special cases for your data
+        if (header === 'Bill Number') key = 'billNumber';
+        if (header === 'Amount') key = 'amount';
+        if (header === 'Mode of Pay') key = 'modePay';
+        if (header === 'Paid') key = 'paid';
+        if (header === 'Issue Description') key = 'issueText';
+        tableHTML += `<td>${row[key] !== undefined ? row[key] : ''}</td>`;
       });
-      tableHTML += '</tr></thead><tbody>';
-      data.forEach(row => {
-        row.forEach((cell, i) => {
-          tableHTML += `<td>${cell}</td>`;
-        });
-        tableHTML += '</tr>';
-      });
-      tableHTML += '</tbody></table>';
-      return tableHTML;
-    }
+      tableHTML += '</tr>';
+    });
+    tableHTML += '</tbody></table>';
+    return tableHTML;
+  }
 
-    function generateExtraDataSummaryTable(data) {
-      let tableHTML = '<table class="analysis-table"><thead><tr>';
-      const headers = ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category'];
-      headers.forEach(header => {
-        tableHTML += `<th>${header}</th>`;
-      });
-      tableHTML += '</tr></thead><tbody>';
-      data.forEach(row => {
-        tableHTML += '<tr>';
-        tableHTML += `<td>${row.billNumber}</td>`;
-        tableHTML += `<td>${row.extraAmount}</td>`;
-        tableHTML += `<td>${row.modePay}</td>`;
-        tableHTML += `<td>${row.itemCategory}</td>`;
-        tableHTML += '</tr>';
-      });
-      tableHTML += '</tbody></table>';
-      return tableHTML;
-    }
+  function generateExtraDataSummaryTable(data) {
+    let tableHTML = '<table class="analysis-table"><thead><tr>';
+    const headers = ['Bill Number', 'Extra Amount', 'Mode of Pay', 'Item Category'];
+    headers.forEach(header => {
+      tableHTML += `<th>${header}</th>`;
+    });
+    tableHTML += '</tr></thead><tbody>';
+    data.forEach(row => {
+      tableHTML += '<tr>';
+      tableHTML += `<td>${row.billNumber}</td>`;
+      tableHTML += `<td>${row.extraAmount}</td>`;
+      tableHTML += `<td>${row.modePay}</td>`;
+      tableHTML += `<td>${row.itemCategory}</td>`;
+      tableHTML += '</tr>';
+    });
+    tableHTML += '</tbody></table>';
+    return tableHTML;
   }
 
   function addTable(doc, title, headers, data, startY) {
