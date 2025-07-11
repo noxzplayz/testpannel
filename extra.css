@@ -1,7 +1,7 @@
 .analysis-title {
   font-weight: bold;
   font-size: 1.8em;
-  color: #2c3e50;
+  color: #bb86fc;
   margin-bottom: 15px;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,9 +15,9 @@
 }
 
 .tab-button {
-  background-color: #3498db;
+  background-color: #03dac6;
   border: none;
-  color: white;
+  color: #000;
   padding: 10px 20px;
   font-weight: bold;
   font-size: 1em;
@@ -28,12 +28,12 @@
 }
 
 .tab-button:hover {
-  background-color: #2980b9;
+  background-color: #00bfa5;
 }
 
 .tab-button:focus {
   outline: none;
-  box-shadow: 0 0 5px #2980b9;
+  box-shadow: 0 0 5px #00bfa5;
 }
 
 .filter-container {
@@ -45,46 +45,53 @@
   font-weight: bold;
   margin-right: 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e0e0e0;
 }
 
 .filter-container select {
   padding: 5px 10px;
   font-size: 1em;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #2a2a2a;
+  color: #e0e0e0;
 }
 
 .analysis-table {
   width: 100%;
   border-collapse: collapse;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .analysis-table th, .analysis-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   padding: 8px;
   text-align: center;
+  color: #e0e0e0;
 }
 
 .analysis-table th {
-  background-color: #3498db;
-  color: white;
+  background-color: #1a1a2e;
+  color: #bb86fc;
   font-weight: bold;
 }
 
 .analysis-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #333;
 }
 
 .analysis-table tr:hover {
-  background-color: #ddd;
+  background-color: #444;
 }
 
 .delete-btn {
-  background-color: #e74c3c;
+  background-color: #cf6679;
   border: none;
-  color: white;
+  color: #000;
   padding: 5px 10px;
   font-weight: bold;
   border-radius: 5px;
@@ -93,5 +100,5 @@
 }
 
 .delete-btn:hover {
-  background-color: #c0392b;
+  background-color: #b85450;
 }
