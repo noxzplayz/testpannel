@@ -5,18 +5,18 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #0f0f0f;
-  color: #e0e0e0;
+  background: #f9f9f9;
+  color: #333;
   overflow-x: hidden;
 }
 
 /* Header styles */
 header {
-  background-color: #1a1a2e;
+  background-color: #7c1aaa;
   color: white;
   padding: 20px 25px;
   text-align: left;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -27,7 +27,6 @@ header .logo {
   letter-spacing: 2px;
   font-family: 'Arial Black', Gadget, sans-serif;
   user-select: none;
-  color: #bb86fc;
 }
 header .subtitle {
   font-size: 1.1em;
@@ -37,7 +36,6 @@ header .subtitle {
   letter-spacing: 1.5px;
   font-family: 'Arial Black', Gadget, sans-serif;
   user-select: none;
-  color: #03dac6;
 }
 
 /* Main content */
@@ -49,25 +47,24 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #1e1e1e;
+  background: white;
   max-width: 600px;
   margin: 30px auto;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 main .welcome-text {
   font-weight: 700;
   font-size: 2.8em;
   margin-bottom: 40px;
-  color: #e0e0e0;
+  color: #222;
   user-select: none;
 }
 
 /* Start shift button */
 main .start-shift-button {
-  background-color: #bb86fc;
-  color: #000;
+  background-color: #007acc;
+  color: white;
   border: none;
   border-radius: 30px;
   padding: 18px 50px;
@@ -75,20 +72,20 @@ main .start-shift-button {
   font-weight: 700;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 6px 15px rgba(187, 134, 252, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
 }
 main .start-shift-button:hover {
-  background-color: #9965f4;
+  background-color: #005fa3;
 }
 main .start-shift-button:active {
-  background-color: #7c4dff;
+  background-color: #00497a;
 }
 
 /* New button below start shift */
 main .new-shift-button {
-  background-color: #bb86fc;
-  color: #000;
+  background-color: #007acc;
+  color: white;
   border: none;
   border-radius: 30px;
   padding: 18px 50px;
@@ -96,21 +93,21 @@ main .new-shift-button {
   font-weight: 700;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 6px 15px rgba(187, 134, 252, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin-top: 20px;
   transition: background-color 0.3s ease;
 }
 main .new-shift-button:hover {
-  background-color: #9965f4;
+  background-color: #005fa3;
 }
 main .new-shift-button:active {
-  background-color: #7c4dff;
+  background-color: #00497a;
 }
 
 /* Counter buttons */
 main .counter-button {
-  background-color: #03dac6;
-  color: #000;
+  background-color: #007acc;
+  color: white;
   border: none;
   border-radius: 30px;
   padding: 18px 50px;
@@ -118,21 +115,21 @@ main .counter-button {
   font-weight: 700;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 6px 15px rgba(3, 218, 198, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
 }
 main .counter-button:hover {
-  background-color: #00bfa5;
+  background-color: #005fa3;
 }
 main .counter-button:active {
-  background-color: #00a693;
+  background-color: #00497a;
 }
 
 /* Action buttons */
 main .action-button {
-  background-color: #03dac6;
-  color: #000;
+  background-color: #007acc;
+  color: white;
   border: none;
   border-radius: 30px;
   padding: 18px 50px;
@@ -140,15 +137,15 @@ main .action-button {
   font-weight: 700;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 6px 15px rgba(3, 218, 198, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 122, 204, 0.5);
   margin: 15px 10px;
   transition: background-color 0.3s ease;
 }
 main .action-button:hover {
-  background-color: #00bfa5;
+  background-color: #005fa3;
 }
 main .action-button:active {
-  background-color: #00a693;
+  background-color: #00497a;
 }
 
 /* UPI form styles */
@@ -156,52 +153,49 @@ main .upi-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #2a2a2a;
+  background: #fefefe;
   padding: 30px 40px;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 320px;
   width: 100%;
   user-select: none;
-  border: 1px solid #444;
 }
 main .upi-form label {
   font-weight: 600;
   font-size: 1.1em;
   margin-bottom: 15px;
-  color: #e0e0e0;
+  color: #222;
 }
 main .upi-form input[type="number"] {
   padding: 12px 15px;
   font-size: 1.1em;
-  border: 1.5px solid #bb86fc;
+  border: 1.5px solid #007acc;
   border-radius: 10px;
   margin-bottom: 25px;
   outline: none;
   transition: border-color 0.3s ease;
-  background: #1e1e1e;
-  color: #e0e0e0;
 }
 main .upi-form input[type="number"]:focus {
-  border-color: #9965f4;
+  border-color: #005fa3;
 }
 main .upi-form .submit-button {
-  background-color: #bb86fc;
-  color: #000;
+  background-color: #007acc;
+  color: white;
   border: none;
   border-radius: 25px;
   padding: 15px 40px;
   font-size: 1.3em;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 12px rgba(187, 134, 252, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 122, 204, 0.5);
   transition: background-color 0.3s ease;
 }
 main .upi-form .submit-button:hover {
-  background-color: #9965f4;
+  background-color: #005fa3;
 }
 main .upi-form .submit-button:active {
-  background-color: #7c4dff;
+  background-color: #00497a;
 }
 
 /* Extra form styles */
@@ -209,20 +203,19 @@ main .extra-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #2a2a2a;
+  background: #fefefe;
   padding: 30px 40px;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 360px;
   width: 100%;
   user-select: none;
-  border: 1px solid #444;
 }
 main .extra-form label {
   font-weight: 600;
   font-size: 1.1em;
   margin-bottom: 15px;
-  color: #e0e0e0;
+  color: #222;
 }
 main .extra-form input[type="text"],
 main .extra-form input[type="number"],
@@ -230,32 +223,24 @@ main .extra-form select,
 main .extra-form textarea {
   padding: 12px 15px;
   font-size: 1.1em;
-  border: 1.5px solid #bb86fc;
+  border: 1.5px solid #007acc;
   border-radius: 10px;
   margin-bottom: 25px;
   outline: none;
   transition: border-color 0.3s ease;
-  background: #1e1e1e;
-  color: #e0e0e0;
 }
 main .extra-form input[type="text"]:focus,
 main .extra-form input[type="number"]:focus,
 main .extra-form select:focus,
 main .extra-form textarea:focus {
-  border-color: #9965f4;
-}
-main .extra-form input[type="text"]:disabled,
-main .extra-form input[type="number"]:disabled {
-  background: #333;
-  color: #888;
-  border-color: #555;
+  border-color: #005fa3;
 }
 
 /* Shift status text */
 main .shift-status {
   font-weight: 700;
   font-size: 2.2em;
-  color: #e0e0e0;
+  color: #222;
   margin-bottom: 40px;
   user-select: none;
 }
@@ -264,7 +249,7 @@ main .shift-status {
 .analysis-title {
   font-size: 2.2em;
   font-weight: bold;
-  color: #bb86fc;
+  color: #4a148c;
   margin-bottom: 18px;
   text-align: center;
   letter-spacing: 1px;
@@ -286,14 +271,14 @@ main .shift-status {
 .tab-button {
   width: 100%;
   min-width: 0;
-  background: #03dac6;
-  color: #000;
+  background: #007acc;
+  color: #fff;
   border: none;
   border-radius: 16px;
   padding: 18px 0;
   font-size: 1.08em;
   font-weight: 700;
-  box-shadow: 0 4px 18px 0 rgba(3, 218, 198, 0.2), 0 1.5px 4px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 4px 18px 0 rgba(0,122,204,0.13), 0 1.5px 4px 0 rgba(0,0,0,0.07);
   margin-bottom: 0;
   transition: background 0.25s, color 0.2s, box-shadow 0.2s, transform 0.1s;
   touch-action: manipulation;
@@ -302,17 +287,17 @@ main .shift-status {
   overflow: hidden;
 }
 .tab-button:active {
-  background: #00bfa5;
-  color: #000;
+  background: #005fa3;
+  color: #fff;
   transform: scale(0.97);
 }
 .tab-button:focus-visible {
-  outline: 3px solid #00bfa5;
+  outline: 3px solid #005fa3;
 }
 
 /* Blinking black border for active tab (e.g., extra tab) */
 .tab-button.active-extra {
-  border: 3px solid #bb86fc;
+  border: 3px solid #000;
   animation: blink-border 1s steps(2, start) infinite;
 }
 @keyframes blink-border {
@@ -327,7 +312,7 @@ main .shift-status {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   border-radius: 16px;
-  background: linear-gradient(120deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%);
+  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -356,12 +341,12 @@ main .shift-status {
 .analysis-title {
   font-size: 2.3em;
   font-weight: bold;
-  color: #bb86fc;
+  color: #a770ef;
   margin-bottom: 22px;
   text-align: center;
   letter-spacing: 1px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-shadow: 0 2px 8px rgba(187, 134, 252, 0.2);
+  text-shadow: 0 2px 8px rgba(167,112,239,0.08);
 }
 
 /* Table premium look */
@@ -371,21 +356,19 @@ main .shift-status {
   border-spacing: 0;
   margin: 0 auto 22px auto;
   font-size: 1.13em;
-  background: #2a2a2a;
+  background: rgba(255,255,255,0.95);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.4);
-  border: 1px solid #444;
+  box-shadow: 0 4px 18px 0 rgba(167,112,239,0.10);
 }
 .analysis-table th, .analysis-table td {
   padding: 20px 10px;
-  border-bottom: 1.5px solid #444;
+  border-bottom: 1.5px solid #e1d5ee;
   text-align: center;
-  color: #e0e0e0;
 }
 .analysis-table th {
-  background: #1a1a2e;
-  color: #bb86fc;
+  background: #f6d365;
+  color: #7c1aaa;
   font-size: 1.08em;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -394,28 +377,28 @@ main .shift-status {
   border-bottom: none;
 }
 .analysis-table tr:active {
-  background: #333;
+  background: #f3e5f5;
 }
 
 /* Premium delete button */
 .delete-btn {
-  background: #cf6679;
-  color: #000;
+  background: #ff3b3b;
+  color: #fff;
   border: none;
   border-radius: 12px;
   padding: 14px 22px;
   font-size: 1em;
   font-weight: 600;
   margin: 0 2px;
-  box-shadow: 0 2px 8px rgba(207, 102, 121, 0.3);
+  box-shadow: 0 2px 8px rgba(255,59,59,0.10);
   transition: background 0.2s, transform 0.1s;
   touch-action: manipulation;
 }
 .delete-btn:hover, .delete-btn:focus {
-  background: #b85450;
+  background: #c82333;
 }
 .delete-btn:active {
-  background: #a04747;
+  background: #a71d2a;
   transform: scale(0.97);
 }
 
@@ -423,28 +406,27 @@ main .shift-status {
 .paid-checkbox {
   width: 32px;
   height: 32px;
-  accent-color: #03dac6;
+  accent-color: #43a047;
   vertical-align: middle;
 }
 
 /* Live totals premium style */
 .live-totals {
-  background: #1a1a2e;
+  background: #f4f8fb; /* soft light blue */
   border-radius: 14px;
   padding: 18px 0;
   margin: 18px 0;
   font-size: 1.18em;
-  color: #e0e0e0;
+  color: #222;
   text-align: center;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  border: 1px solid #444;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* Premium back button */
 #analysis-back-btn {
-  background: #03dac6;
-  color: #000;
+  background: #007acc;
+  color: #fff;
   border: none;
   border-radius: 16px;
   padding: 18px 0;
@@ -452,15 +434,15 @@ main .shift-status {
   font-weight: 700;
   margin: 22px auto 0 auto;
   display: block;
-  box-shadow: 0 2px 8px rgba(3, 218, 198, 0.3);
+  box-shadow: 0 2px 8px rgba(167,112,239,0.08);
   transition: background 0.2s, transform 0.1s;
   touch-action: manipulation;
   width: 90%;
   max-width: 320px;
 }
 #analysis-back-btn:active {
-  background: #00bfa5;
-  color: #000;
+  background: #005fa3;
+  color: #fff;
   transform: scale(0.97);
 }
 
@@ -478,45 +460,27 @@ main .shift-status {
 
 /* Edit button styles */
 .edit-btn {
-  background: #2a2a2a;
-  color: #03dac6;
-  border: 2px solid #03dac6;
+  background: #fff;
+  color: #219150;
+  border: 2px solid #219150;
   border-radius: 12px;
   padding: 10px 18px;
   font-size: 1em;
   font-weight: 600;
   margin: 0 6px 0 0;
-  box-shadow: 0 2px 8px rgba(3, 218, 198, 0.2);
+  box-shadow: 0 2px 8px rgba(33,145,80,0.07);
   transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
   cursor: pointer;
   touch-action: manipulation;
 }
 .edit-btn:hover, .edit-btn:focus {
-  background: #03dac6;
-  color: #000;
-  border-color: #00bfa5;
+  background: #219150;
+  color: #fff;
+  border-color: #176b38;
 }
 .edit-btn:active {
-  background: #00bfa5;
-  color: #000;
-  border-color: #00a693;
+  background: #176b38;
+  color: #fff;
+  border-color: #176b38;
   transform: scale(0.97);
-}
-
-/* Footer styles */
-footer {
-  background-color: #1a1a2e;
-  color: #e0e0e0;
-  text-align: center;
-  padding: 15px;
-  border-top: 1px solid #444;
-}
-
-footer a {
-  color: #bb86fc;
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: #03dac6;
 }
