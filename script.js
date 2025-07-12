@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="action-button" id="issue-btn">Issue</button>
       <button class="action-button" id="analysis-btn">Analysis</button>
       <button class="action-button" id="retails-btn">Retail Credit</button>
-      <button class="action-button" id="mrp-print-btn" style="background-color:#ff9800;">MRP PRINT</button>
       <button class="action-button end-shift-button" id="end-shift-btn">End Shift</button>
     `;
 
@@ -115,10 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('retails-btn').addEventListener('click', () => {
       showRetailReceivedForm();
-    });
-    // --- NEW BUTTON EVENT LISTENER ---
-    document.getElementById('mrp-print-btn').addEventListener('click', () => {
-      showMRPPrintForm();
     });
     document.querySelector('.end-shift-button').addEventListener('click', endShift);
   }
@@ -1321,98 +1316,5 @@ document.addEventListener('DOMContentLoaded', () => {
       showShiftInProgress();
     });
     document.getElementById('retail-given-back-btn').addEventListener('click', showRetailTypeForm);
-  }
-
-  function showMRPPrintForm() {
-    mainContent.innerHTML = `
-      <form id="mrp-print-form" class="extra-form" style="max-width:350px;margin:40px auto;padding:24px 20px;">
-        <h3>MRP Print</h3>
-        <label for="mrp-item-name">Item Name:</label><br/>
-        <input type="text" id="mrp-item-name" name="mrp-item-name" required class="input-field" style="width:100%;"/><br/>
-        <label for="mrp-mrp">MRP:</label><br/>
-        <input type="number" id="mrp-mrp" name="mrp-mrp" required class="input-field" style="width:100%;"/><br/>
-        <label for="mrp-selling">Selling Price:</label><br/>
-        <input type="number" id="mrp-selling" name="mrp-selling" required class="input-field" style="width:100%;"/><br/>
-        <button type="submit" class="action-button" style="margin-top:10px;">Print</button>
-        <button type="button" id="mrp-print-back-btn" class="action-button" style="margin-top:10px;">Back</button>
-      </form>
-      <div id="mrp-print-preview" style="display:none;"></div>
-    `;
-
-    document.getElementById('mrp-print-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const itemName = document.getElementById('mrp-item-name').value.trim().toUpperCase();
-      const mrp = document.getElementById('mrp-mrp').value.trim();
-      const selling = document.getElementById('mrp-selling').value.trim();
-
-      // Create the preview div with the exact layout
-      const preview = document.getElementById('mrp-print-preview');
-      preview.style.display = 'block';
-      preview.innerHTML = `
-        <div id="mrp-print-image" style="
-          width: 398px; height: 276px; 
-          background: white; 
-          display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
-          font-family: Arial, sans-serif; 
-          padding-top: 24px;
-          box-sizing: border-box;
-        ">
-          <div style="font-size:2em;font-weight:bold;margin-bottom:10px;letter-spacing:2px;">${itemName}</div>
-          <div style="font-size:1.5em;font-weight:bold;margin-bottom:18px;letter-spacing:2px;">----------------------</div>
-          <div style="font-size:1.3em;margin-bottom:8px;">MRP: <span style="font-family:Arial;text-decoration:underline;">₹${mrp}</span></div>
-          <div style="font-size:1.3em;font-weight:bold;"><span style="font-weight:bold;">SP:</span> <span style="font-family:Arial,text-decoration:underline;">₹ ${selling}</span></div>
-        </div>
-      `;
-
-      // Load html2canvas if not already loaded
-      if (typeof html2canvas === "undefined") {
-        const script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-        document.body.appendChild(script);
-        await new Promise(resolve => { script.onload = resolve; });
-      }
-
-      // Render to PNG and print directly
-      const node = document.getElementById('mrp-print-image');
-      html2canvas(node, { backgroundColor: null, scale: 1 }).then(canvas => {
-        // Create a print window with the PNG and auto-print
-        const printFrame = document.createElement('iframe');
-        printFrame.style.position = 'fixed';
-        printFrame.style.right = '0';
-        printFrame.style.bottom = '0';
-        printFrame.style.width = '0';
-        printFrame.style.height = '0';
-        printFrame.style.border = '0';
-        document.body.appendChild(printFrame);
-
-        const imgData = canvas.toDataURL("image/png");
-        printFrame.contentDocument.write(`
-          <html>
-          <head>
-            <title>Print</title>
-            <style>
-              body { margin: 0; display: flex; align-items: center; justify-content: center; }
-              img { width: 398px; height: 276px; }
-            </style>
-          </head>
-          <body>
-            <img src="${imgData}" />
-            <script>
-              window.onload = function() {
-                window.focus();
-                window.print();
-                setTimeout(function() { window.close(); }, 100);
-              }
-            <\/script>
-          </body>
-          </html>
-        `);
-        printFrame.contentDocument.close();
-      });
-    });
-
-    document.getElementById('mrp-print-back-btn').addEventListener('click', () => {
-      showShiftInProgress();
-    });
   }
 });
